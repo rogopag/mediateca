@@ -84,7 +84,7 @@ class Mediateca_Admin
 						'desc' => 'Sezione di appartenenza della pubblicazione',
 						'id' => $this->meta_prefix . 'sezione',
 						'taxonomy' => 'sezione', //Enter Taxonomy Slug
-						'type' => 'taxonomy_multicheck'
+						'type' => 'taxonomy_radio'
 					),
 					array(
 						'name' => 'Categoria',

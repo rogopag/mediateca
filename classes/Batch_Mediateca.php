@@ -94,11 +94,9 @@ class Batch_Mediateca
 	private function giveTermsToPost($card, $post_id = null)
 	{
 		$categoria = mb_strtolower( $this->batch_db->get_var("SELECT Categoria FROM Categorie WHERE ID = '$card->IDCategoria'") );
-		$parentCat = term_exists($categoria, 'categoria');
-		$parentCatId = $parentCat['term_id'];
+		$parentCatId = $this->getTermId($categoria);
 		$sottoCategoria = mb_strtolower( $this->batch_db->get_var("SELECT SottoCategoria FROM SottoCategorie WHERE ID = '$card->IDSottoCategoria'") );
-		$cat = term_exists($sottoCategoria, 'categoria', $parentCatId);
-		$catId = $cat['term_id'];
+		$catId = $this->getTermId($sottoCategoria);
 		
 		$terzoLivello = $this->doSlugFromTermName( mb_strtolower( $this->batch_db->get_var("SELECT TerzoLivello FROM TerzoLivello WHERE ID = '$card->TerzoLivello'") ) );
 		$sezione = $this->doSlugFromTermName( mb_strtolower($card->Sezione) );
@@ -130,7 +128,11 @@ class Batch_Mediateca
 		if($card->Editore) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'editore', $card->Editore, true );
 		if($card->Sistema) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'sistema', $card->Sistema, true );
 		if($card->HardwareNecessario) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'hardware_necessario', $card->HardwareNecessario, true );
-		if($card->Immagine) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $card->Immagine, true );
+		if($card->Immagine) 
+		{
+			$link = trim( $card->Immagine,'~' );
+			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $card->Immagine, true );
+		}
 	}
 	private function createTerms()
 	{
