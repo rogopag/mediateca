@@ -130,8 +130,8 @@ class Batch_Mediateca
 		if($card->HardwareNecessario) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'hardware_necessario', $card->HardwareNecessario, true );
 		if($card->Immagine) 
 		{
-			$link = trim( $card->Immagine,'~' );
-			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $card->Immagine, true );
+			$link = trim( $card->Immagine, '~' );
+			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $link, true );
 		}
 	}
 	private function createTerms()
