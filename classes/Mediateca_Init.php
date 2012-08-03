@@ -48,7 +48,7 @@ class Mediateca_Init
 	{
 		register_taxonomy( 'terzo-livello', self::$types,
 		array(
-			'hierarchical' => true,
+			'hierarchical' => false,
 			'label' => __('Terzo livello',MEDIATECA_TD),
 			'query_var' => 'terzo-livello',
 			'rewrite' => array('slug' => 'terzo-livello' )

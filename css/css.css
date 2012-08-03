@@ -1,0 +1,10 @@
+@CHARSET "UTF-8";
+
+ul.hierarchical_checkboxes{}
+ul.hierarchical_checkboxes li{display:inline-block;min-width:150px;width:auto;padding:0 50px 20px 0px;vertical-align:top;}
+ul.hierarchical_checkboxes li label.selectit{font-weight:bold;}
+ul.hierarchical_checkboxes li label.selectit input{font-weight:bold;}
+ul.hierarchical_checkboxes li ul.children{padding-left:10px;}
+ul.hierarchical_checkboxes li ul.children li{display:block;padding:0;}
+ul.hierarchical_checkboxes li ul.children li label.selectit{font-weight:normal;}
+ul.hierarchical_checkboxes li ul.children li label.selectit input{font-weight:normal;}

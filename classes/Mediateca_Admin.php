@@ -22,13 +22,24 @@ class Mediateca_Admin
 	 **/
 	private function __construct()
 	{
-		global $wp_query;
 		$this->meta_prefix = '_mediateca_';
 		$this->types = Mediateca_Init::$types;
 		$this->type = ( $_GET['post_type'] ) ? $_GET['post_type'] : get_query_var('post_type');
 		$this->metaBoxes = add_filter( 'cmb_meta_boxes', array(&$this, 'addMetaBoxes' ) );
 		add_action('admin_menu', array(&$this, 'cleanMetaboxes') );
+		add_filter( 'cmb_render_hierarchical_checkboxes', array(&$this, 'render_hierarchical_checkboxes'), 10, 2 );
 		add_action( 'init', array(&$this, 'initCmbMetaBoxes'), 999 );
+		add_action( 'admin_enqueue_scripts', array(&$this, 'add_admin_scripts'), 10, 1 );
+	}
+	function add_admin_scripts( $hook ) {
+	
+	    global $post;
+	
+	    if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
+	        if ( in_array($post->post_type, $this->types) ) {     
+	            wp_enqueue_style(  'mediateca_admin_style', MEDIATECA_URL.'css/css.css', '', '0.1', 'screen' );
+	        }
+	    }
 	}
 	/**
 	 * cleanMetaboxes() - Cleans up default metaboxes from edit pages
@@ -73,14 +84,14 @@ class Mediateca_Admin
 						'desc' => 'Sezione di appartenenza della pubblicazione',
 						'id' => $this->meta_prefix . 'sezione',
 						'taxonomy' => 'sezione', //Enter Taxonomy Slug
-						'type' => 'taxonomy_select'
+						'type' => 'taxonomy_multicheck'
 					),
 					array(
 						'name' => 'Categoria',
 						'desc' => 'Categoria e sottocategoria (figlia) di appartenenza della pubblicazione',
 						'id' => $this->meta_prefix . 'categoria',
 						'taxonomy' => 'categoria', //Enter Taxonomy Slug
-						'type' => 'taxonomy_select'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Terzo livello',
@@ -161,10 +172,59 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'hardware_necessario',
 						'type' => 'text_medium'
 					),
+					array(
+						'name' => 'Featured Image',
+						'desc' => 'Indirizzo immagine importata dal vecchio DB. Non Utilizzare per nuovi inserimenti e cancellare nel caso di importazione nuova immagine da WP.',
+						'id' => $this->meta_prefix . 'featured_image',
+						'type' => 'text_medium'
+					),
 				),
 			);
 
 			return $meta_boxes;
+	}
+	/**
+	 * render_hierarchical_taxonomy - creates a field to support hierarchical taxonomies
+	 * @public
+	 * @arg $field, $meta
+	 * @return string
+	 * @author Riccardo Strobbia
+	 **/
+	public function render_hierarchical_checkboxes($field, $meta)
+	{
+		global $post;
+		$args = array(
+			'descendants_and_self' => 0,
+			'selected_cats' => true,
+			'popular_cats' => false,
+			'walker' => null,
+			'taxonomy' => $field['taxonomy'],
+			'checked_ontop' => true
+		);
+		echo '<ul class="hierarchical_checkboxes">';
+		wp_terms_checklist($post->ID, $args);
+		echo '</ul>';
+	}
+	/**
+	 * render_hierarchical_taxonomy - creates a field to support hierarchical taxonomies
+	 * @public
+	 * @arg $field, $meta
+	 * @return string
+	 * @author Riccardo Strobbia
+	 **/
+	public function render_hierarchical_taxonomy( $field, $meta )
+	{
+		wp_dropdown_categories(array(
+            'show_option_none' => '&#8212; Select &#8212;',
+            'hierarchical' => 1,
+            'taxonomy' => $field['taxonomy'],
+            'orderby' => 'name', 
+            'hide_empty' => 0, 
+            'name' => $field['id'],
+            'selected' => $meta  
+
+        ));
+        if ( !empty( $field['desc'] ) ) echo '<p class="cmb_metabox_description">' . $field['desc'] . '</p>';
 	}
 	/**
 	 * initCmbMetaBoxes() - initialize cmb_Meta_Box class

@@ -1,2 +1,6 @@
 
 .project
+
+.cache/.dataModel
+
+.cache/.wsdlDataModel
