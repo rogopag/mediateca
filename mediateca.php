@@ -35,6 +35,6 @@ function mediatecaCreateInstances()
 	//class is singleton
 	$mediatecaInit = Mediateca_Init::getInstance();
 	$mediatecaAdmin = Mediateca_Admin::getInstance();
-	$batchMediateca = new Batch_Mediateca();
+	//$batchMediateca = new Batch_Mediateca();
 }
 ?>
