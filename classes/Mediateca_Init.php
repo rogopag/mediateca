@@ -5,6 +5,7 @@ class Mediateca_Init
 {
 	private static $instance;
 	public static $types = array(HARDWARE_TYPE, SOFTWARE_TYPE, LIBRI_TYPE);
+	public static $pages;
 	
 	private function __construct()
 	{
@@ -12,6 +13,7 @@ class Mediateca_Init
 		$this->createTaxonomies();
 		add_filter('query_vars', array(&$this, 'addQueryVars'));
 		register_activation_hook( MEDIATECA_PATH.'mediateca', array( $this, 'createPluginPages' ) );
+		self::$pages = array( MEDIATECA_SLUG => get_page_by_title( ucfirst(MEDIATECA_SLUG) ), HARDWARE_SOFTWARE_SLUG => get_page_by_title( ucfirst( str_replace('-', ' ', HARDWARE_SOFTWARE_SLUG) ) ), LIBRI_SLUG => get_page_by_title( ucfirst( str_replace('-', ' ', LIBRI_SLUG) ) ));
 	}
 	private function createPostTypes()
 	{
