@@ -60,7 +60,7 @@ class Batch_Mediateca
 		$user = $current_user;
 		
 		$postdata = array(
-					'post_title' => $card->Titolo,
+					'post_title' => ucfirst( mb_strtolower( $card->Titolo ) ),
 					'post_content' => $card->Scheda,
 					'post_status' => 'publish',
 					'post_type' => mb_strtolower($card->Tipologia),

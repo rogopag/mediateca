@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL); 
+ini_set("display_errors", 0);
 class Mediateca_Init
 {
 	private static $instance;
@@ -9,6 +11,7 @@ class Mediateca_Init
 		$this->createPostTypes();
 		$this->createTaxonomies();
 		add_filter('query_vars', array(&$this, 'addQueryVars'));
+		register_activation_hook( MEDIATECA_PATH.'mediateca', array( $this, 'createPluginPages' ) );
 	}
 	private function createPostTypes()
 	{
@@ -71,8 +74,9 @@ class Mediateca_Init
 	//push our types in the array of valid query vars
 	public function addQueryVars($vars) 
 	{
-		// add movies_view to the valid list of variables
+		// add mediateca_views to the valid list of variables
 		$new_vars = self::$types;
+		array_push($new_vars, MEDIATECA_RESULTS_PAGE);
 		$vars = $new_vars + $vars;
 		return $vars;
 	}

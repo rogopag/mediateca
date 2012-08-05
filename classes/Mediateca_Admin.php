@@ -134,7 +134,7 @@ class Mediateca_Admin
 						'name' => 'Anno',
 						'desc' => 'Anno di pubblicazione',
 						'id' => $this->meta_prefix . 'anno',
-						'type' => 'text_date_timestamp'
+						'type' => 'text_date'
 					),
 					array(
 						'name' => 'Collana',
