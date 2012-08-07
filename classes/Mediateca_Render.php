@@ -17,13 +17,32 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'mediatecaTemplate') );
 		add_filter( 'page_template', array(&$this, 'hardware_e_softwareTemplate') );
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
+		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'renderHardwareAndSoftwareResult') );
+		add_action( 'wp_ajax_nopriv_hardware-e-software-search', array(&$this, 'ajaxResult') );
+	}
+	public function ajaxResult()
+	{
+		if( $_POST )
+		{
+			print_r( $_POST );
+			die('');
+		}
+	} 
+	private function styleAndScripts()
+	{
+		global $post, $wp;
+		wp_enqueue_style('mediateca-front', MEDIATECA_URL.'css/style.css', '', '0.1', 'screen');
+		wp_enqueue_script('mediateca-js', MEDIATECA_URL.'js/js.js', array('jquery'), '0.1', 'screen');
+		wp_localize_script( 'mediateca-js', 'Mediateca', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'page' => get_permalink($post->ID), 'query' => $wp->query_vars ) );
 	}
 	public function hardware_e_softwareTemplate($page_template) 
 	{
 	     global $post, $wp;
 	
-	     if ($post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php' ) ) 
+	     if ($post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php' ) )
 	     {
+	     	  $this->styleAndScripts();
+	     	  
 	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
 	     	  {
 	     	  	
@@ -39,17 +58,18 @@ class Mediateca_Render
 	public function libriTemplate($page_template) 
 	{
 	     global $post, $wp;
-	
-	     if ( $post->post_name == LIBRI_SLUG && file_exists( LIBRI_SOFTWARE_SLUG.'-page.php' ) ) 
+	     
+	     if ( $post->post_name == LIBRI_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . LIBRI_SLUG.'-page.php' ) ) 
 	     {
-	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == LIBRI_SOFTWARE_SLUG )
+	     	  $this->styleAndScripts();
+	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == LIBRI_SLUG )
 	     	  {
 	     	  	
-	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . LIBRI_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . LIBRI_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
 	     	  }
 	     	  else 
 	     	  {
-	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . LIBRI_SOFTWARE_SLUG.'-page.php';
+	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . LIBRI_SLUG.'-page.php';
 	     	  }
 	     }
 	     return $page_template;
@@ -60,17 +80,27 @@ class Mediateca_Render
 	
 	     if ( $post->post_name == MEDIATECA_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . MEDIATECA_SLUG.'-page.php' ) ) 
 	     {
+	     	  $this->styleAndScripts();
 	          $page_template = MEDIATECA_TEMPLATE_PATH .  MEDIATECA_SLUG.'-page.php';
+	          add_filter('the_content', array(&$this, 'modifyMediatecaPageContent'), 10, 1);
 	     }
 	     return $page_template;
+	}
+	public function modifyMediatecaPageContent($content)
+	{
+				$html = '<div class="buttonsContainer">
+				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="'.get_bloginfo('url') . '/' . MEDIATECA_SLUG . '/' . HARDWARE_SOFTWARE_SLUG.'">Hardware&Software</a></div>
+				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="'.get_bloginfo('url') . '/' . MEDIATECA_SLUG . '/' . LIBRI_SLUG.'">Libri</a></div>
+				</div>';
+		return $content.$html;
 	}
 	public function get_custom_post_type_single_template($single_template) 
 	{
 	     global $post;
 	
-	     if ( in_array($post->post_type, $this->types) && file_exists( MEDIATECA_TEMPLATE_PATH . 'single-mediateca.php' ) ) 
+	     if ( in_array($post->post_type, $this->types) && file_exists( MEDIATECA_TEMPLATE_PATH . 'single-'.MEDIATECA_SLUG.'.php' ) ) 
 	     {
-	          $single_template = MEDIATECA_TEMPLATE_PATH . '/single-mediateca.php';
+	          $single_template = MEDIATECA_TEMPLATE_PATH . '/single-'.MEDIATECA_SLUG.'.php';
 	     }
 	     return $single_template;
 	}

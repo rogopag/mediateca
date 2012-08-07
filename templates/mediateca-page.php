@@ -10,6 +10,7 @@
 
 			<div class="entry intro">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
+				
 				<small>
 					<?php  
 				if (is_user_logged_in())

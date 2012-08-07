@@ -1,0 +1,4 @@
+div.buttonsContainer{text-align:center;margin-bottom:20px;}
+.mediatecaButtons{display:inline-block;margin-right:10px;padding:10px;width:120px;height:20px;background:url(/dito/wp-content/themes/area/imgs/percbck.png) repeat left top;vertical-align:middle;cursor:pointer;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;box-shadow: 0px 3px 5px #000;-moz-box-shadow: 0px 3px 5px #000;-webkit-box-shadow: 0px 3px 5px #000;}
+.mediatecaButtons:hover{position:relative;top:3px;color: #fqq;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;}
+.mediatecaButtons a{color:black;}

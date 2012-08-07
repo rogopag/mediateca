@@ -204,6 +204,7 @@ class Mediateca_Admin
 		echo '<ul class="hierarchical_checkboxes">';
 		wp_terms_checklist($post->ID, $args);
 		echo '</ul>';
+		if ( !empty( $field['desc'] ) ) echo '<p class="cmb_metabox_description">' . $field['desc'] . '</p>';
 	}
 	/**
 	 * render_hierarchical_taxonomy - creates a field to support hierarchical taxonomies
