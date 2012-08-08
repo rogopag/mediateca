@@ -15,13 +15,13 @@ if(!defined('MEDIATECA_JS_URL')) define('MEDIATECA_JS_URL', MEDIATECA_URL.'/js/'
 define('POSTS_PER_PAGE', get_option('posts_per_page'));
 define('MEDIATECA_CATS', 'categoria');
 define('MEDIATECA_SUB_CATS', 'sotto-categoria');
-define('MEDIATECA_THIRD_LEVEL', 'terzo-livello');
 //Post type and template stuff
-define('MEDIATECA_SLUG', 'mediateca');
 define('HARDWARE_TYPE', 'hardware');
 define('SOFTWARE_TYPE', 'software');
+define('MEDIATECA_THIRD_LEVEL', 'terzo-livello');
 define('LIBRI_TYPE', 'libri');
 define('MEDIATECA_LAND_PAGE', 'mediateca');
+define('MEDIATECA_SLUG', 'mediateca');
 define('LIBRI_SLUG', 'libri');
 define('HARDWARE_SOFTWARE_SLUG', 'hardware-e-software');
 define('MEDIATECA_TD', 'mediateca');

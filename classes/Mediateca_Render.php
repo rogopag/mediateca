@@ -17,7 +17,6 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'mediatecaTemplate') );
 		add_filter( 'page_template', array(&$this, 'hardware_e_softwareTemplate') );
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
-		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'renderHardwareAndSoftwareResult') );
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
 	}
 	public function ajaxResult()
