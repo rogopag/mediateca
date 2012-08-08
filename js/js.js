@@ -52,7 +52,10 @@ function hardwareSoftwareForm()
 			}, 
 			success: function( data, textStatus, jqXHR )
 			{
-				console.log( data );
+				if( data )
+				{
+					$("#hardware-and-software-form").parent().after( data );
+				}
 			},
 			complete: function( data, textStatus )
 			{

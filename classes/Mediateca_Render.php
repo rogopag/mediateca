@@ -18,14 +18,22 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'hardware_e_softwareTemplate') );
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'renderHardwareAndSoftwareResult') );
-		add_action( 'wp_ajax_nopriv_hardware-e-software-search', array(&$this, 'ajaxResult') );
+		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
 	}
 	public function ajaxResult()
 	{
+		
 		if( $_POST )
 		{
-			print_r( $_POST );
-			die('');
+			if(  wp_verify_nonce($_POST['mediateca-nonce'],'mediateca-check-nonce') )
+			{
+				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+				die('');
+			}
+			else
+			{
+				die("Problema di validazione del form.");
+			}
 		}
 	} 
 	private function styleAndScripts()
@@ -46,7 +54,8 @@ class Mediateca_Render
 	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
 	     	  {
 	     	  	
-	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+	     	  	//$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
 	     	  }
 	     	  else
 	     	  {

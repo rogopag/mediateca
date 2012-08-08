@@ -7,7 +7,7 @@
 			<h2 class="orange main-large"><?php the_title(); ?></h2>
 			<div class="entry intro main-large">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
-				<small class="smallAlignRight">
+				<small class="float-right">
 					<?php  
 				if (is_user_logged_in())
 				{
@@ -18,7 +18,7 @@
 		</div>
 <!--  FORM  -->
 <form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form">
-<?php wp_nonce_field( plugin_basename(__FILE__), 'hardware-e-software-nonce' ); ?>
+<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce');; ?>
 <input type="hidden" name="action" value="hardware-e-software-search" id="hardware-e-software-search" />
 <input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
 	
@@ -28,13 +28,13 @@
 
 <!--  END FORM  -->
 <?php endwhile; else: ?>
-
-<?php do_action('render_response'); ?>
-
-	<p>Sorry, no posts matched your criteria.</p>
+<p>Sorry, no posts matched your criteria.</p>
 <?php endif; ?>
 <!--  END CONTENT  -->
-
+<?php
+if($_POST && $_POST['results']):
+include MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+endif; ?>
 
 </div>
 <?php get_sidebar(); ?>
