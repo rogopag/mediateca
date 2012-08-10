@@ -4,8 +4,12 @@ ini_set("display_errors", 0);
 class Mediateca_Render
 {
 	private $types;
+	private $type;
 	public $show_comments;
 	public static $PAGES_SLUG = array( MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
+	const POSTS_PER_PAGE = 10; 
+	private $taxonomies = array();
+	private $metas = array();
 	
 	public function __construct()
 	{
@@ -18,14 +22,22 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'hardware_e_softwareTemplate') );
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
+		add_action( 'wp_ajax_manage_category_select', array(&$this, 'populateSubcategories') );
 	}
 	public function ajaxResult()
 	{
-		
-		if( $_POST )
+		if( $_POST && $_POST['post_type'] )
 		{
-			if(  wp_verify_nonce($_POST['mediateca-nonce'],'mediateca-check-nonce') )
+			$this->type = $_POST['post_type'];
+			
+			if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
 			{
+				$categoria = $_POST['sottocategoria'] ? $_POST['sottocategoria'] : $_POST['categoria'];
+				
+				$this->taxQuery( 'categoria', $categoria );
+				$this->taxQuery( 'terzo-livello', $_POST['terzo-livello'] );
+				$search = $this->getQueryObject( $this->type,  $this->taxonomies );
+				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
 				die('');
 			}
@@ -34,7 +46,7 @@ class Mediateca_Render
 				die("Problema di validazione del form.");
 			}
 		}
-	} 
+	}
 	private function styleAndScripts()
 	{
 		global $post, $wp;
@@ -50,16 +62,8 @@ class Mediateca_Render
 	     {
 	     	  $this->styleAndScripts();
 	     	  
-	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
-	     	  {
-	     	  	
-	     	  	//$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
-	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
-	     	  }
-	     	  else
-	     	  {
-	     	  	$page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
-	     	  }
+	     	  $page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
+	     	  
 	     }
 	     return $page_template;
 	}
@@ -142,10 +146,96 @@ class Mediateca_Render
 		
 		return $ps;
 	}
+	private function getQueryObject( $types, $taxonomies = array(), $metas = array() )
+	{
+		$args = array(
+	    'offset'          => 0,
+	    'tax_query'        => $taxonomies ,
+	    'orderby'         => 'post_date',
+	    'order'           => 'DESC',
+	    'include'         => '',
+	    'exclude'         => '',
+	    'meta_query'        => $metas,
+	    'post_type'       => $types,
+	    'post_mime_type'  => '',
+	    'post_parent'     => '',
+	    'post_status'     => 'publish', 
+		'paged'			  => get_query_var( 'page' ),
+		'posts_per_page'  => self::POSTS_PER_PAGE 
+		);
+		
+		print_r( $args );
+		$q = new WP_Query($args);
+		
+		return $q;
+	}
+	private function taxQuery( $tax, $term )
+	{
+		if( !$term || $term == -1 ) return array();
+		
+		$query = array(
+			'taxonomy' => $tax,
+			'field' => 'id',
+			'terms' => $term);
+		
+		return array_push($this->taxonomies, $query);
+	}
+	public function paginationLinks()
+	{
+		global $wp_query;
+
+		$big = 999999999; // need an unlikely integer
+		
+		echo paginate_links( array(
+			'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+			'format' => '?paged=%#%',
+			'current' => max( 1, get_query_var('paged') ),
+			'total' => $wp_query->max_num_pages
+		) );
+	}
 	public function getUserNiceName( $id )
 	{
 		$user = get_user_by('id', $id);
 		return $user->display_name;
+	}
+	public function taxonomySelect($name, $taxonomy, $args = null, $parent = 0,  $label = 'Select', $class="visible")
+	{
+		if( $args )
+		{
+			echo '<div class="select-container '. $class.'">';
+			echo '<label for="'.$name.'" class="mediateca_search_select">'.ucfirst($label).'</label><br />';
+			
+			echo '<select name="'.$name.'" id="'.$name.'">';
+			
+			$terms = get_terms( $taxonomy,  $args);
+			
+			if( count( $terms ) > 0)
+			{
+				echo '<option value="" selected>&#8212; Seleziona ' . ucfirst($name) . ' &#8212;</option>';
+				foreach ( $terms as $term ) 
+				{
+					if( $parent && $term->parent == 0 )
+					{
+						echo '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+					}
+					else if( !$parent )
+					{
+						echo '<option value="' . $term->term_id . '">' . $term->name . '</option>';
+					}
+					
+				}
+			}
+		echo '</select></div>';
+		}
+	}
+	public function populateSubcategories()
+	{
+		if( $_POST && wp_verify_nonce($_POST['mediateca-nonce'],'mediateca-check-nonce') )
+		{
+			$args = array( 'hide_empty' => 0, 'hierarchical' => true, 'child_of' =>  $_POST['parent'] );
+			$this->taxonomySelect('sottocategoria', 'categoria', $args, false, 'Sottocategoria', 'hidden' );
+			die('');
+		}
 	}
 }
 ?>
