@@ -25,7 +25,7 @@
 		<input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
 		<div class="select-container">
 			<label for="terzo-livello">Tipologia</label><br />
-			<select id="post_type" name="post_type">
+			<select id="media_type" name="media_type">
 				<option value="<?php echo HARDWARE_TYPE; ?>"><?php echo ucfirst(HARDWARE_TYPE); ?></option>
 				<option value="<?php echo SOFTWARE_TYPE; ?>"><?php echo ucfirst(SOFTWARE_TYPE); ?></option>
 			</select>
@@ -55,13 +55,9 @@
 	<p>Sorry, no posts matched your criteria.</p>
 <?php endif; ?>
 <!--  END CONTENT  -->
-	<?php
-/*if($_POST && $_POST['results']):
-include MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
-endif; */?>
-
+<?php
+do_action('render_search_results');
+?>
 </div>
-<?php get_sidebar(); ?>
 </div>
-
-	<?php get_footer(); ?>
+<?php get_footer(); ?>

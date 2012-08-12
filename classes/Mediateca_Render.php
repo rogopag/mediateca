@@ -10,10 +10,17 @@ class Mediateca_Render
 	const POSTS_PER_PAGE = 10; 
 	private $taxonomies = array();
 	private $metas = array();
+	private $number_of_pages = 1;
+	private $mother_page;
 	
 	public function __construct()
 	{
+		$this->initSession();
+		
+		echo "CONSTRUCTOR::: " . $_SESSION['previous_query'];
+		
 		$this->types = Mediateca_Init::$types;
+		
 		$this->show_comments = false;
 		
 		add_action( 'sidebar_left_home_first_box', array(&$this, 'sidebarLeftBox'), 10 );
@@ -24,28 +31,56 @@ class Mediateca_Render
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
 		add_action( 'wp_ajax_manage_category_select', array(&$this, 'populateSubcategories') );
 	}
-	public function ajaxResult()
+	private function initSession()
 	{
-		if( $_POST && $_POST['post_type'] )
-		{
-			$this->type = $_POST['post_type'];
-			
-			if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
+		if (!session_id()) {
+	        session_start();
+	        $_SESSION['previous_query'] = null;
+	    }
+	}
+	public function ajaxResult()
+	{	
+		global $wp;
+		
+		print_r($wp->query_vars);
+		
+		echo "<br />______________________________________________________________________________<br />";
+		
+		if( ( $_POST && $_POST['media_type'] ) )
 			{
-				$categoria = $_POST['sottocategoria'] ? $_POST['sottocategoria'] : $_POST['categoria'];
-				
-				$this->taxQuery( 'categoria', $categoria );
-				$this->taxQuery( 'terzo-livello', $_POST['terzo-livello'] );
-				$search = $this->getQueryObject( $this->type,  $this->taxonomies );
+				echo "in POST if::::::::::::::::::::::::::::::::::::::::::";
+				if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
+				{
+					$this->type = $_POST['media_type'];
+					
+					$categoria = $_POST['sottocategoria'] ? $_POST['sottocategoria'] : $_POST['categoria'];
+					
+					$this->taxQuery( 'categoria', $categoria );
+					$this->taxQuery( 'terzo-livello', $_POST['terzo-livello'] );
+					
+					$_SESSION['previous_query'] = null;
+					
+					$search = $this->getQueryObject( $this->type,  $this->taxonomies );
+					
+					include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+					
+					if( $this->isAjax() ) die('');
+				}
+				else
+				{
+					die("Problema di validazione del form.");
+				}
+		}
+		else if( $_GET && $_GET['results'] == $this->mother_page )
+		{
+				echo "in GET if::::::::::::::::::::::::::::::::::::::::::";
+				$search = $this->getQueryObject( null,  null, null, true );
 				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
-				die('');
-			}
-			else
-			{
-				die("Problema di validazione del form.");
-			}
+				
+				if( $this->isAjax() ) die('');
 		}
+			
 	}
 	private function styleAndScripts()
 	{
@@ -58,9 +93,19 @@ class Mediateca_Render
 	{
 	     global $post, $wp;
 	
-	     if ($post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php' ) )
+	     if ( $post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php' ) )
 	     {
+	     	
+	     	  $this->mother_page = $post->post_name;
+	     	  
+	     	  echo 'the mother is ' . $this->mother_page;
+	     	  
 	     	  $this->styleAndScripts();
+	     	  
+	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
+	     	  {
+	     	  	add_action( 'render_search_results', array(&$this, 'ajaxResult') );
+	     	  }
 	     	  
 	     	  $page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
 	     	  
@@ -129,7 +174,7 @@ class Mediateca_Render
 	public function getPosts( $types, $number = 2, $taxonomies = array(), $metas = array() )
 	{
 		$args = array(
-	    'numberposts'     => $number,
+	    'posts_per_page'     => $number,
 	    'offset'          => 0,
 	    'tax_query'        => $taxonomies,
 	    'orderby'         => 'post_date',
@@ -146,8 +191,11 @@ class Mediateca_Render
 		
 		return $ps;
 	}
-	private function getQueryObject( $types, $taxonomies = array(), $metas = array() )
+	private function getQueryObject( $types, $taxonomies = array(), $metas = array(), $is_pagination_query = false )
 	{
+		$page = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+		
+		
 		$args = array(
 	    'offset'          => 0,
 	    'tax_query'        => $taxonomies ,
@@ -160,12 +208,26 @@ class Mediateca_Render
 	    'post_mime_type'  => '',
 	    'post_parent'     => '',
 	    'post_status'     => 'publish', 
-		'paged'			  => get_query_var( 'page' ),
+		'paged'			  => $page,
 		'posts_per_page'  => self::POSTS_PER_PAGE 
 		);
 		
-		print_r( $args );
-		$q = new WP_Query($args);
+		if( $is_pagination_query == false ) 
+		{
+			echo 'is post query and is using built args ' . $page . "<br />";
+			$_SESSION['previous_query'] = $args;
+			$query = $args;
+		} 
+		else if( $is_pagination_query == true )
+		{
+			echo 'is pagination query and is using built args ' . $page . "<br />";
+			$query = $_SESSION['previous_query'];
+			$query['paged'] = $page;
+		}
+		
+		$q = new WP_Query( $query );
+		
+		$this->number_of_pages = $q->max_num_pages;
 		
 		return $q;
 	}
@@ -182,16 +244,35 @@ class Mediateca_Render
 	}
 	public function paginationLinks()
 	{
-		global $wp_query;
-
-		$big = 999999999; // need an unlikely integer
+		global $wp_query, $wp_rewrite, $wp;
+		$wp_query->query_vars['paged'] > 1 ? $current = $wp_query->query_vars['paged'] : $current = 1;
 		
-		echo paginate_links( array(
-			'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-			'format' => '?paged=%#%',
-			'current' => max( 1, get_query_var('paged') ),
-			'total' => $wp_query->max_num_pages
-		) );
+		$pagination['add_args'] = array();
+ 
+		$pagination = array(
+			'base' => @add_query_arg('page','%#%'),
+			'format' => '',
+			'total' => $this->number_of_pages,
+			'current' => $current,
+			'show_all' => true,
+			'type' => 'list',
+			'next_text' => '&raquo;',
+			'prev_text' => '&laquo;'
+			);
+			
+		if( $wp_rewrite->using_permalinks() )
+			$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 's', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
+ 
+		if( !empty($wp_query->query_vars['s']) )
+			$pagination['add_args'] = array( 's' => get_query_var( 's' ) );
+			
+		if( $wp_query->query_vars['results'] )
+		{
+			$pagination['add_args']['results'] = $this->mother_page;
+		}
+		echo "<br />line 274 ";
+		print_r( $wp_query->query_vars );
+		echo paginate_links( $pagination );
 	}
 	public function getUserNiceName( $id )
 	{
@@ -236,6 +317,11 @@ class Mediateca_Render
 			$this->taxonomySelect('sottocategoria', 'categoria', $args, false, 'Sottocategoria', 'hidden' );
 			die('');
 		}
+	}
+	public function isAjax() {
+	   return (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+	              &&
+	            ($_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
 	}
 }
 ?>

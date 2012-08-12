@@ -8,7 +8,7 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		hardwareSoftwareForm();
+		//hardwareSoftwareForm();
 	}
 	if( $('#categoria').is('select') )
 	{

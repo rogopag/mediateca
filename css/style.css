@@ -9,3 +9,6 @@ div.buttonsContainer{text-align:center;margin-bottom:20px;}
 .mediateca-form select{margin-bottom:10px;min-width:200px;}
 .float-right{float:right;padding-right:10px;}
 .hidden{display:none;}
+ul.page-numbers{float:right;}
+ul.page-numbers li{list-style-type:none;display:inline;padding-left:5px;}
+a.page-numbers{}
