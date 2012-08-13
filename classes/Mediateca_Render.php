@@ -13,6 +13,7 @@ class Mediateca_Render
 	private $number_of_pages = 1;
 	private $mother_page;
 	private $pagename;
+	const HIDE_EMPTY = 1;
 	
 	public function __construct()
 	{
@@ -42,14 +43,20 @@ class Mediateca_Render
 	{	
 		global $wp;
 		
+		//removes the addThis shit from results...
+		
+		remove_filter('the_content', 'addthis_display_social_widget', 15);
+		
+		//check if it is a from submission and we ave something
 		if( ( $_POST && $_POST['media_type'] ) )
 			{
-				
+				//check if the form was submitted from our form 
 				if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
 				{
+					//fill up the vars and render
 					$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
 					
-					$this->type = $_POST['media_type'];
+					$this->type = $_SESSION['media_type'] = $_POST['media_type'];
 					
 					$categoria = $_POST['sottocategoria'] ? $_POST['sottocategoria'] : $_POST['categoria'];
 					
@@ -57,6 +64,7 @@ class Mediateca_Render
 					
 					$this->taxQuery( 'terzo-livello', $_POST['terzo-livello'] );
 					
+					//keep track of the last query to paginate results
 					$_SESSION['previous_query'] = null;
 					
 					if( $this->isAjax() ) $visible = 'hidden';
@@ -74,8 +82,9 @@ class Mediateca_Render
 		}
 		else if( $_GET && $_GET['results'] == $this->mother_page )
 		{
-				
-				$search = $this->getQueryObject( null,  null, null, true );
+				$this->type = $_SESSION['media_type'];
+			
+				$search = $this->getQueryObject( null,  null, null, true ); 
 				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
 				
@@ -319,7 +328,7 @@ class Mediateca_Render
 	{
 		if( $_POST && wp_verify_nonce($_POST['mediateca-nonce'],'mediateca-check-nonce') )
 		{
-			$args = array( 'hide_empty' => 0, 'hierarchical' => true, 'child_of' =>  $_POST['parent'] );
+			$args = array( 'hide_empty' => self::HIDE_EMPTY, 'hierarchical' => true, 'child_of' =>  $_POST['parent'] );
 			$this->taxonomySelect('sottocategoria', 'categoria', $args, false, 'Sottocategoria', 'hidden' );
 			die('');
 		}
