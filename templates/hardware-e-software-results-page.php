@@ -1,10 +1,19 @@
-<div class="main forIE main-large">
-	<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-		<h2 class="orange"><?php the_title(); ?> risultati</h2>
-		<div class="entry intro">
-					
+<div class="main forIE main-large <?php echo $visible;?>" id="search-results">
+	<h2 class="orange main-large"><?php echo ucfirst( $this->type ); ?> risultati</h2>
+	<?php if ($search->have_posts()) : while ($search->have_posts()) : $search->the_post(); ?>
+		<div class="entry search-entry main-large">
+			<h4 class="search-result-entry-title"><?php the_title(); ?></h4>
+			<?php 
+			the_advanced_excerpt('length=150&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img');
+			?>		
 		</div>
-<?php endwhile; else: ?>
-	<p>Sorry, no posts matched your criteria.</p>
+<?php 
+endwhile; 
+$this->paginationLinks();
+wp_reset_query();
+else: ?>
+<div class="entry search-entry">
+	<p>Siamo spiacenti, la tua ricerca non ha prodotto risultati.</p>
+</div>
 <?php endif; ?>
 

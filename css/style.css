@@ -1,5 +1,17 @@
+div.wrap-center-content{float:left;width:665px;}
 div.buttonsContainer{text-align:center;margin-bottom:20px;}
 .mediatecaButtons{display:inline-block;margin-right:10px;padding:10px;width:120px;height:20px;background:url(/dito/wp-content/themes/area/imgs/percbck.png) repeat left top;vertical-align:middle;cursor:pointer;border-radius:8px;-moz-border-radius:8px;-webkit-border-radius:8px;box-shadow: 0px 3px 5px #000;-moz-box-shadow: 0px 3px 5px #000;-webkit-box-shadow: 0px 3px 5px #000;}
 .mediatecaButtons:hover{position:relative;top:3px;color: #fqq;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;}
 .mediatecaButtons a{color:black;}
+.mediateca-forms-container{float:left;padding:0 12px 0 12px;width:308px;margin:0;}
+#mediateca-form-container{border-right:1px solid #F8E498;padding-right:24px;}
+#mediateca-text-search{padding-right:0px;}
+.mediateca-forms-container h4{padding:10px 0 10px 0;color:rgb(30,30,30)}
+.mediateca-form{font-size:12px;}
+.mediateca-form label{color:rgb(60,60,60);padding-left:2px;font-weight:bold;}
+.mediateca-form select{margin-bottom:10px;min-width:200px;}
 .float-right{float:right;padding-right:10px;}
+.hidden{display:none;}
+ul.page-numbers{float:right;}
+ul.page-numbers li{list-style-type:none;display:inline;padding-left:5px;}
+a.page-numbers{}
