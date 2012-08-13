@@ -8,7 +8,7 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		//hardwareSoftwareForm();
+		hardwareSoftwareForm();
 	}
 	if( $('#categoria').is('select') )
 	{
@@ -36,7 +36,7 @@ function hardwareSoftwareForm()
 {
 	$("#hardware-and-software-form").submit(function()
 	{
-		var send = $(this).serialize();
+		var send = $(this).serialize() + jQuery.param( Mediateca.query );
 		
 		$.ajax({  
 			type: 'post',  
@@ -56,9 +56,23 @@ function hardwareSoftwareForm()
 			}, 
 			success: function( data, textStatus, jqXHR )
 			{
+				console.log(data);
+				
 				if( data )
 				{
-					$("#hardware-and-software-form").parent().after( data );
+					if( $("#search-results").is('div') )
+					{
+						$("#search-results").fadeOut(200, function()
+						{
+							$("#hardware-and-software-form").parent().after( data );
+							$("#search-results").fadeIn(200);
+						});
+					}
+					else
+					{
+						$("#hardware-and-software-form").parent().after( data );
+						$("#search-results").fadeIn(200);
+					}
 				}
 			},
 			complete: function( data, textStatus )

@@ -12,12 +12,11 @@ class Mediateca_Render
 	private $metas = array();
 	private $number_of_pages = 1;
 	private $mother_page;
+	private $pagename;
 	
 	public function __construct()
 	{
 		$this->initSession();
-		
-		echo "CONSTRUCTOR::: " . $_SESSION['previous_query'];
 		
 		$this->types = Mediateca_Init::$types;
 		
@@ -29,6 +28,7 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'hardware_e_softwareTemplate') );
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
+		add_action( 'wp_ajax_nopriv_hardware-e-software-search', array(&$this, 'ajaxResult') );
 		add_action( 'wp_ajax_manage_category_select', array(&$this, 'populateSubcategories') );
 	}
 	private function initSession()
@@ -42,23 +42,24 @@ class Mediateca_Render
 	{	
 		global $wp;
 		
-		print_r($wp->query_vars);
-		
-		echo "<br />______________________________________________________________________________<br />";
-		
 		if( ( $_POST && $_POST['media_type'] ) )
 			{
-				echo "in POST if::::::::::::::::::::::::::::::::::::::::::";
+				
 				if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
 				{
+					$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
+					
 					$this->type = $_POST['media_type'];
 					
 					$categoria = $_POST['sottocategoria'] ? $_POST['sottocategoria'] : $_POST['categoria'];
 					
 					$this->taxQuery( 'categoria', $categoria );
+					
 					$this->taxQuery( 'terzo-livello', $_POST['terzo-livello'] );
 					
 					$_SESSION['previous_query'] = null;
+					
+					if( $this->isAjax() ) $visible = 'hidden';
 					
 					$search = $this->getQueryObject( $this->type,  $this->taxonomies );
 					
@@ -73,7 +74,7 @@ class Mediateca_Render
 		}
 		else if( $_GET && $_GET['results'] == $this->mother_page )
 		{
-				echo "in GET if::::::::::::::::::::::::::::::::::::::::::";
+				
 				$search = $this->getQueryObject( null,  null, null, true );
 				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
@@ -95,10 +96,7 @@ class Mediateca_Render
 	
 	     if ( $post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php' ) )
 	     {
-	     	
 	     	  $this->mother_page = $post->post_name;
-	     	  
-	     	  echo 'the mother is ' . $this->mother_page;
 	     	  
 	     	  $this->styleAndScripts();
 	     	  
@@ -214,7 +212,6 @@ class Mediateca_Render
 		
 		if( $is_pagination_query == false ) 
 		{
-			echo 'is post query and is using built args ' . $page . "<br />";
 			$_SESSION['previous_query'] = $args;
 			$query = $args;
 		} 
@@ -245,12 +242,13 @@ class Mediateca_Render
 	public function paginationLinks()
 	{
 		global $wp_query, $wp_rewrite, $wp;
+		
 		$wp_query->query_vars['paged'] > 1 ? $current = $wp_query->query_vars['paged'] : $current = 1;
 		
 		$pagination['add_args'] = array();
  
 		$pagination = array(
-			'base' => @add_query_arg('page','%#%'),
+			'base' => add_query_arg('page','%#%'),
 			'format' => '',
 			'total' => $this->number_of_pages,
 			'current' => $current,
@@ -259,19 +257,28 @@ class Mediateca_Render
 			'next_text' => '&raquo;',
 			'prev_text' => '&laquo;'
 			);
+		
+		
 			
 		if( $wp_rewrite->using_permalinks() )
+		{
 			$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 's', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
- 
+			$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 'results', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
+		}
+		
+		if( strpos( $pagination['base'], 'wp-admin/admin-ajax.php') )
+		{
+			$pagination['base'] = str_replace('wp-admin/admin-ajax.php', $this->pagename, $pagination['base']);
+		}
+		
+		if( $wp->query_vars['results'] || $_POST['results'] )
+		{
+			$pagination['add_args']['results'] = ( $wp->query_vars['results'] ) ? $wp->query_vars['results'] : $_POST['results'];
+		}
+		
 		if( !empty($wp_query->query_vars['s']) )
 			$pagination['add_args'] = array( 's' => get_query_var( 's' ) );
-			
-		if( $wp_query->query_vars['results'] )
-		{
-			$pagination['add_args']['results'] = $this->mother_page;
-		}
-		echo "<br />line 274 ";
-		print_r( $wp_query->query_vars );
+		
 		echo paginate_links( $pagination );
 	}
 	public function getUserNiceName( $id )
