@@ -10,6 +10,10 @@ jq(function($)
 	{
 		hardwareSoftwareForm();
 	}
+	if( $('#categoria').is('select') )
+	{
+		manageCategorySelect();
+	}
 });
 
 function mediatecaLinkButtons()
@@ -32,7 +36,7 @@ function hardwareSoftwareForm()
 {
 	$("#hardware-and-software-form").submit(function()
 	{
-		var send = $(this).serialize();
+		var el = $(this), send = el.serialize() + jQuery.param( Mediateca.query );
 		
 		$.ajax({  
 			type: 'post',  
@@ -54,7 +58,20 @@ function hardwareSoftwareForm()
 			{
 				if( data )
 				{
-					$("#hardware-and-software-form").parent().after( data );
+					console.log( "Parent "+el.parent().parent().attr('class') )
+					if( $("#search-results").is('div') )
+					{
+						$("#search-results").fadeOut(200, function()
+						{
+							el.parent().parent().after( data );
+							$("#search-results").fadeIn(200);
+						});
+					}
+					else
+					{
+						el.parent().parent().after( data );
+						$("#search-results").fadeIn(200);
+					}
 				}
 			},
 			complete: function( data, textStatus )
@@ -63,6 +80,40 @@ function hardwareSoftwareForm()
 			}  
 		});
 		return false;
+	});
+};
+function manageCategorySelect()
+{
+	$('#categoria').change(function()
+	{
+		var el = $(this), value = el.val();
+		
+		if( value != '')
+		{
+			$.post(Mediateca.ajaxurl, { action: 'manage_category_select', parent: value, 'mediateca-nonce' : $('#mediateca-nonce').val() }, function(data){
+				if( data )
+				{
+					
+					if( $("#sottocategoria").is('select') )
+					{
+						$("#sottocategoria").fadeOut(300, function(){
+							$(this).parent().remove();
+							el.parent().after(data);
+							$("#sottocategoria").parent().fadeIn(300, function(){
+						
+							});
+						});
+					}
+					else
+					{
+						el.parent().after(data);
+						$("#sottocategoria").parent().fadeIn(300, function(){
+						
+						});
+					}
+				}
+			});
+		}
 	});
 };
 
