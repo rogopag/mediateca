@@ -31,6 +31,7 @@ class Mediateca_Render
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
 		add_action( 'wp_ajax_nopriv_hardware-e-software-search', array(&$this, 'ajaxResult') );
 		add_action( 'wp_ajax_manage_category_select', array(&$this, 'populateSubcategories') );
+		add_action( 'wp_ajax_nopriv_manage_category_select', array(&$this, 'populateSubcategories') );
 	}
 	private function initSession()
 	{
