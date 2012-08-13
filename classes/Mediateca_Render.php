@@ -217,7 +217,6 @@ class Mediateca_Render
 		} 
 		else if( $is_pagination_query == true )
 		{
-			echo 'is pagination query and is using built args ' . $page . "<br />";
 			$query = $_SESSION['previous_query'];
 			$query['paged'] = $page;
 		}
