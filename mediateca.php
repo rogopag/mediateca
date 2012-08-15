@@ -26,6 +26,7 @@ define('LIBRI_SLUG', 'libri');
 define('HARDWARE_SOFTWARE_SLUG', 'hardware-e-software');
 define('MEDIATECA_TD', 'mediateca');
 define('MEDIATECA_RESULTS_PAGE', 'results');
+define('MEDIATECA_TEXT_SEARCH', 'search');
 
 require_once 'conf/class_loader.php';
 

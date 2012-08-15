@@ -2,7 +2,7 @@
 	<h2 class="orange main-large"><?php echo ucfirst( $this->type ); ?> risultati</h2>
 	<?php if ($search->have_posts()) : while ($search->have_posts()) : $search->the_post(); ?>
 		<div class="entry search-entry main-large">
-			<h4 class="search-result-entry-title"><?php the_title(); ?></h4>
+			<h4 class="search-result-entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
 			<?php 
 			the_advanced_excerpt('length=150&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img');
 			?>		

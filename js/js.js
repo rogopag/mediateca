@@ -8,11 +8,22 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		hardwareSoftwareForm();
+		//hardwareSoftwareForm( $("#hardware-and-software-form") );
+	}
+	if( $("#text-search-form").is('form') )
+	{
+		//hardwareSoftwareForm( $("#text-search-form") );
 	}
 	if( $('#categoria').is('select') )
 	{
 		manageCategorySelect();
+	}
+	if( $("#text-search-input").is('input') )
+	{
+		$("#text-search-input").click(function()
+		{
+			$(this).val('');
+		});
 	}
 });
 
@@ -31,12 +42,14 @@ function mediatecaLinkButtons()
 		$(this).children('a').css('color', 'black');
 	});
 };
-
-function hardwareSoftwareForm()
+function hardwareSoftwareForm( form )
 {
-	$("#hardware-and-software-form").submit(function()
+	form.submit(function()
 	{
-		var el = $(this), send = el.serialize() + jQuery.param( Mediateca.query );
+		
+		var el = $(this), send = el.serialize() + '&' +jQuery.param( Mediateca.query );
+		
+		//console.log( send );
 		
 		$.ajax({  
 			type: 'post',  
@@ -45,7 +58,7 @@ function hardwareSoftwareForm()
 			//dataType: 'json',
 			error: function(XMLHttpRequest, textStatus, errorThrown)
 			{  
-				console.log( textStatus, errorThrown );
+				console.error( textStatus, errorThrown );
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
@@ -58,7 +71,7 @@ function hardwareSoftwareForm()
 			{
 				if( data )
 				{
-					console.log( "Parent "+el.parent().parent().attr('class') )
+					//console.log(data);
 					if( $("#search-results").is('div') )
 					{
 						$("#search-results").fadeOut(200, function()
@@ -76,7 +89,7 @@ function hardwareSoftwareForm()
 			},
 			complete: function( data, textStatus )
 			{
-				//console.log( data, textStatus );
+				////console.log( data, textStatus );
 			}  
 		});
 		return false;

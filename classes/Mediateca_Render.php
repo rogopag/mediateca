@@ -30,8 +30,12 @@ class Mediateca_Render
 		add_filter( 'page_template', array(&$this, 'libriTemplate') );
 		add_action( 'wp_ajax_hardware-e-software-search', array(&$this, 'ajaxResult') );
 		add_action( 'wp_ajax_nopriv_hardware-e-software-search', array(&$this, 'ajaxResult') );
+		
 		add_action( 'wp_ajax_manage_category_select', array(&$this, 'populateSubcategories') );
 		add_action( 'wp_ajax_nopriv_manage_category_select', array(&$this, 'populateSubcategories') );
+		
+		add_action( 'wp_ajax_do_text_search', array(&$this, 'doTextSearch') );
+		add_action( 'wp_ajax_nopriv_do_text_search', array(&$this, 'doTextSearch') );
 	}
 	private function initSession()
 	{
@@ -43,8 +47,6 @@ class Mediateca_Render
 	public function ajaxResult()
 	{	
 		global $wp;
-		
-		//removes the addThis shit from results...
 		
 		remove_filter('the_content', 'addthis_display_social_widget', 15);
 		
@@ -96,6 +98,9 @@ class Mediateca_Render
 	private function styleAndScripts()
 	{
 		global $post, $wp;
+		
+		$wp->query_vars['current_page'] = $post->post_name;
+		
 		wp_enqueue_style('mediateca-front', MEDIATECA_URL.'css/style.css', '', '0.1', 'screen');
 		wp_enqueue_script('mediateca-js', MEDIATECA_URL.'js/js.js', array('jquery'), '0.1', 'screen');
 		wp_localize_script( 'mediateca-js', 'Mediateca', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'page' => get_permalink($post->ID), 'query' => $wp->query_vars ) );
@@ -112,7 +117,12 @@ class Mediateca_Render
 	     	  
 	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
 	     	  {
+	     	  	
 	     	  	add_action( 'render_search_results', array(&$this, 'ajaxResult') );
+	     	  }
+	     	  elseif( $wp->query_vars[MEDIATECA_TEXT_SEARCH] )
+	     	  {
+	     	  	add_action( 'render_search_results', array(&$this, 'doTextSearch') );
 	     	  }
 	     	  
 	     	  $page_template = MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-page.php';
@@ -120,13 +130,67 @@ class Mediateca_Render
 	     }
 	     return $page_template;
 	}
+	public function doTextSearch()
+	{
+		global $wp;
+		
+		remove_filter('the_content', 'addthis_display_social_widget', 15);
+		
+		if( function_exists('relevanssi_do_query') )
+		{
+			if( ( $_POST && wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') ) || $wp->query_vars['search'] )
+			{
+				$page = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+				
+				$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
+				
+				if( $this->isAjax() )
+				{ 
+					$this->mother_page = $_POST['current_page'];
+					
+					$wp->query_vars[MEDIATECA_TEXT_SEARCH] = $_POST[MEDIATECA_TEXT_SEARCH];
+				}
+				
+				if( $this->mother_page == HARDWARE_SOFTWARE_SLUG )
+				{
+					$types = array(SOFTWARE_TYPE, HARDWARE_TYPE);
+				}
+				elseif( $this->mother_page == LIBRI_SLUG )
+				{
+					$types = array(LIBRI_TYPE);
+				}
+				
+				$args = array(
+						's' => $wp->query_vars[MEDIATECA_TEXT_SEARCH],
+						'post_type' => $types,
+						'paged'			  => $page,
+						'posts_per_page'  => self::POSTS_PER_PAGE
+				);
+				
+				$searchlive = new WP_Query( $args );
+				
+				relevanssi_do_query( $searchlive );
+				
+				$search = &$searchlive;
+				
+				$this->number_of_pages = $search->max_num_pages;
+				
+				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+				
+				if( $this->isAjax() ) die('');
+			}
+		}
+	}
 	public function libriTemplate($page_template) 
 	{
 	     global $post, $wp;
 	     
 	     if ( $post->post_name == LIBRI_SLUG && file_exists( MEDIATECA_TEMPLATE_PATH . LIBRI_SLUG.'-page.php' ) ) 
 	     {
+	     	  $this->mother_page = $post->post_name;
+	     	  
 	     	  $this->styleAndScripts();
+	     	  
 	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == LIBRI_SLUG )
 	     	  {
 	     	  	
@@ -266,27 +330,28 @@ class Mediateca_Render
 			'next_text' => '&raquo;',
 			'prev_text' => '&laquo;'
 			);
-		
-		
 			
+		
 		if( $wp_rewrite->using_permalinks() )
 		{
-			$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 's', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
-			$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 'results', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
+			if( !empty($wp_query->query_vars[MEDIATECA_TEXT_SEARCH]) || $_POST[MEDIATECA_TEXT_SEARCH] )
+			{
+				$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( MEDIATECA_TEXT_SEARCH, get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
+				$pagination['add_args'][MEDIATECA_TEXT_SEARCH] = ( get_query_var( MEDIATECA_TEXT_SEARCH ) ) ? get_query_var( MEDIATECA_TEXT_SEARCH ) : $_POST[MEDIATECA_TEXT_SEARCH];
+			}
+			
+			if( $wp->query_vars['results'] || $_POST['results'] )
+			{
+				$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 'results', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
+				$pagination['add_args']['results'] = ( $wp->query_vars['results'] ) ? $wp->query_vars['results'] : $_POST['results'];
+			}
+			
 		}
 		
 		if( strpos( $pagination['base'], 'wp-admin/admin-ajax.php') )
 		{
 			$pagination['base'] = str_replace('wp-admin/admin-ajax.php', $this->pagename, $pagination['base']);
 		}
-		
-		if( $wp->query_vars['results'] || $_POST['results'] )
-		{
-			$pagination['add_args']['results'] = ( $wp->query_vars['results'] ) ? $wp->query_vars['results'] : $_POST['results'];
-		}
-		
-		if( !empty($wp_query->query_vars['s']) )
-			$pagination['add_args'] = array( 's' => get_query_var( 's' ) );
 		
 		echo paginate_links( $pagination );
 	}

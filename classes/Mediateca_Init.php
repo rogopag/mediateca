@@ -79,6 +79,7 @@ class Mediateca_Init
 		// add mediateca_views to the valid list of variables
 		$new_vars = self::$types;
 		array_push($new_vars, MEDIATECA_RESULTS_PAGE);
+		array_push($new_vars, MEDIATECA_TEXT_SEARCH);
 		$vars = $new_vars + $vars;
 		return $vars;
 	}
