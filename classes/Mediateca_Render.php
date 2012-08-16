@@ -48,6 +48,9 @@ class Mediateca_Render
 	{	
 		global $wp;
 		
+		remove_filter('the_content', 'addthis_display_social_widget', 15);
+				
+		remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
 		//check if it is a from submission and we ave something
 		if( ( $_POST && $_POST['media_type'] ) )
 			{
@@ -113,12 +116,11 @@ class Mediateca_Render
 	     	  
 	     	  $this->styleAndScripts();
 	     	  
-	     	  if( $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
+	     	  if( isset($wp->query_vars['results']) && $wp->query_vars['results'] && $wp->query_vars['results'] == HARDWARE_SOFTWARE_SLUG )
 	     	  {
-	     	  	
 	     	  	add_action( 'render_search_results', array(&$this, 'ajaxResult') );
 	     	  }
-	     	  elseif( $wp->query_vars[MEDIATECA_TEXT_SEARCH] )
+	     	  elseif( isset( $wp->query_vars[MEDIATECA_TEXT_SEARCH] ) && $wp->query_vars[MEDIATECA_TEXT_SEARCH] )
 	     	  {
 	     	  	add_action( 'render_search_results', array(&$this, 'doTextSearch') );
 	     	  }
@@ -158,26 +160,26 @@ class Mediateca_Render
 				$args = array(
 						's' => $wp->query_vars[MEDIATECA_TEXT_SEARCH],
 						'post_type' => $types,
-						'showpost' => 50
-						//'paged'			  => $page,
-						//'posts_per_page'  => self::POSTS_PER_PAGE
+						//'showposts' => 50
+						'paged'			  => $page,
+						'posts_per_page'  => self::POSTS_PER_PAGE
 				);
 				
 				$searchlive = new WP_Query( $args );
 				
 				relevanssi_do_query( $searchlive );
 				
-				//$search = &$searchlive;
+				$search = &$searchlive;
 				
-				$search = array_slice($searchlive->posts, 0, -1);
+				//$search = array_slice($searchlive->posts, 0, -1);
 				
 				$this->number_of_pages = $search->max_num_pages;
 				
 				remove_filter('the_content', 'addthis_display_social_widget', 15);
 				
-				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-search.php';
+				remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
 				
-				wp_reset_query();
+				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
 				
 				if( $this->isAjax() ) die('');
 			}
