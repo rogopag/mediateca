@@ -48,8 +48,6 @@ class Mediateca_Render
 	{	
 		global $wp;
 		
-		remove_filter('the_content', 'addthis_display_social_widget', 15);
-		
 		//check if it is a from submission and we ave something
 		if( ( $_POST && $_POST['media_type'] ) )
 			{
@@ -134,8 +132,6 @@ class Mediateca_Render
 	{
 		global $wp;
 		
-		remove_filter('the_content', 'addthis_display_social_widget', 15);
-		
 		if( function_exists('relevanssi_do_query') )
 		{
 			if( ( $_POST && wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') ) || $wp->query_vars['search'] )
@@ -147,7 +143,6 @@ class Mediateca_Render
 				if( $this->isAjax() )
 				{ 
 					$this->mother_page = $_POST['current_page'];
-					
 					$wp->query_vars[MEDIATECA_TEXT_SEARCH] = $_POST[MEDIATECA_TEXT_SEARCH];
 				}
 				
@@ -163,19 +158,26 @@ class Mediateca_Render
 				$args = array(
 						's' => $wp->query_vars[MEDIATECA_TEXT_SEARCH],
 						'post_type' => $types,
-						'paged'			  => $page,
-						'posts_per_page'  => self::POSTS_PER_PAGE
+						'showpost' => 50
+						//'paged'			  => $page,
+						//'posts_per_page'  => self::POSTS_PER_PAGE
 				);
 				
 				$searchlive = new WP_Query( $args );
 				
 				relevanssi_do_query( $searchlive );
 				
-				$search = &$searchlive;
+				//$search = &$searchlive;
+				
+				$search = array_slice($searchlive->posts, 0, -1);
 				
 				$this->number_of_pages = $search->max_num_pages;
 				
-				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
+				remove_filter('the_content', 'addthis_display_social_widget', 15);
+				
+				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-search.php';
+				
+				wp_reset_query();
 				
 				if( $this->isAjax() ) die('');
 			}

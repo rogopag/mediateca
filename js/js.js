@@ -8,11 +8,11 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		//hardwareSoftwareForm( $("#hardware-and-software-form") );
+		hardwareSoftwareForm( $("#hardware-and-software-form") );
 	}
 	if( $("#text-search-form").is('form') )
 	{
-		//hardwareSoftwareForm( $("#text-search-form") );
+		hardwareSoftwareForm( $("#text-search-form") );
 	}
 	if( $('#categoria').is('select') )
 	{
