@@ -8,11 +8,11 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		//hardwareSoftwareForm( $("#hardware-and-software-form") );
+		hardwareSoftwareForm( $("#hardware-and-software-form") );
 	}
 	if( $("#text-search-form").is('form') )
 	{
-		//hardwareSoftwareForm( $("#text-search-form") );
+		hardwareSoftwareForm( $("#text-search-form") );
 	}
 	if( $('#categoria').is('select') )
 	{
@@ -46,12 +46,18 @@ function hardwareSoftwareForm( form )
 {
 	form.submit(function()
 	{
-		
 		var el = $(this), send = el.serialize() + '&' +jQuery.param( Mediateca.query );
 		
-		//console.log( send );
+		ajaxCall( send, el );
 		
-		$.ajax({  
+		return false;
+	});
+};
+function ajaxCall( data, element )
+{
+	var send = data, el = element;
+	
+	$.ajax({  
 			type: 'post',  
 			url: Mediateca.ajaxurl,  
 			data: send,
@@ -71,29 +77,31 @@ function hardwareSoftwareForm( form )
 			{
 				if( data )
 				{
-					//console.log(data);
+					
 					if( $("#search-results").is('div') )
 					{
 						$("#search-results").fadeOut(200, function()
 						{
 							el.parent().parent().after( data );
-							$("#search-results").fadeIn(200);
+							$("#search-results").fadeIn(200, function(){
+								mediatecaPagination()
+							});
 						});
 					}
 					else
 					{
 						el.parent().parent().after( data );
-						$("#search-results").fadeIn(200);
+						$("#search-results").fadeIn(200, function(){
+							mediatecaPagination()
+						});
 					}
 				}
 			},
 			complete: function( data, textStatus )
 			{
-				////console.log( data, textStatus );
+				
 			}  
 		});
-		return false;
-	});
 };
 function manageCategorySelect()
 {
@@ -129,7 +137,36 @@ function manageCategorySelect()
 		}
 	});
 };
-
-
-
-
+function managePagination()
+{
+	$('a.page-numbers').bind('click', function(event)
+	{	
+		event.preventDefault();
+		
+		var kind, send, action, a = $(event.target), href = a.attr('href'), query = href.split('?')[1], variable = query.split('=')[0], what = query.split('=')[1], tmp = href.split('page/'), page = tmp[1].split('/?')[0];
+		
+		if( variable == 'results' )
+		{
+			action = $('#hardware-e-software-search').val();
+			kind = $('#hardware-e-software-search').val();
+		}
+		else if( variable == 'search' )
+		{
+			action = $("#hardware-e-software-text-search").val();
+			kind = what;
+		}
+		
+		send = $.param({action:action, paginated : what, pagenum : page, kind : kind }) + '&' +jQuery.param( Mediateca.query );
+		
+		console.log( send  );
+		
+		ajaxCall( send, $("#hardware-and-software-form") )
+	});
+};
+function mediatecaPagination()
+{
+	if( $('a.page-numbers').is('a') )
+	{
+		managePagination();
+	}
+};

@@ -48,9 +48,15 @@ class Mediateca_Render
 	{	
 		global $wp;
 		
-		remove_filter('the_content', 'addthis_display_social_widget', 15);
-				
-		remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
+		//make sure add this plugin shit doesn't bother
+		if( function_exists('addthis_init') )
+		{
+			remove_filter('the_content', 'addthis_display_social_widget', 15);	
+			remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
+		}
+		
+		$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
+		
 		//check if it is a from submission and we ave something
 		if( ( $_POST && $_POST['media_type'] ) )
 			{
@@ -58,7 +64,6 @@ class Mediateca_Render
 				if(  wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') )
 				{
 					//fill up the vars and render
-					$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
 					
 					$this->type = $_SESSION['media_type'] = $_POST['media_type'];
 					
@@ -84,7 +89,7 @@ class Mediateca_Render
 					die("Problema di validazione del form.");
 				}
 		}
-		else if( $_GET && $_GET['results'] == $this->mother_page )
+		else if( ($_GET && $_GET['results'] == $this->mother_page) || ( $_POST && $_POST['paginated'] ) )
 		{
 				$this->type = $_SESSION['media_type'];
 			
@@ -132,26 +137,27 @@ class Mediateca_Render
 	}
 	public function doTextSearch()
 	{
-		global $wp;
+		global $wp, $wp_query;
 		
 		if( function_exists('relevanssi_do_query') )
 		{
-			if( ( $_POST && wp_verify_nonce($_POST['mediateca-nonce'], 'mediateca-check-nonce') ) || $wp->query_vars['search'] )
+			
+			if( ( $_POST && wp_verify_nonce($_POST['mediateca-nonce-text'], 'mediateca-check-nonce') || $_POST && $_POST['paginated'] ) || $wp->query_vars['search'] )
 			{
-				$page = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
 				
 				$this->pagename = isset( $_POST['pagename'] ) ? $_POST['pagename'] : $wp->query_vars['pagename'];
 				
 				if( $this->isAjax() )
 				{ 
 					$this->mother_page = $_POST['current_page'];
-					$wp->query_vars[MEDIATECA_TEXT_SEARCH] = $_POST[MEDIATECA_TEXT_SEARCH];
+					$wp->query_vars[MEDIATECA_TEXT_SEARCH] = ( $_POST['paginated'] ) ? $_POST['paginated'] : $_POST[MEDIATECA_TEXT_SEARCH] ;
 				}
 				
 				if( $this->mother_page == HARDWARE_SOFTWARE_SLUG )
 				{
 					$types = array(SOFTWARE_TYPE, HARDWARE_TYPE);
 				}
+				
 				elseif( $this->mother_page == LIBRI_SLUG )
 				{
 					$types = array(LIBRI_TYPE);
@@ -161,29 +167,38 @@ class Mediateca_Render
 						's' => $wp->query_vars[MEDIATECA_TEXT_SEARCH],
 						'post_type' => $types,
 						//'showposts' => 50
-						'paged'			  => $page,
-						'posts_per_page'  => self::POSTS_PER_PAGE
+						'paged'			  => $this->getCurrent(),
+						'posts_per_page'  => self::POSTS_PER_PAGE,
+						'order_by' => 'post_date'
 				);
-				
-				$searchlive = new WP_Query( $args );
-				
-				relevanssi_do_query( $searchlive );
-				
-				$search = &$searchlive;
-				
-				//$search = array_slice($searchlive->posts, 0, -1);
+						
+				$search = new WP_Query( $args );
+			
 				
 				$this->number_of_pages = $search->max_num_pages;
 				
-				remove_filter('the_content', 'addthis_display_social_widget', 15);
-				
-				remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
+					//make sure add this plugin shit doesn't bother
+				if( function_exists('addthis_init') )
+				{
+					remove_filter('the_content', 'addthis_display_social_widget', 15);	
+					remove_filter('get_the_excerpt', 'addthis_display_social_widget_excerpt', 11);
+				}
 				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG.'-'.MEDIATECA_RESULTS_PAGE.'-page.php';
 				
 				if( $this->isAjax() ) die('');
 			}
 		}
+	}
+	private function getCurrent()
+	{
+		global $wp_query;
+
+		$wp_query->query_vars['paged'] > 1 ? $current = $wp_query->query_vars['paged'] : $current = 1;
+		
+		isset( $_POST['pagenum'] ) ? $current = $_POST['pagenum'] : $current = $current;
+		
+		return $current;
 	}
 	public function libriTemplate($page_template) 
 	{
@@ -269,8 +284,14 @@ class Mediateca_Render
 	}
 	private function getQueryObject( $types, $taxonomies = array(), $metas = array(), $is_pagination_query = false )
 	{
-		$page = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
-		
+		if( $_POST && $_POST['pagenum'] ) 
+		{
+			$page = $_POST['pagenum'];
+		}
+		else 
+		{
+			$page = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+		}
 		
 		$args = array(
 	    'offset'          => 0,
@@ -316,38 +337,37 @@ class Mediateca_Render
 		
 		return array_push($this->taxonomies, $query);
 	}
+
 	public function paginationLinks()
 	{
 		global $wp_query, $wp_rewrite, $wp;
 		
-		$wp_query->query_vars['paged'] > 1 ? $current = $wp_query->query_vars['paged'] : $current = 1;
-		
 		$pagination['add_args'] = array();
- 
+		
 		$pagination = array(
 			'base' => add_query_arg('page','%#%'),
 			'format' => '',
 			'total' => $this->number_of_pages,
-			'current' => $current,
+			'current' => $this->getCurrent(),
 			'show_all' => true,
 			'type' => 'list',
 			'next_text' => '&raquo;',
 			'prev_text' => '&laquo;'
 			);
 			
-		
 		if( $wp_rewrite->using_permalinks() )
-		{
-			if( !empty($wp_query->query_vars[MEDIATECA_TEXT_SEARCH]) || $_POST[MEDIATECA_TEXT_SEARCH] )
+		{	
+			if( ( $_POST['paginated'] && $_POST['paginated'] == $_POST['kind'] ) || ( !empty($wp_query->query_vars[MEDIATECA_TEXT_SEARCH]) || $_POST[MEDIATECA_TEXT_SEARCH] ) )
 			{
 				$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( MEDIATECA_TEXT_SEARCH, get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
-				$pagination['add_args'][MEDIATECA_TEXT_SEARCH] = ( get_query_var( MEDIATECA_TEXT_SEARCH ) ) ? get_query_var( MEDIATECA_TEXT_SEARCH ) : $_POST[MEDIATECA_TEXT_SEARCH];
+				$pagination['add_args'][MEDIATECA_TEXT_SEARCH] = ( get_query_var( MEDIATECA_TEXT_SEARCH ) ) ? get_query_var( MEDIATECA_TEXT_SEARCH ) : ( $_POST[MEDIATECA_TEXT_SEARCH] ) ? $_POST[MEDIATECA_TEXT_SEARCH] : $_POST['paginated'];
 			}
 			
-			if( $wp->query_vars['results'] || $_POST['results'] )
+			if( ( $_POST['paginated'] && $_POST['kind'] == MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH ) || ( $wp->query_vars['results'] || $_POST['results'] ) )
 			{
 				$pagination['base'] = user_trailingslashit( trailingslashit( remove_query_arg( 'results', get_pagenum_link( 1 ) ) ) . 'page/%#%/', 'paged' );
-				$pagination['add_args']['results'] = ( $wp->query_vars['results'] ) ? $wp->query_vars['results'] : $_POST['results'];
+				$pagination['add_args']['results'] = ( $wp->query_vars['results'] ) ? $wp->query_vars['results'] : ( $_POST['results'] ) ? $_POST['results'] : $_POST['paginated'];
+				
 			}
 			
 		}

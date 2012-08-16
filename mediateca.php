@@ -27,6 +27,7 @@ define('HARDWARE_SOFTWARE_SLUG', 'hardware-e-software');
 define('MEDIATECA_TD', 'mediateca');
 define('MEDIATECA_RESULTS_PAGE', 'results');
 define('MEDIATECA_TEXT_SEARCH', 'search');
+define('MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH', 'hardware-e-software-search');
 
 require_once 'conf/class_loader.php';
 

@@ -22,7 +22,7 @@
 			<h4>Ricerca avanzata</h4>
 			<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form" class="mediateca-form">
 		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce'); ?>
-		<input type="hidden" name="action" value="hardware-e-software-search" id="hardware-e-software-search" />
+		<input type="hidden" name="action" value="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" id="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" />
 		<input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
 		<div class="select-container">
 			<label for="terzo-livello">Tipologia</label><br />
@@ -56,11 +56,12 @@
 	<h4>Ricerca testuale</h4>
 	<form id="text-search-form" name="text-search-form" method="post" class="mediateca-form" action="<?php echo the_permalink(); ?>">
 		<input type="text" name="<?php echo MEDIATECA_TEXT_SEARCH; ?>" value="cerca" id="text-search-input" />
-		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce'); ?>
-		<input type="hidden" name="action" value="do_text_search" />
+		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce-text'); ?>
+		<input type="hidden" name="action" value="do_text_search" id="hardware-e-software-text-search" />
 		<span class="span-submit"><input name="submit-text-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 	</form>
 </div>
+
 <?php endwhile; else: ?>
 	<p>Siamo spiacenti, la pagina che stavi cercando non &egrave; stata trovata.</p>
 <?php endif; ?>

@@ -13,9 +13,13 @@
 endwhile; 
 $this->paginationLinks();
 wp_reset_query();
+$search->rewind_posts();
 else: ?>
 <div class="entry search-entry">
 	<p>Siamo spiacenti, la tua ricerca non ha prodotto risultati.</p>
 </div>
-<?php endif; ?>
+<?php 
+endif; 
+
+?>
 
