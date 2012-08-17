@@ -169,7 +169,8 @@ class Mediateca_Render
 						//'showposts' => 50
 						'paged'			  => $this->getCurrent(),
 						'posts_per_page'  => self::POSTS_PER_PAGE,
-						'order_by' => 'post_date'
+						'orderby' => 'title',
+						'order'  => 'ASC'
 				);
 						
 				$search = new WP_Query( $args );
