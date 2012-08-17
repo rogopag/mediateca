@@ -15,6 +15,6 @@ div.buttonsContainer{text-align:center;margin-bottom:20px;}
 .span-submit{position:relative;top:4px;vertical-align:middle;}
 .mediateca-form input[type="image"]{position:relative;}
 .hidden{display:none;}
-ul.page-numbers{float:right;}
+ul.page-numbers{text-align:center;}
 ul.page-numbers li{list-style-type:none;display:inline;padding-left:5px;}
 a.page-numbers{}

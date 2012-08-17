@@ -5,8 +5,13 @@
 	<?php if ($search->have_posts()) : while ($search->have_posts()) : $search->the_post(); ?>
 		<div class="entry search-entry main-large">
 			<h4 class="search-result-entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
+			<p class="postmetadata">Pubblicato in <?php echo dito_printObjectTermsInNiceFormat( get_the_ID() ); ?></p>
 			<?php 
-				the_advanced_excerpt('length=150&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img');
+				if( function_exists('the_advanced_excerpt') ):
+					the_advanced_excerpt('length=150&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img');
+				else:
+					echo "Attivare la plugin Advanced Excerpt";
+				endif;
 			?>		
 		</div>
 <?php 
