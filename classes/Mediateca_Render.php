@@ -336,7 +336,7 @@ class Mediateca_Render {
 		else if( get_post_meta($id, '_mediateca_featured_image', true) )
 		{
 			$thumb = get_post_meta($id, '_mediateca_featured_image', true);
-			echo "IMG_SRC::: " . $thumb;
+			
 			if( strpos( $thumb, 'ImmaginiDB') )
 			{
 				$thumb = str_replace('/ImmaginiDB/', '', $thumb);
