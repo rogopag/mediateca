@@ -56,7 +56,7 @@
 	<h4>Ricerca testuale</h4>
 	<form id="text-search-form" name="text-search-form" method="post" class="mediateca-form" action="<?php echo the_permalink(); ?>">
 		<input type="text" name="<?php echo MEDIATECA_TEXT_SEARCH; ?>" value="cerca" id="text-search-input" />
-		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce-text'); ?>
+		<?php wp_nonce_field('mediateca-check-text-nonce','mediateca-nonce-text'); ?>
 		<input type="hidden" name="action" value="do_text_search" id="hardware-e-software-text-search" />
 		<span class="span-submit"><input name="submit-text-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 	</form>

@@ -26,6 +26,7 @@ class Mediateca_Render {
 		add_filter ( 'page_template', array (&$this, 'mediatecaTemplate' ) );
 		add_filter ( 'page_template', array (&$this, 'hardware_e_softwareTemplate' ) );
 		add_filter ( 'page_template', array (&$this, 'libriTemplate' ) );
+		
 		add_action ( 'wp_ajax_hardware-e-software-search', array (&$this, 'ajaxResult' ) );
 		add_action ( 'wp_ajax_nopriv_hardware-e-software-search', array (&$this, 'ajaxResult' ) );
 		
@@ -55,7 +56,7 @@ class Mediateca_Render {
 		//check if it is a from submission and we ave something
 		if (($_POST && $_POST ['media_type'])) {
 			//check if the form was submitted from our form 
-			if (wp_verify_nonce ( $_POST ['mediateca-nonce'], 'mediateca-check-nonce' )) {
+			if ( wp_verify_nonce ( $_POST ['mediateca-nonce'], 'mediateca-check-nonce' ) ) {
 				//fill up the vars and render
 				
 
@@ -125,7 +126,7 @@ class Mediateca_Render {
 	public function doTextSearch() {
 		global $wp;
 		
-		if (($_POST && wp_verify_nonce ( $_POST ['mediateca-nonce-text'], 'mediateca-check-nonce' ) || $_POST && $_POST ['paginated']) || $wp->query_vars ['search']) {
+		if (($_POST && wp_verify_nonce ( $_POST ['mediateca-nonce-text'], 'mediateca-check-text-nonce' ) || $_POST && $_POST ['paginated']) || $wp->query_vars ['search']) {
 			
 			$this->pagename = isset ( $_POST ['pagename'] ) ? $_POST ['pagename'] : $wp->query_vars ['pagename'];
 			
@@ -322,6 +323,29 @@ class Mediateca_Render {
 	}
 	public function isAjax() {
 		return (isset ( $_SERVER ['HTTP_X_REQUESTED_WITH'] ) && ($_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
+	}
+	public function grabPostThumbIfAny( $post_id )
+	{
+		$id = $post_id;
+		$thumb = get_the_post_thumbnail($id, 'thumbnail');
+		
+		if( $thumb ) 
+		{
+			return $thumb;
+		}
+		else if( get_post_meta($id, '_mediateca_featured_image', true) )
+		{
+			$thumb = get_post_meta($id, '_mediateca_featured_image', true);
+			echo "IMG_SRC::: " . $thumb;
+			if( strpos( $thumb, 'ImmaginiDB') )
+			{
+				$thumb = str_replace('/ImmaginiDB/', '', $thumb);
+			}
+			$upload = wp_upload_dir();
+			$thumb = $upload['baseurl'] . '/ImmaginiDB/' . $thumb;
+			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'" width="180px" height="135px" /></a>';
+		}
+		return false;
 	}
 }
 ?>
