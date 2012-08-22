@@ -21,3 +21,4 @@ a.page-numbers{}
 .search-entry{padding-bottom:8px;}
 .mediateca-image-anchor{float:left;margin:0;padding:0 10px 10px 0;}
 .mediateca-image-anchor img {margin:0 0 10px 0;padding:0;background:none;border:1px solid #F8E498;}
+#loading-gif{display:none;position:relative;display:none;left:50%;top:20px;}

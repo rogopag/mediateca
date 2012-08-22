@@ -5,7 +5,7 @@ class Mediateca_Render {
 	private $types;
 	private $type;
 	public $show_comments;
-	public static $PAGES_SLUG = array (MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
+	public static $PAGES_SLUG = array (MEDIATECA_SLUGS, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
 	const POSTS_PER_PAGE = 10;
 	private $taxonomies = array ( );
 	private $metas = array ( );
@@ -102,7 +102,7 @@ class Mediateca_Render {
 		
 		wp_enqueue_style ( 'mediateca-front', MEDIATECA_URL . 'css/style.css', '', '0.1', 'screen' );
 		wp_enqueue_script ( 'mediateca-js', MEDIATECA_URL . 'js/js.js', array ('jquery' ), '0.1', 'screen' );
-		wp_localize_script ( 'mediateca-js', 'Mediateca', array ('ajaxurl' => admin_url ( 'admin-ajax.php' ), 'page' => get_permalink ( $post->ID ), 'query' => $wp->query_vars ) );
+		wp_localize_script ( 'mediateca-js', 'Mediateca', array ('plugin_url' => MEDIATECA_URL, ajaxurl => admin_url ( 'admin-ajax.php' ), 'page' => get_permalink ( $post->ID ), 'query' => $wp->query_vars ) );
 	}
 	public function hardware_e_softwareTemplate($page_template) {
 		global $post, $wp;
@@ -342,7 +342,9 @@ class Mediateca_Render {
 				$thumb = str_replace('/ImmaginiDB/', '', $thumb);
 			}
 			$upload = wp_upload_dir();
+			
 			$thumb = $upload['baseurl'] . '/ImmaginiDB/' . $thumb;
+			
 			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'" width="180px" height="135px" /></a>';
 		}
 		return false;
