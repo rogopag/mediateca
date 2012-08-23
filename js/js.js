@@ -72,10 +72,14 @@ function ajaxCall( data, element )
 					{
 						$("#search-results").fadeOut('fast', function()
 						{
-						
+							mediateca_loading( el );
 						});
 					}
-					mediateca_loading( el );
+					else
+					{
+						mediateca_loading( el );
+					}
+					
 			}, 
 			success: function( data, textStatus, jqXHR )
 			{

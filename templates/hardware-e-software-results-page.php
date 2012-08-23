@@ -1,7 +1,7 @@
 <?php $title = ( $wp->query_vars[MEDIATECA_TEXT_SEARCH] ) ? ucfirst($wp->query_vars[MEDIATECA_TEXT_SEARCH]) : ucfirst( $this->type ); ?>
 <div class="main forIE main-large <?php echo $visible;?>" id="search-results">
 	<h2 class="orange main-large">
-	<?php echo $search->found_posts .' risultati per '.  $title; ?></h2>
+	<?php printf( ( $search->found_posts == 1 ) ? "%d risultato per %s" : "%d risultati per %s" , $search->found_posts, $title);?></h2>
 	<?php if ($search->have_posts()) : while ($search->have_posts()) : $search->the_post(); ?>
 		<div class="entry search-entry main-large">
 			<?php  echo $this->grabPostThumbIfAny( get_the_ID() ); ?>
