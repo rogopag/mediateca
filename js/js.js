@@ -8,11 +8,22 @@ jq(function($)
 	}
 	if( $("#hardware-and-software-form").is('form') )
 	{
-		hardwareSoftwareForm();
+		hardwareSoftwareForm( $("#hardware-and-software-form") );
+	}
+	if( $("#text-search-form").is('form') )
+	{
+		hardwareSoftwareForm( $("#text-search-form") );
 	}
 	if( $('#categoria').is('select') )
 	{
 		manageCategorySelect();
+	}
+	if( $("#text-search-input").is('input') )
+	{
+		$("#text-search-input").click(function()
+		{
+			$(this).val('');
+		});
 	}
 });
 
@@ -31,56 +42,61 @@ function mediatecaLinkButtons()
 		$(this).children('a').css('color', 'black');
 	});
 };
-
-function hardwareSoftwareForm()
+function hardwareSoftwareForm( form )
 {
-	$("#hardware-and-software-form").submit(function()
+	form.submit(function()
 	{
-		var el = $(this), send = el.serialize() + jQuery.param( Mediateca.query );
+		var el = $(this), send = el.serialize() + '&' +jQuery.param( Mediateca.query );
 		
-		$.ajax({  
+		ajaxCall( send, el );
+		
+		return false;
+	});
+};
+function ajaxCall( data, element )
+{
+	var send = data, el = element;
+	
+	$.ajax({  
 			type: 'post',  
 			url: Mediateca.ajaxurl,  
 			data: send,
 			//dataType: 'json',
 			error: function(XMLHttpRequest, textStatus, errorThrown)
 			{  
-				console.log( textStatus, errorThrown );
+				console.error( textStatus, errorThrown );
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
-				if (XMLHttpRequest && XMLHttpRequest.overrideMimeType) 
-				{
-				    //XMLHttpRequest.overrideMimeType("application/j-son;charset=UTF-8");
-				}
+				if( $("#search-results").is('div') )
+					{
+						$("#search-results").fadeOut('fast', function()
+						{
+							mediateca_loading( el );
+						});
+					}
+					else
+					{
+						mediateca_loading( el );
+					}
+					
 			}, 
 			success: function( data, textStatus, jqXHR )
 			{
 				if( data )
 				{
-					console.log( "Parent "+el.parent().parent().attr('class') )
-					if( $("#search-results").is('div') )
-					{
-						$("#search-results").fadeOut(200, function()
-						{
-							el.parent().parent().after( data );
-							$("#search-results").fadeIn(200);
-						});
-					}
-					else
-					{
-						el.parent().parent().after( data );
-						$("#search-results").fadeIn(200);
-					}
+					el.parent().parent().after( data );
+					$("#search-results").fadeIn(200, function(){
+							mediatecaPagination()
+					});
+						
 				}
 			},
 			complete: function( data, textStatus )
 			{
-				//console.log( data, textStatus );
+				mediateca_loading_remove();
 			}  
 		});
-		return false;
-	});
 };
 function manageCategorySelect()
 {
@@ -116,7 +132,49 @@ function manageCategorySelect()
 		}
 	});
 };
-
-
-
-
+function managePagination()
+{
+	$('a.page-numbers').bind('click', function(event)
+	{	
+		event.preventDefault();
+		
+		var kind, send, action, a = $(event.target), href = a.attr('href'), query = href.split('?')[1], variable = query.split('=')[0], what = query.split('=')[1], tmp = href.split('page/'), page = tmp[1].split('/?')[0];
+		
+		if( variable == 'results' )
+		{
+			action = $('#hardware-e-software-search').val();
+			kind = $('#hardware-e-software-search').val();
+		}
+		else if( variable == 'search' )
+		{
+			action = $("#hardware-e-software-text-search").val();
+			kind = what;
+		}
+		
+		send = $.param({action:action, paginated : what, pagenum : page, kind : kind }) + '&' + jQuery.param( Mediateca.query );
+		
+		console.log( send  );
+		
+		ajaxCall( send, $("#hardware-and-software-form") )
+	});
+};
+function mediatecaPagination()
+{
+	if( $('a.page-numbers').is('a') )
+	{
+		managePagination();
+	}
+};
+function mediateca_loading( a )
+{
+	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading" id="loading-gif" />'), append = a;
+	console.log( src, loading.attr('src') );
+	loading.insertAfter( append.parent().parent() ).fadeIn('fast');
+};
+function mediateca_loading_remove( )
+{
+	$("#loading-gif").fadeOut('fast', function()
+	{
+		$(this).remove();
+	});
+};

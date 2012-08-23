@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set("display_errors", 0); 
 class Batch_Mediateca
 {
-	private $db, $dbUser, $dbPassword, $dbHost, $batch_db, $wp, $admin;
+	private $db, $dbUser, $dbPassword, $dbHost, $batch_db, $wp, $admin, $cards_count;
 	
 	public function __construct()
 	{
@@ -47,6 +47,8 @@ class Batch_Mediateca
 	{
 		$cards = $this->batch_db->get_results("SELECT * FROM Schede");
 		
+		$this->cards_count = count( $cards );
+		
 		foreach($cards as $card)
 		{
 			$this->insertPost( $card );
@@ -55,6 +57,10 @@ class Batch_Mediateca
 	private function insertPost( $card )
 	{
 		global $current_user;
+		
+		static $count_h = 0;
+		
+		static $count_s = 0;
 		
 		get_currentuserinfo();
 		$user = $current_user;
@@ -78,17 +84,30 @@ class Batch_Mediateca
 					'post_date' => $card->DataModifica,
 					);
 		
-					
+
+		if( $postdata['post_type'] == 'hardware' ) $count_h++;
+		if( $postdata['post_type'] == 'software' ) $count_s++;
+				
 		$post_id = wp_insert_post( $postdata, true );
 		
-		echo $post_id;
 		
 		if( $post_id  && !is_wp_error($post_id ) ) 
 		{
 			$this->giveTermsToPost($card, $post_id);
 		}
 		
+		$foo = ( $postdata['post_type'] == 'hardware' ) ? $count_h : $count_s;
+		
+		print "Inserted post " . $post_id . ' type ' . $postdata['post_type'] . " c " . $foo;
+		
 		print "<p>_________________________________________________________________________________________________________</p>";
+		
+		$total = $count_h + $count_s;
+		
+		if( $this->cards_count == $total )
+		{
+			print "<p>Get everything in total we have " . $total . " == " . $this->cards_count.'</p>';
+		}
 		
 	}
 	private function giveTermsToPost($card, $post_id = null)
@@ -109,7 +128,7 @@ class Batch_Mediateca
 		
 		$this->giveMetaToPost( $card, $post_id );
 		
-		echo $post_id . " => " .  ' '. $c[0] . " " . $c[1] . " " . $t[0] . " " . $s[0];
+		//echo $post_id . " => " .  ' '. $c[0] . " " . $c[1] . " " . $t[0] . " " . $s[0];
 		
 	}
 	private function giveMetaToPost($card, $post_id = null)
@@ -130,8 +149,28 @@ class Batch_Mediateca
 		if($card->HardwareNecessario) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'hardware_necessario', $card->HardwareNecessario, true );
 		if($card->Immagine) 
 		{
-			$link = trim( $card->Immagine, '~' );
-			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $link, true );
+			if( strpos( $card->Immagine, 'ImmaginiDB') )
+			{
+				$link = str_replace('~/ImmaginiDB/', '', $card->Immagine);
+			}
+			elseif( strpos( $card->Immagine, "\\" ) )
+			{
+				$tmp = explode("\\", $card->Immagine);
+				$link = $tmp[1];
+			}
+			else 
+			{
+				$link = $card->Immagine;
+			}
+			
+			$upload = wp_upload_dir();
+			
+			if( file_exists( $upload['basedir'].'/ImmaginiDB/'.$link ) && $link != 'logo.jpg' )
+			{
+				print " Image for this post is " . $link . ' originally was ' . $card->Immagine . " and the path is " . $upload['basedir'].'/ImmaginiDB/'.$link;
+			
+				add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'featured_image', $link, true );
+			}
 		}
 	}
 	private function createTerms()

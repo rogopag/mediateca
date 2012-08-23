@@ -8,10 +8,17 @@ div.buttonsContainer{text-align:center;margin-bottom:20px;}
 #mediateca-text-search{padding-right:0px;}
 .mediateca-forms-container h4{padding:10px 0 10px 0;color:rgb(30,30,30)}
 .mediateca-form{font-size:12px;}
+.mediateca-form input[type="text"]{border: 1px solid #646464;height: 13px;padding: 1px;position: relative;width: 200px;}
 .mediateca-form label{color:rgb(60,60,60);padding-left:2px;font-weight:bold;}
 .mediateca-form select{margin-bottom:10px;min-width:200px;}
 .float-right{float:right;padding-right:10px;}
+.span-submit{position:relative;top:4px;vertical-align:middle;}
+.mediateca-form input[type="image"]{position:relative;}
 .hidden{display:none;}
-ul.page-numbers{float:right;}
+ul.page-numbers{text-align:center;}
 ul.page-numbers li{list-style-type:none;display:inline;padding-left:5px;}
 a.page-numbers{}
+.search-entry{padding-bottom:8px;}
+.mediateca-image-anchor{float:left;margin:0;padding:0 10px 10px 0;}
+.mediateca-image-anchor img {margin:0 0 10px 0;padding:0;background:none;border:1px solid #F8E498;}
+#loading-gif{display:none;position:relative;display:none;left:50%;top:20px;}
