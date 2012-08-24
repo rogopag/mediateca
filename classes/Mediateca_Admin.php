@@ -25,7 +25,9 @@ class Mediateca_Admin
 		$this->meta_prefix = '_mediateca_';
 		$this->types = Mediateca_Init::$types;
 		$this->type = ( $_GET['post_type'] ) ? $_GET['post_type'] : get_query_var('post_type');
-		$this->metaBoxes = add_filter( 'cmb_meta_boxes', array(&$this, 'addMetaBoxes' ) );
+		$this->metaBoxes = add_filter( 'cmb_meta_boxes', array(&$this, 'addHardwareAndSoftwareMetaBoxes' ) );
+		$foo = add_filter( 'cmb_meta_boxes', array(&$this, 'addLibriMetaBoxes' ) );
+		print_r($foo);
 		add_action('admin_menu', array(&$this, 'cleanMetaboxes') );
 		add_filter( 'cmb_render_hierarchical_checkboxes', array(&$this, 'render_hierarchical_checkboxes'), 10, 2 );
 		add_action( 'init', array(&$this, 'initCmbMetaBoxes'), 999 );
@@ -64,17 +66,21 @@ class Mediateca_Admin
 		}
 	}
 	/**
-	 * addMetaBoxes() - callback function to cmb_meta_boxes
+	 * aaddHardwareAndSoftwareMetaBoxes() - callback function to cmb_meta_boxes
 	 * @param $meta_boxes
 	 * @return array
 	 * @author Riccardo Strobbia
 	 **/
-	public function addMetaBoxes( $meta_boxes )
+	public function addHardwareAndSoftwareMetaBoxes( $meta_boxes )
 	{
+		$types = $this->types;
+		
+		array_pop( $types );
+		
 		$meta_boxes[] = array(
 				'id' => 'test_metabox',
 				'title' => 'Dati pubblicazione',
-				'pages' => $this->types, // post type
+				'pages' => $types, // post type
 				'context' => 'normal',
 				'priority' => 'high',
 				'show_names' => true, // Show field names on the left
@@ -177,6 +183,209 @@ class Mediateca_Admin
 						'desc' => 'Indirizzo immagine importata dal vecchio DB. Non Utilizzare per nuovi inserimenti e cancellare nel caso di importazione nuova immagine da WP.',
 						'id' => $this->meta_prefix . 'featured_image',
 						'type' => 'text_medium'
+					),
+				),
+			);
+
+			return $meta_boxes;
+	}
+public function addLibriMetaBoxes( $meta_boxes )
+	{
+		$types = array(LIBRI_TYPE);
+		
+		$meta_boxes[] = array(
+				'id' => 'test_metabox',
+				'title' => 'Dati pubblicazione',
+				'pages' => $types, // post type
+				'context' => 'normal',
+				'priority' => 'high',
+				'show_names' => true, // Show field names on the left
+				'fields' => array(
+					array(
+						'name' => 'Sezione',
+						'desc' => 'Sezione di appartenenza della pubblicazione',
+						'id' => $this->meta_prefix . 'sezione-libri',
+						'taxonomy' => 'sezione-libri', //Enter Taxonomy Slug
+						'type' => 'taxonomy_radio'
+					),
+					array(
+						'name' => 'Handicap preso in considerazione',
+						'desc' => 'Handicap preso in considerazione',
+						'id' => $this->meta_prefix . 'tipo-di-handicap',
+						'taxonomy' => 'tipo-di-handicap',
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Genere',
+						'desc' => 'Genere',
+						'id' => $this->meta_prefix . 'genere',
+						'taxonomy' => 'genere', //Enter Taxonomy Slug
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Tipologia di libro',
+						'desc' => 'Tipologia di libro',
+						'id' => $this->meta_prefix . 'tipo-di-libro',
+						'taxonomy' => 'tipo-di-libro', //Enter Taxonomy Slug
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Fascia di et&agrave;',
+						'desc' => 'Fascia di et&agrave;',
+						'id' => $this->meta_prefix . 'eta',
+						'taxonomy' => 'eta', //Enter Taxonomy Slug
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Tipo di difficolt&agrave; compensata',
+						'desc' => 'Tipo di difficolt&agrave; compensata',
+						'id' => $this->meta_prefix . 'difficolta-compensata',
+						'taxonomy' => 'difficolta-compensata', //Enter Taxonomy Slug
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Personaggi',
+						'desc' => 'Personaggi',
+						'id' => $this->meta_prefix . 'personaggi',
+						'taxonomy' => 'personaggi', //Enter Taxonomy Slug
+						'type' => 'checkbox'
+					),
+					array(
+						'name' => 'Anno',
+						'desc' => 'Anno di pubblicazione',
+						'id' => $this->meta_prefix . 'anno',
+						'type' => 'text_date'
+					),
+					array(
+						'name' => 'Collana',
+						'desc' => 'Collana di pubblicazione',
+						'id' => $this->meta_prefix . 'collana',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Autore/i',
+						'desc' => 'Autore/i della pubblicazione',
+						'id' => $this->meta_prefix . 'autori',
+						'type' => 'text'
+					),
+					array(
+						'name' => 'Distributore',
+						'desc' => 'Distributore della pubblicazione',
+						'id' => $this->meta_prefix . 'distributore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Editore',
+						'desc' => 'Editore della pubblicazione',
+						'id' => $this->meta_prefix . 'editore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Prezzo',
+						'desc' => 'Prezzo della pubblicazione',
+						'id' => $this->meta_prefix . 'prezzo',
+						'type' => 'text_money'
+					),
+					array(
+						'name' => 'Maneggevolezza',
+						'desc' => 'Grado di difficolt&agrave; nella manipolazione',
+						'id' => $this->meta_prefix . 'maneggevolezza',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Numero di pagine',
+						'desc' => 'Numero di pagine',
+						'id' => $this->meta_prefix . 'numero-di-pagine',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => 'meno di 10', 'value' => 'meno di 10', ),
+							array( 'name' => 'tra 10 e 50', 'value' => 'tra 10 e 50', ),
+							array( 'name' => 'tra 50 e 100', 'value' => 'tra 10 e 50', ),
+							array( 'name' => 'pi&ugrave; di 100', 'value' => 'pi&ugrave; di 100', ),
+						),
+					),
+					array(
+						'name' => 'Complessit&agrave;',
+						'desc' => 'Grado di complessit&agrave; nella fruizione',
+						'id' => $this->meta_prefix . 'complessita',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Font',
+						'desc' => 'Maiuscolo o minuscolo',
+						'id' => $this->meta_prefix . 'font',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Maiuscolo', 'value' => 0, ),
+							array( 'name' => 'Minuscolo', 'value' => 1, ),
+						),
+					),
+					array(
+						'name' => 'Dimesnione del carattere',
+						'desc' => 'Dimesnione del carattere',
+						'id' => $this->meta_prefix . 'dimensione-carattere',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Normale', 'value' => 0, ),
+							array( 'name' => 'Grande', 'value' => 1, ),
+						),
+					),
+					array(
+						'name' => 'Esplorabilit&agrave;',
+						'desc' => 'Grado di Esplorabilit&agrave;',
+						'id' => $this->meta_prefix . 'esploralibita',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Multimedia',
+						'desc' => 'Presenza di assets multimediali',
+						'id' => $this->meta_prefix . 'multimedia',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
+						),
+					),
+					array(
+						'name' => 'Tipo di supporto multimediale',
+						'desc' => 'Tipo di supporto multimediale',
+						'id' => $this->meta_prefix . 'Multimedia type',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => 'nessuno', 'value' => '', ),
+							array( 'name' => 'Cd Audio', 'value' => 'Cd Audio', ),
+							array( 'name' => 'Cd Mp3', 'value' => 'Cd Mp3', ),
+							array( 'name' => 'Mp3 scaricabile', 'value' => 'Mp3 scaricabile', ),
+							array( 'name' => 'Video', 'value' => 'Video', ),
+							array( 'name' => 'Scaricabile', 'value' => 'Scaricabile', ),
+						),
+					),
+					array(
+						'name' => 'Multimedia link',
+						'desc' => 'Lunk all\'asset multimediale',
+						'type' => 'text',
+						'id' => $prefix . 'multimedia-link'
 					),
 				),
 			);

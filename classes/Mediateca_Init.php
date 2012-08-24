@@ -10,7 +10,8 @@ class Mediateca_Init
 	private function __construct()
 	{
 		$this->createPostTypes();
-		$this->createTaxonomies();
+		$this->createHardwareAndSoftwareTaxonomies();
+		$this->createLibriTaxonomies();
 		add_filter('query_vars', array(&$this, 'addQueryVars'));
 		register_activation_hook( MEDIATECA_PATH.'mediateca', array( $this, 'createPluginPages' ) );
 		self::$pages = array( MEDIATECA_SLUG => get_page_by_title( ucfirst(MEDIATECA_SLUG) ), HARDWARE_SOFTWARE_SLUG => get_page_by_title( ucfirst( str_replace('-', ' ', HARDWARE_SOFTWARE_SLUG) ) ), LIBRI_SLUG => get_page_by_title( ucfirst( str_replace('-', ' ', LIBRI_SLUG) ) ));
@@ -49,28 +50,86 @@ class Mediateca_Init
 			));
 		}
 	}
-	private function createTaxonomies()
+	private function createHardwareAndSoftwareTaxonomies()
 	{
-		register_taxonomy( 'terzo-livello', self::$types,
-		array(
-			'hierarchical' => false,
-			'label' => __('Terzo livello',MEDIATECA_TD),
-			'query_var' => 'terzo-livello',
-			'rewrite' => array('slug' => 'terzo-livello' )
-			));
-		register_taxonomy( 'categoria', self::$types,
+		$types = self::$types;
+		
+		array_pop( $types );	
+	
+		register_taxonomy( 'categoria', $types,
 		array(
 			'hierarchical' => true,
 			'label' => __('Categoria',MEDIATECA_TD),
 			'query_var' => 'categoria',
 			'rewrite' => array('slug' => 'categoria' )
 			));
-		register_taxonomy( 'sezione', self::$types,
+		register_taxonomy( 'terzo-livello', $types,
 		array(
 			'hierarchical' => false,
+			'label' => __('Terzo livello',MEDIATECA_TD),
+			'query_var' => 'terzo-livello',
+			'rewrite' => array('slug' => 'terzo-livello' )
+			));
+		register_taxonomy( 'sezione', $types,
+		array(
+			'hierarchical' => true,
 			'label' => __('Sezione',MEDIATECA_TD),
 			'query_var' => 'sezione',
 			'rewrite' => array('slug' => 'sezione' )
+			));
+	}
+	public function createLibriTaxonomies()
+	{
+		$types = LIBRI_TYPE;
+		
+		register_taxonomy( 'tipo-di-handicap', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Tipo di handicap',MEDIATECA_TD),
+			'query_var' => 'tipo-di-handicap',
+			'rewrite' => array('slug' => 'tipo-di-handicap' )
+			));
+		register_taxonomy( 'genere', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Genere',MEDIATECA_TD),
+			'query_var' => 'genere',
+			'rewrite' => array('slug' => 'genere' )
+			));
+		register_taxonomy( 'sezione-libri', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Sezione',MEDIATECA_TD),
+			'query_var' => 'sezione-libri',
+			'rewrite' => array('slug' => 'sezione-libri' )
+			));
+		register_taxonomy( 'tipo-di-libro', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Tipologia di libro',MEDIATECA_TD),
+			'query_var' => 'tipo-di-libro',
+			'rewrite' => array('slug' => 'tipo-di-libro' )
+			));
+		register_taxonomy( 'eta', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Fascia di et&agrave;',MEDIATECA_TD),
+			'query_var' => 'eta',
+			'rewrite' => array('slug' => 'eta' )
+			));
+		register_taxonomy( 'difficolta-compensata', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Tipo di difficolt&agrave; compensata',MEDIATECA_TD),
+			'query_var' => 'difficolta-compensata',
+			'rewrite' => array('slug' => 'difficolta-compensata' )
+			));
+		register_taxonomy( 'personaggi', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Personaggi',MEDIATECA_TD),
+			'query_var' => 'personaggi',
+			'rewrite' => array('slug' => 'personaggi' )
 			));
 	}
 	//push our types in the array of valid query vars
