@@ -25,7 +25,7 @@ class Mediateca_Init
 				'singular_name' => __(ucfirst($type), MEDIATECA_TD),
 				'add_new' => __('Add New', MEDIATECA_TD),
 				'add_new_item' => __('Add New '. ucfirst($type),MEDIATECA_TD),
-				'edit_item' => __('Edit Promote',MEDIATECA_TD),
+				'edit_item' => __('Edit '.ucfirst($type),MEDIATECA_TD),
 				'new_item' => __('New '.ucfirst($type),MEDIATECA_TD),
 				'view_item' => __('View '.ucfirst($type),MEDIATECA_TD),
 				'search_items' => __('Search '.ucfirst($type) ,MEDIATECA_TD),

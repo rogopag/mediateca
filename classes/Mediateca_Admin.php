@@ -10,10 +10,9 @@ class Mediateca_Admin
 {
 	//this class is singleton
 	private static $instance;
-	private $type;
 	private $types;
 	public $meta_prefix;
-	public $metaBoxes;
+	
 	/**
 	 * Class constructor
 	 * @private
@@ -24,10 +23,8 @@ class Mediateca_Admin
 	{
 		$this->meta_prefix = '_mediateca_';
 		$this->types = Mediateca_Init::$types;
-		$this->type = ( $_GET['post_type'] ) ? $_GET['post_type'] : get_query_var('post_type');
-		$this->metaBoxes = add_filter( 'cmb_meta_boxes', array(&$this, 'addHardwareAndSoftwareMetaBoxes' ) );
-		$foo = add_filter( 'cmb_meta_boxes', array(&$this, 'addLibriMetaBoxes' ) );
-		print_r($foo);
+		add_filter( 'cmb_meta_boxes', array(&$this, 'addHardwareAndSoftwareMetaBoxes' ) );
+		add_filter( 'cmb_meta_boxes', array(&$this, 'addLibriMetaBoxes' ) );
 		add_action('admin_menu', array(&$this, 'cleanMetaboxes') );
 		add_filter( 'cmb_render_hierarchical_checkboxes', array(&$this, 'render_hierarchical_checkboxes'), 10, 2 );
 		add_action( 'init', array(&$this, 'initCmbMetaBoxes'), 999 );
@@ -51,18 +48,14 @@ class Mediateca_Admin
 	 **/
 	public function cleanMetaboxes()
 	{
-		
 		foreach( $this->types as $type )
 		{
-			if( $type == $this->type )
-			{
-				remove_meta_box('postcustom', $type, 'normal');
-				remove_meta_box('powerpress-podcast', $type, 'normal');
-				remove_meta_box('commentstatusdiv', $type, 'normal');
-				remove_meta_box('categoriadiv', $type, 'side');
-				remove_meta_box('tagsdiv-sezione', $type, 'side');
-				remove_meta_box('terzo-livellodiv', $type, 'side');
-			}
+			remove_meta_box ( 'postcustom', $type, 'normal' );
+			remove_meta_box ( 'powerpress-podcast', $type, 'normal' );
+			remove_meta_box ( 'commentstatusdiv', $type, 'normal' );
+			remove_meta_box ( 'categoriadiv', $type, 'side' );
+			remove_meta_box ( 'tagsdiv-sezione', $type, 'side' );
+			remove_meta_box ( 'terzo-livellodiv', $type, 'side' );
 		}
 	}
 	/**
@@ -213,42 +206,42 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'desc' => 'Handicap preso in considerazione',
 						'id' => $this->meta_prefix . 'tipo-di-handicap',
 						'taxonomy' => 'tipo-di-handicap',
-						'type' => 'checkbox'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Genere',
 						'desc' => 'Genere',
 						'id' => $this->meta_prefix . 'genere',
 						'taxonomy' => 'genere', //Enter Taxonomy Slug
-						'type' => 'checkbox'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Tipologia di libro',
 						'desc' => 'Tipologia di libro',
 						'id' => $this->meta_prefix . 'tipo-di-libro',
 						'taxonomy' => 'tipo-di-libro', //Enter Taxonomy Slug
-						'type' => 'checkbox'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Fascia di et&agrave;',
 						'desc' => 'Fascia di et&agrave;',
 						'id' => $this->meta_prefix . 'eta',
 						'taxonomy' => 'eta', //Enter Taxonomy Slug
-						'type' => 'checkbox'
+						'type' => 'multicheck'
 					),
 					array(
 						'name' => 'Tipo di difficolt&agrave; compensata',
 						'desc' => 'Tipo di difficolt&agrave; compensata',
 						'id' => $this->meta_prefix . 'difficolta-compensata',
 						'taxonomy' => 'difficolta-compensata', //Enter Taxonomy Slug
-						'type' => 'checkbox'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Personaggi',
 						'desc' => 'Personaggi',
 						'id' => $this->meta_prefix . 'personaggi',
 						'taxonomy' => 'personaggi', //Enter Taxonomy Slug
-						'type' => 'checkbox'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Anno',
@@ -307,7 +300,7 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'options' => array(
 							array( 'name' => 'meno di 10', 'value' => 'meno di 10', ),
 							array( 'name' => 'tra 10 e 50', 'value' => 'tra 10 e 50', ),
-							array( 'name' => 'tra 50 e 100', 'value' => 'tra 10 e 50', ),
+							array( 'name' => 'tra 50 e 100', 'value' => 'tra 50 e 100', ),
 							array( 'name' => 'pi&ugrave; di 100', 'value' => 'pi&ugrave; di 100', ),
 						),
 					),
@@ -385,7 +378,7 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'name' => 'Multimedia link',
 						'desc' => 'Lunk all\'asset multimediale',
 						'type' => 'text',
-						'id' => $prefix . 'multimedia-link'
+						'id' => $this->meta_prefix . 'multimedia-link',
 					),
 				),
 			);
