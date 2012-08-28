@@ -1,4 +1,6 @@
-<?php get_header(); ?>
+<?php 
+global $mediatecaRender;
+get_header(); ?>
 
 <div id="content">
 
@@ -6,7 +8,7 @@
 	<div class="main forIE">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange"><?php the_title(); ?></h2>
-
+			<?php echo $mediatecaRender->grabPostThumbIfAny( get_the_ID() ); ?>
 
 			<div class="entry intro">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
