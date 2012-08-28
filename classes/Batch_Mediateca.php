@@ -27,6 +27,8 @@ class Batch_Mediateca
 		<p><input type="submit" value="Batch Terms" name="batch_terms" /></form></p>';
 		$form .= '<form id="Batch_Posts_submit"  action="'. $_SERVER['REQUEST_URI'] .'" method="post" accept-charset="utf-8" name="Batch_Posts_submit">
 		<p><input type="submit" value="Batch Posts" name="batch_posts" /></form></p>';
+		$form .= '<form id="Batch_Libri_Terms_submit"  action="'. $_SERVER['REQUEST_URI'] .'" method="post" accept-charset="utf-8" name="Batch_Libri_Terms_submit">
+		<p><input type="submit" value="Batch Libri Terms" name="batch_libri_terms" /></form></p>';
 		echo $form;
 		
 		$this->doBatches();
@@ -41,6 +43,24 @@ class Batch_Mediateca
 		if( $_POST['batch_posts'])
 		{
 			$this->savePostsAndPostData();
+		}
+		if( $_POST['batch_libri_terms'])
+		{
+			$this->batch_libri_terms();
+		}
+	}
+	private function batch_libri_terms()
+	{
+		$tax_arr = $this->libriTaxonomiesData();
+		foreach( $tax_arr as $key => $val )
+		{
+			foreach( $val as $term )
+			{
+				$t =  $this->doSlugFromTermName( strtolower( $term ) );
+				$this->insertTerm($t, $key);
+				print 'Inserted term <strong>' . $t . '</strong> nice name is '.$term.' in taxonomy <strong>' .$key. '</strong><br />';
+			}
+			print '<br />________________________________________________________________________________________<br />';
 		}
 	}
 	private function savePostsAndPostData()
@@ -227,6 +247,116 @@ class Batch_Mediateca
 	private function unaccent($string)
 	{
 		return preg_replace('~&([a-z]{1,2})(acute|cedil|circ|grave|lig|orn|ring|slash|th|tilde|uml);~i', '$1', htmlentities($string, ENT_QUOTES, 'UTF-8'));
+	}
+	private function libriTaxonomiesData()
+	{
+			$populate = array(
+			'tipo-di-libro' => array(
+				'Libro tradizionale a stampa',
+				'Libro digitale',
+				'Libro tattile',
+				'Libro corredato da simboli',
+				'Libro con traduzione in LIS-Lingua dei Segni Italiana',
+				'Libro con carattere specifico per la dislessia',
+				'Audiolibro',
+				'Libro senza parole',
+				'altro'
+			),
+			'tipo-di-handicap' => array(
+				'Nessuna disabilita',
+				'Disabilita uditiva',
+				'Disabilita visiva',
+				'Disabilita intellettiva',
+				'Disabilita motoria',
+				'Disabilita espressiva',
+				'DSA-Disturbi Specifici dell\'Apprendimento',
+			),
+			'difficolta-compensata' => array(
+				'Nessuna',
+				'Manipolazione dell\'oggetto-libro',
+				'Cecita',
+				'Ipovisione',
+				'Riconoscimento delle lettere e delle parole',
+				'Comprensione del testo',
+				'Comprensione del senso della frase',
+				'Comprensione del lessico',
+				'Comprensione delle immagini',
+				'Attenzione',
+				'Pronuncia ad alta voce del testo-difficolta fonologiche',
+				'Altro',
+			),
+			'genere' => array(
+				'albo',
+				'fiaba',
+				'poesie-e-filastrocche',
+				'racconto',
+				'romanzo',
+				'diario',
+				'fumetto',
+				'altro'
+			),
+			'temi-trattati' => array(
+				'affetti',
+				'amicizia',
+				'avventura',
+				'disabilita',
+				'diversita',
+				'ecologia',
+				'emozioni',
+				'famiglia',
+				'fantasy',
+				'fantascienza',
+				'giallo-indagini-misteri',
+				'guerra-e-conflitti',
+				'mitologia',
+				'sport',
+				'storia',
+				'vita-scolastica',
+				'viaggio',
+				'altro'
+			),
+			'personaggi' => array(
+				'animali',
+				'animali-che-si-comportanmo-comne-umani',
+				'persone',
+				'oggetti-animati',
+				'mostri-e-creature-fantastiche',
+				'personaggi-di-fantasia-visti-in-tv',
+				'altro'
+			),
+			'eta' => array(
+				'0-2-anni',
+				'3-5-anni',
+				'6-8-anni',
+				'9-11-anni',
+				'12-14-anni',
+			),
+			'ambiente-prevalente' => array(
+				'domestico',
+				'scolastico',
+				'urbano',
+				'naturale',
+				'fantastico',
+				'altro'
+			),
+			'ambiente-prevalente' => array(
+				'domestico',
+				'scolastico',
+				'urbano',
+				'naturale',
+				'fantastico',
+				'altro'
+			),
+			'codici-utilizzati' => array(
+				'testo-a-stampa',
+				'braille',
+				'lingua-italiana-dei-segni',
+				'simboli-pcs',
+				'altri-tipi-di-simboli',
+				'altro'
+			)
+		);
+		return $populate;
 	}
 }
 ?>

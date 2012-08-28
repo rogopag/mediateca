@@ -202,7 +202,7 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'type' => 'taxonomy_radio'
 					),
 					array(
-						'name' => 'Handicap preso in considerazione',
+						'name' => 'Tipo di handicap',
 						'desc' => 'Handicap preso in considerazione',
 						'id' => $this->meta_prefix . 'tipo-di-handicap',
 						'taxonomy' => 'tipo-di-handicap',
@@ -213,27 +213,48 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'desc' => 'Genere',
 						'id' => $this->meta_prefix . 'genere',
 						'taxonomy' => 'genere', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
+						'type' => 'taxonomy_select'
 					),
 					array(
 						'name' => 'Tipologia di libro',
 						'desc' => 'Tipologia di libro',
 						'id' => $this->meta_prefix . 'tipo-di-libro',
 						'taxonomy' => 'tipo-di-libro', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
+						'type' => 'taxonomy_select'
 					),
 					array(
 						'name' => 'Fascia di et&agrave;',
 						'desc' => 'Fascia di et&agrave;',
 						'id' => $this->meta_prefix . 'eta',
 						'taxonomy' => 'eta', //Enter Taxonomy Slug
-						'type' => 'multicheck'
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Tipo di difficolt&agrave; compensata',
 						'desc' => 'Tipo di difficolt&agrave; compensata',
 						'id' => $this->meta_prefix . 'difficolta-compensata',
 						'taxonomy' => 'difficolta-compensata', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Codici utilizzati',
+						'desc' => 'Codici utilizzati',
+						'id' => $this->meta_prefix . 'codici-utilizzati',
+						'taxonomy' => 'codici-utilizzati', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Temi trattati',
+						'desc' => 'Temi trattati',
+						'id' => $this->meta_prefix . 'temi-trattati',
+						'taxonomy' => 'temi-trattati', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Ambiente prevalente',
+						'desc' => 'Ambiente prevalente',
+						'id' => $this->meta_prefix . 'ambiente-prevalente',
+						'taxonomy' => 'ambiente-prevalente', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
 					),
 					array(
@@ -271,6 +292,12 @@ public function addLibriMetaBoxes( $meta_boxes )
 						'name' => 'Editore',
 						'desc' => 'Editore della pubblicazione',
 						'id' => $this->meta_prefix . 'editore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'ISBN',
+						'desc' => 'ISBN',
+						'id' => $this->meta_prefix . 'ISBN',
 						'type' => 'text_medium'
 					),
 					array(

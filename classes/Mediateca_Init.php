@@ -81,7 +81,6 @@ class Mediateca_Init
 	public function createLibriTaxonomies()
 	{
 		$types = LIBRI_TYPE;
-		
 		register_taxonomy( 'tipo-di-handicap', $types,
 		array(
 			'hierarchical' => false,
@@ -130,6 +129,20 @@ class Mediateca_Init
 			'label' => __('Personaggi',MEDIATECA_TD),
 			'query_var' => 'personaggi',
 			'rewrite' => array('slug' => 'personaggi' )
+			));
+		register_taxonomy( 'temi-trattati', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Temi trattati',MEDIATECA_TD),
+			'query_var' => 'temi-trattati',
+			'rewrite' => array('slug' => 'temi-trattati' )
+			));
+		register_taxonomy( 'codici-utilizzati', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Codici utilizzati',MEDIATECA_TD),
+			'query_var' => 'codici-utilizzati',
+			'rewrite' => array('slug' => 'codici-utilizzati' )
 			));
 	}
 	//push our types in the array of valid query vars
