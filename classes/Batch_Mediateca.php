@@ -82,53 +82,62 @@ class Batch_Mediateca
 		
 		static $count_s = 0;
 		
+		$title = ucfirst( mb_strtolower( $card->Titolo ) );
+		
+		$type = mb_strtolower($card->Tipologia);
+		
 		get_currentuserinfo();
+		
 		$user = $current_user;
 		
-		$postdata = array(
-					'post_title' => ucfirst( mb_strtolower( $card->Titolo ) ),
-					'post_content' => $card->Scheda,
-					'post_status' => 'publish',
-					'post_type' => mb_strtolower($card->Tipologia),
-					'post_author' => $user->ID,
-					'ping_status' => get_option('default_ping_status'),
-					'post_parent' => 0,
-					'menu_order' => 0,
-					'to_ping' =>  '',
-					'pinged' => '',
-					'post_password' => '',
-					'guid' => '',
-					'post_content_filtered' => '',
-					'post_excerpt' => '',
-					'import_id' => 0,
-					'post_date' => $card->DataModifica,
-					);
+		$exists = $this->wp->get_var("SELECT post_title FROM wp_posts WHERE post_title = '$title' AND post_type = '$type'");
 		
+		if( !$exists )
+		{
+			print $title . ' do not exists ' . $exists . '<br />';
+			
+			$postdata = array(
+						'post_title' => $title,
+						'post_content' => $card->Scheda,
+						'post_status' => 'publish',
+						'post_type' => $type,
+						'post_author' => $user->ID,
+						'ping_status' => get_option('default_ping_status'),
+						'post_parent' => 0,
+						'menu_order' => 0,
+						'to_ping' =>  '',
+						'pinged' => '',
+						'post_password' => '',
+						'guid' => '',
+						'post_content_filtered' => '',
+						'post_excerpt' => '',
+						'import_id' => 0,
+						'post_date' => $card->DataModifica,
+						);
+			
+	
+			if( $postdata['post_type'] == 'hardware' ) $count_h++;
+			if( $postdata['post_type'] == 'software' ) $count_s++;
+					
+			$post_id = wp_insert_post( $postdata, true );
+			
+			
+			if( $post_id  && !is_wp_error($post_id ) ) 
+			{
+				$this->giveTermsToPost($card, $post_id);
+			}
+			
+			$foo = ( $postdata['post_type'] == 'hardware' ) ? $count_h : $count_s;
+			
+			print "Inserted post " . $post_id . ' type ' . $postdata['post_type'] . " c " . $foo;
+			
+			print "<p>_________________________________________________________________________________________________________</p>";
+			
+			$total = $count_h + $count_s;
+		}
+		
+		print "<p>Get everything in total we have " . $total . " == " . $this->cards_count / 2 .'</p>';
 
-		if( $postdata['post_type'] == 'hardware' ) $count_h++;
-		if( $postdata['post_type'] == 'software' ) $count_s++;
-				
-		$post_id = wp_insert_post( $postdata, true );
-		
-		
-		if( $post_id  && !is_wp_error($post_id ) ) 
-		{
-			$this->giveTermsToPost($card, $post_id);
-		}
-		
-		$foo = ( $postdata['post_type'] == 'hardware' ) ? $count_h : $count_s;
-		
-		print "Inserted post " . $post_id . ' type ' . $postdata['post_type'] . " c " . $foo;
-		
-		print "<p>_________________________________________________________________________________________________________</p>";
-		
-		$total = $count_h + $count_s;
-		
-		if( $this->cards_count == $total )
-		{
-			print "<p>Get everything in total we have " . $total . " == " . $this->cards_count.'</p>';
-		}
-		
 	}
 	private function giveTermsToPost($card, $post_id = null)
 	{
