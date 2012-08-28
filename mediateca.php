@@ -42,7 +42,7 @@ function mediatecaCreateInstances()
 	$mediatecaInit = Mediateca_Init::getInstance();
 	//class is singleton
 	$mediatecaAdmin = Mediateca_Admin::getInstance();
-	//$batchMediateca = new Batch_Mediateca();
+	$batchMediateca = new Batch_Mediateca();
 	$mediatecaRender = new Mediateca_Render();
 }
 
