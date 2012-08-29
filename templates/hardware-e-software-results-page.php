@@ -9,9 +9,9 @@
 			<p class="postmetadata">Pubblicato in <?php echo dito_printObjectTermsInNiceFormat( get_the_ID() ); ?></p>
 			<?php 
 				if( function_exists('the_advanced_excerpt') ):
-					the_advanced_excerpt('length=150&use_words=0&no_custom=1&ellipsis=%26hellip;&exclude_tags=img');
+					mediatecaDoExerpt();
 				else:
-					echo "Attivare la plugin Advanced Excerpt";
+					the_content();
 				endif;
 			?>		
 		</div>
