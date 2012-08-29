@@ -10,7 +10,7 @@ get_header(); ?>
 			<h2 class="orange"><?php the_title(); ?></h2>
 			<?php echo $mediatecaRender->grabPostThumbIfAny( get_the_ID() ); ?>
 
-			<div class="entry intro">
+			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small>
 					<?php  
