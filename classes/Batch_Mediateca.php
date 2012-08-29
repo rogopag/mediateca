@@ -52,12 +52,13 @@ class Batch_Mediateca
 	private function batch_libri_terms()
 	{
 		$tax_arr = $this->libriTaxonomiesData();
+		
 		foreach( $tax_arr as $key => $val )
 		{
 			foreach( $val as $term )
 			{
 				$t =  $this->doSlugFromTermName( strtolower( $term ) );
-				$this->insertTerm($t, $key);
+				$this->insertTerm( ucfirst($term), $key, array('slug' => $t ) );
 				print 'Inserted term <strong>' . $t . '</strong> nice name is '.$term.' in taxonomy <strong>' .$key. '</strong><br />';
 			}
 			print '<br />________________________________________________________________________________________<br />';
@@ -260,9 +261,9 @@ class Batch_Mediateca
 	private function libriTaxonomiesData()
 	{
 			$populate = array(
-			'sezione' => array(
-				'libri-accessibili',
-				'libri-sulla-disabilita',
+			'sezione-libri' => array(
+				'Libri accessibili',
+				'Libri sulla disabilita',
 			),
 			'tipo-di-libro' => array(
 				'Libro tradizionale a stampa',
@@ -301,7 +302,7 @@ class Batch_Mediateca
 			'genere' => array(
 				'albo',
 				'fiaba',
-				'poesie-e-filastrocche',
+				'poesie e filastrocche',
 				'racconto',
 				'romanzo',
 				'diario',
@@ -319,22 +320,22 @@ class Batch_Mediateca
 				'famiglia',
 				'fantasy',
 				'fantascienza',
-				'giallo-indagini-misteri',
-				'guerra-e-conflitti',
+				'giallo indagini misteri',
+				'guerra e conflitti',
 				'mitologia',
 				'sport',
 				'storia',
-				'vita-scolastica',
+				'vita scolastica',
 				'viaggio',
 				'altro'
 			),
 			'personaggi' => array(
 				'animali',
-				'animali-che-si-comportanmo-comne-umani',
+				'animali che si comportanmo comne umani',
 				'persone',
-				'oggetti-animati',
-				'mostri-e-creature-fantastiche',
-				'personaggi-di-fantasia-visti-in-tv',
+				'oggetti animati',
+				'mostri e creature fantastiche',
+				'personaggi di fantasia visti in tv',
 				'altro'
 			),
 			'eta' => array(
@@ -361,11 +362,11 @@ class Batch_Mediateca
 				'altro'
 			),
 			'codici-utilizzati' => array(
-				'testo-a-stampa',
+				'testo a stampa',
 				'braille',
-				'lingua-italiana-dei-segni',
-				'simboli-pcs',
-				'altri-tipi-di-simboli',
+				'lingua italiana dei segni',
+				'simboli pcs',
+				'altri tipi di simboli',
 				'altro'
 			)
 		);
