@@ -260,6 +260,10 @@ class Batch_Mediateca
 	private function libriTaxonomiesData()
 	{
 			$populate = array(
+			'sezione' => array(
+				'libri-accessibili',
+				'libri-sulla-disabilita',
+			),
 			'tipo-di-libro' => array(
 				'Libro tradizionale a stampa',
 				'Libro digitale',
