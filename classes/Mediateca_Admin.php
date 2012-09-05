@@ -182,7 +182,7 @@ class Mediateca_Admin
 
 			return $meta_boxes;
 	}
-public function addLibriMetaBoxes( $meta_boxes )
+	public function addLibriMetaBoxes( $meta_boxes )
 	{
 		$types = array(LIBRI_TYPE);
 		

@@ -353,14 +353,6 @@ class Batch_Mediateca
 				'fantastico',
 				'altro'
 			),
-			'ambiente-prevalente' => array(
-				'domestico',
-				'scolastico',
-				'urbano',
-				'naturale',
-				'fantastico',
-				'altro'
-			),
 			'codici-utilizzati' => array(
 				'testo a stampa',
 				'braille',

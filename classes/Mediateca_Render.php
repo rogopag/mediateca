@@ -15,7 +15,7 @@ class Mediateca_Render {
 	const HIDE_EMPTY = 1;
 	
 	public function __construct() {
-		$this->initSession ();
+		$this->initSession();
 		
 		$this->types = Mediateca_Init::$types;
 		
@@ -109,7 +109,7 @@ class Mediateca_Render {
 		if ($post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists ( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-page.php' )) {
 			$this->mother_page = $post->post_name;
 			
-			$this->styleAndScripts ();
+			$this->styleAndScripts();
 			
 			if (isset ( $wp->query_vars ['results'] ) && $wp->query_vars ['results'] && $wp->query_vars ['results'] == HARDWARE_SOFTWARE_SLUG) {
 				add_action ( 'render_search_results', array (&$this, 'ajaxResult' ) );
@@ -197,7 +197,7 @@ class Mediateca_Render {
 		}
 		return $page_template;
 	}
-	public function modifyMediatecaPageContent($content) {
+	public function modifyMediatecaPageContent($content) {		
 		$html = '<div class="buttonsContainer">
 				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="' . get_bloginfo ( 'url' ) . '/' . MEDIATECA_SLUG . '/' . HARDWARE_SOFTWARE_SLUG . '">Hardware&Software</a></div>
 				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="' . get_bloginfo ( 'url' ) . '/' . MEDIATECA_SLUG . '/' . LIBRI_SLUG . '">Libri</a></div>
@@ -208,6 +208,7 @@ class Mediateca_Render {
 		global $post;
 		
 		if (in_array ( $post->post_type, $this->types ) && file_exists ( MEDIATECA_TEMPLATE_PATH . 'single-' . MEDIATECA_SLUG . '.php' )) {
+			$this->styleAndScripts();
 			$single_template = MEDIATECA_TEMPLATE_PATH . '/single-' . MEDIATECA_SLUG . '.php';
 		}
 		return $single_template;
