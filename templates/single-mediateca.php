@@ -4,13 +4,11 @@ get_header(); ?>
 
 <div id="content">
 
-	<?php get_template_part('sidebar_left');?>
+	<?php include_once 'mediateca_sidebar.php';?>
 	<div class="main forIE">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange"><?php the_title(); ?></h2>
-			<?php echo $mediatecaRender->grabPostThumbIfAny( get_the_ID() ); ?>
-
-			<div class="entry intro">
+			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small>
 					<?php  

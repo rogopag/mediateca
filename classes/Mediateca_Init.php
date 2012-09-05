@@ -81,6 +81,13 @@ class Mediateca_Init
 	public function createLibriTaxonomies()
 	{
 		$types = LIBRI_TYPE;
+		register_taxonomy( 'sezione-libri', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Sezione',MEDIATECA_TD),
+			'query_var' => 'sezione-libri',
+			'rewrite' => array('slug' => 'sezione-libri' )
+			));
 		register_taxonomy( 'tipo-di-handicap', $types,
 		array(
 			'hierarchical' => false,
@@ -94,13 +101,6 @@ class Mediateca_Init
 			'label' => __('Genere',MEDIATECA_TD),
 			'query_var' => 'genere',
 			'rewrite' => array('slug' => 'genere' )
-			));
-		register_taxonomy( 'sezione-libri', $types,
-		array(
-			'hierarchical' => false,
-			'label' => __('Sezione',MEDIATECA_TD),
-			'query_var' => 'sezione-libri',
-			'rewrite' => array('slug' => 'sezione-libri' )
 			));
 		register_taxonomy( 'tipo-di-libro', $types,
 		array(
