@@ -15,7 +15,7 @@ class Mediateca_Render {
 	const HIDE_EMPTY = 1;
 	
 	public function __construct() {
-		$this->initSession ();
+		$this->initSession();
 		
 		$this->types = Mediateca_Init::$types;
 		
@@ -37,9 +37,8 @@ class Mediateca_Render {
 		add_action ( 'wp_ajax_nopriv_do_text_search', array (&$this, 'doTextSearch' ) );
 	}
 	private function initSession() {
-		if (! session_id ()) {
+		if ( !session_id () ) {
 			session_start ();
-			$_SESSION ['previous_query'] = null;
 		}
 	}
 	public function ajaxResult() {
@@ -60,7 +59,7 @@ class Mediateca_Render {
 				//fill up the vars and render
 				
 
-				$this->type = $_SESSION ['media_type'] = $_POST ['media_type'];
+				$this->type = $_SESSION['media_type'] = $_POST ['media_type'];
 				
 				$categoria = $_POST ['sottocategoria'] ? $_POST ['sottocategoria'] : $_POST ['categoria'];
 				
@@ -69,7 +68,7 @@ class Mediateca_Render {
 				$this->taxQuery ( 'terzo-livello', $_POST ['terzo-livello'] );
 				
 				//keep track of the last query to paginate results
-				$_SESSION ['previous_query'] = null;
+				$_SESSION['previous_query'] = null;
 				
 				if ($this->isAjax ())
 					$visible = 'hidden';
@@ -84,7 +83,7 @@ class Mediateca_Render {
 				die ( "Problema di validazione del form." );
 			}
 		} else if (($_GET && $_GET ['results'] == $this->mother_page) || ($_POST && $_POST ['paginated'])) {
-			$this->type = $_SESSION ['media_type'];
+			$this->type = $_SESSION['media_type'];
 			
 			$search = $this->getQueryObject ( null, null, null, true );
 			
@@ -110,7 +109,7 @@ class Mediateca_Render {
 		if ($post->post_name == HARDWARE_SOFTWARE_SLUG && file_exists ( MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-page.php' )) {
 			$this->mother_page = $post->post_name;
 			
-			$this->styleAndScripts ();
+			$this->styleAndScripts();
 			
 			if (isset ( $wp->query_vars ['results'] ) && $wp->query_vars ['results'] && $wp->query_vars ['results'] == HARDWARE_SOFTWARE_SLUG) {
 				add_action ( 'render_search_results', array (&$this, 'ajaxResult' ) );
@@ -198,7 +197,7 @@ class Mediateca_Render {
 		}
 		return $page_template;
 	}
-	public function modifyMediatecaPageContent($content) {
+	public function modifyMediatecaPageContent($content) {		
 		$html = '<div class="buttonsContainer">
 				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="' . get_bloginfo ( 'url' ) . '/' . MEDIATECA_SLUG . '/' . HARDWARE_SOFTWARE_SLUG . '">Hardware&Software</a></div>
 				<div id="buttonLikeDiv" class="mediatecaButtons"><a href="' . get_bloginfo ( 'url' ) . '/' . MEDIATECA_SLUG . '/' . LIBRI_SLUG . '">Libri</a></div>
@@ -209,6 +208,7 @@ class Mediateca_Render {
 		global $post;
 		
 		if (in_array ( $post->post_type, $this->types ) && file_exists ( MEDIATECA_TEMPLATE_PATH . 'single-' . MEDIATECA_SLUG . '.php' )) {
+			$this->styleAndScripts();
 			$single_template = MEDIATECA_TEMPLATE_PATH . '/single-' . MEDIATECA_SLUG . '.php';
 		}
 		return $single_template;
@@ -238,10 +238,10 @@ class Mediateca_Render {
 		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'post_date', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
 		
 		if ($is_pagination_query == false) {
-			$_SESSION ['previous_query'] = $args;
+			$_SESSION['previous_query'] = $args;
 			$query = $args;
 		} else if ($is_pagination_query == true) {
-			$query = $_SESSION ['previous_query'];
+			$query = $_SESSION['previous_query'];
 			$query ['paged'] = $page;
 		}
 		
