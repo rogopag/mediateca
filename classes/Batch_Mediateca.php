@@ -285,6 +285,15 @@ class Batch_Mediateca
 				'Disabilita espressiva',
 				'DSA-Disturbi Specifici dell\'Apprendimento',
 			),
+			'accessibilita-secondaria' => array(
+				'Nessuna disabilita',
+				'Disabilita uditiva',
+				'Disabilita visiva',
+				'Disabilita intellettiva',
+				'Disabilita motoria',
+				'Disabilita espressiva',
+				'DSA-Disturbi Specifici dell\'Apprendimento',
+			),
 			'difficolta-compensata' => array(
 				'Nessuna',
 				'Manipolazione dell\'oggetto-libro',
@@ -297,6 +306,7 @@ class Batch_Mediateca
 				'Comprensione delle immagini',
 				'Attenzione',
 				'Pronuncia ad alta voce del testo-difficolta fonologiche',
+				'Memoria',
 				'Altro',
 			),
 			'genere' => array(
@@ -360,6 +370,15 @@ class Batch_Mediateca
 				'simboli pcs',
 				'altri tipi di simboli',
 				'altro'
+			),
+			'materiale-di-base' => array(
+				'Carta',
+				'Cartoncino rigido',
+				'Carta plastificata',
+				'Plastica',
+				'Stoffa',
+				'Legno',
+				'Altro'
 			)
 		);
 		return $populate;

@@ -254,7 +254,7 @@ class cmb_Meta_Box {
 					echo '<div class="cmb_radio_inline">';
 					$i = 1;
 					foreach ($field['options'] as $option) {
-						echo '<div class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i, '" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'], '</label></div>';
+						echo '<div class="cmb_radio_inline_option"><input type="radio" name="', $field['id'], '" id="', $field['id'], $i, '" value="', $option['value'], '"', $meta == $option['value'] || $option['checked'] == 1 ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'], '</label></div>';
 						$i++;
 					}
 					echo '</div>';
@@ -265,7 +265,7 @@ class cmb_Meta_Box {
 					echo '<ul>';
 					$i = 1;
 					foreach ($field['options'] as $option) {
-						echo '<li><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '"', $meta == $option['value'] ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
+						echo '<li><input type="radio" name="', $field['id'], '" id="', $field['id'], $i,'" value="', $option['value'], '"', $meta == $option['value'] || $option['checked'] == 1  ? ' checked="checked"' : '', ' /><label for="', $field['id'], $i, '">', $option['name'].'</label></li>';
 						$i++;
 					}
 					echo '</ul>';

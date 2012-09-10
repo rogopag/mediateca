@@ -187,8 +187,8 @@ class Mediateca_Admin
 		$types = array(LIBRI_TYPE);
 		
 		$meta_boxes[] = array(
-				'id' => 'test_metabox',
-				'title' => 'Dati pubblicazione',
+				'id' => 'descrizione_metabox',
+				'title' => 'Descrizione del volume',
 				'pages' => $types, // post type
 				'context' => 'normal',
 				'priority' => 'high',
@@ -202,18 +202,58 @@ class Mediateca_Admin
 						'type' => 'taxonomy_radio'
 					),
 					array(
-						'name' => 'Tipo di handicap',
-						'desc' => 'Handicap preso in considerazione',
-						'id' => $this->meta_prefix . 'tipo-di-handicap',
-						'taxonomy' => 'tipo-di-handicap',
-						'type' => 'hierarchical_checkboxes'
+						'name' => 'Autore/i',
+						'desc' => 'Autore/i della pubblicazione',
+						'id' => $this->meta_prefix . 'autori',
+						'type' => 'text'
 					),
 					array(
-						'name' => 'Genere',
-						'desc' => 'Genere',
-						'id' => $this->meta_prefix . 'genere',
-						'taxonomy' => 'genere', //Enter Taxonomy Slug
-						'type' => 'taxonomy_select'
+						'name' => 'Illustratore/i',
+						'desc' => 'Illustratore/i della pubblicazione',
+						'id' => $this->meta_prefix . 'illustratori',
+						'type' => 'text'
+					),
+					array(
+						'name' => 'Editore',
+						'desc' => 'Editore della pubblicazione',
+						'id' => $this->meta_prefix . 'editore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Collana',
+						'desc' => 'Collana di pubblicazione',
+						'id' => $this->meta_prefix . 'collana',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Distributore',
+						'desc' => 'Distributore della pubblicazione',
+						'id' => $this->meta_prefix . 'distributore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'ISBN',
+						'desc' => 'ISBN',
+						'id' => $this->meta_prefix . 'ISBN',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Anno',
+						'desc' => 'Anno di pubblicazione',
+						'id' => $this->meta_prefix . 'anno',
+						'type' => 'text_date'
+					),
+					array(
+						'name' => 'Numero di pagine',
+						'desc' => 'Numero di pagine',
+						'id' => $this->meta_prefix . 'numero-di-pagine',
+						'type'    => 'text_small',
+					),
+					array(
+						'name' => 'Prezzo',
+						'desc' => 'Prezzo della pubblicazione',
+						'id' => $this->meta_prefix . 'prezzo',
+						'type' => 'text_money'
 					),
 					array(
 						'name' => 'Tipologia di libro',
@@ -229,6 +269,31 @@ class Mediateca_Admin
 						'taxonomy' => 'eta', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
 					),
+				),
+			);
+			
+			$meta_boxes[] = array(
+					'id' => 'accesibilita_metabox',
+					'title' => 'Accessibilit&agrave; del volume',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
+					array(
+						'name' => 'Accessibilit&agrave; primaria',
+						'desc' => 'Handicap preso in considerazione',
+						'id' => $this->meta_prefix . 'accessibilita-primaria',
+						'taxonomy' => 'tipo-di-handicap',
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Accessibilit&agrave; secondaria',
+						'desc' => 'Tipo di Accessibilit&agrave; secondaria coperta dalla publicazione e non direttamente prevista dagli autori/editori',
+						'id' => $this->meta_prefix . 'accessibilita-secondaria',
+						'taxonomy' => 'accessibilita-secondaria',
+						'type' => 'hierarchical_checkboxes'
+					),
 					array(
 						'name' => 'Tipo di difficolt&agrave; compensata',
 						'desc' => 'Tipo di difficolt&agrave; compensata',
@@ -236,152 +301,80 @@ class Mediateca_Admin
 						'taxonomy' => 'difficolta-compensata', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
 					),
+				),
+			);
+			
+			$meta_boxes[] = array(
+					'id' => 'descrizione_supporto_metabox',
+					'title' => 'Descrizione del supporto',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
 					array(
-						'name' => 'Codici utilizzati',
-						'desc' => 'Codici utilizzati',
-						'id' => $this->meta_prefix . 'codici-utilizzati',
-						'taxonomy' => 'codici-utilizzati', //Enter Taxonomy Slug
+						'name' => 'Formato',
+						'desc' => 'Formato di impaginazione del volume',
+						'id' => $this->meta_prefix . 'formato',
+						'type'    => 'radio_inline',
+						'options' => array(
+							array( 'name' => 'Piu piccolo di un A4', 'value' => 'Piu piccolo di un A4', 'checked' => 1),
+							array( 'name' => 'A4', 'value' => 'A4', ),
+							array( 'name' => 'Piu grande di un A4', 'value' => 'Piu grande di un A4', ),
+						),
+					),
+					array(
+						'name' => 'Materiale di base',
+						'desc' => 'Materiale di base',
+						'id' => $this->meta_prefix . 'materiale-di-base',
+						'taxonomy' => 'materiale-di-base', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
 					),
 					array(
-						'name' => 'Temi trattati',
-						'desc' => 'Temi trattati',
-						'id' => $this->meta_prefix . 'temi-trattati',
-						'taxonomy' => 'temi-trattati', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
-					),
-					array(
-						'name' => 'Ambiente prevalente',
-						'desc' => 'Ambiente prevalente',
-						'id' => $this->meta_prefix . 'ambiente-prevalente',
-						'taxonomy' => 'ambiente-prevalente', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
-					),
-					array(
-						'name' => 'Personaggi',
-						'desc' => 'Personaggi',
-						'id' => $this->meta_prefix . 'personaggi',
-						'taxonomy' => 'personaggi', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
-					),
-					array(
-						'name' => 'Anno',
-						'desc' => 'Anno di pubblicazione',
-						'id' => $this->meta_prefix . 'anno',
-						'type' => 'text_date'
-					),
-					array(
-						'name' => 'Collana',
-						'desc' => 'Collana di pubblicazione',
-						'id' => $this->meta_prefix . 'collana',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Autore/i',
-						'desc' => 'Autore/i della pubblicazione',
-						'id' => $this->meta_prefix . 'autori',
-						'type' => 'text'
-					),
-					array(
-						'name' => 'Distributore',
-						'desc' => 'Distributore della pubblicazione',
-						'id' => $this->meta_prefix . 'distributore',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Editore',
-						'desc' => 'Editore della pubblicazione',
-						'id' => $this->meta_prefix . 'editore',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'ISBN',
-						'desc' => 'ISBN',
-						'id' => $this->meta_prefix . 'ISBN',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Prezzo',
-						'desc' => 'Prezzo della pubblicazione',
-						'id' => $this->meta_prefix . 'prezzo',
-						'type' => 'text_money'
-					),
-					array(
-						'name' => 'Maneggevolezza',
-						'desc' => 'Grado di difficolt&agrave; nella manipolazione',
-						'id' => $this->meta_prefix . 'maneggevolezza',
-						'type'    => 'select',
+						'name' => 'Forma delle pagine',
+						'desc' => 'Forma delle pagine',
+						'id' => $this->meta_prefix . 'forma-delle-pagine',
+						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => '1', 'value' => 1, ),
-							array( 'name' => '2', 'value' => 2, ),
-							array( 'name' => '3', 'value' => 3, ),
-							array( 'name' => '4', 'value' => 4, ),
-							array( 'name' => '5', 'value' => 5, ),
+							array( 'name' => 'Regolare', 'value' => 'Regolare', 'checked' => 1),
+							array( 'name' => 'Irregolare', 'value' => 'Irregolare', ),
 						),
 					),
 					array(
-						'name' => 'Numero di pagine',
-						'desc' => 'Numero di pagine',
-						'id' => $this->meta_prefix . 'numero-di-pagine',
-						'type'    => 'select',
+						'name' => 'Presenza di dispositivi per aiutare a sfogliare le pagine',
+						'desc' => 'Presenza di dispositivi per aiutare a sfogliare le pagine',
+						'id' => $this->meta_prefix . 'dispositivi-di-aiuto',
+						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => 'meno di 10', 'value' => 'meno di 10', ),
-							array( 'name' => 'tra 10 e 50', 'value' => 'tra 10 e 50', ),
-							array( 'name' => 'tra 50 e 100', 'value' => 'tra 50 e 100', ),
-							array( 'name' => 'pi&ugrave; di 100', 'value' => 'pi&ugrave; di 100', ),
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
 						),
 					),
 					array(
-						'name' => 'Complessit&agrave;',
-						'desc' => 'Grado di complessit&agrave; nella fruizione',
-						'id' => $this->meta_prefix . 'complessita',
-						'type'    => 'select',
+						'name' => 'Presenza di elementi mobili',
+						'desc' => 'Presenza di elementi mobili',
+						'id' => $this->meta_prefix . 'elementi-mobili',
+						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => '1', 'value' => 1, ),
-							array( 'name' => '2', 'value' => 2, ),
-							array( 'name' => '3', 'value' => 3, ),
-							array( 'name' => '4', 'value' => 4, ),
-							array( 'name' => '5', 'value' => 5, ),
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
 						),
 					),
 					array(
-						'name' => 'Font',
-						'desc' => 'Maiuscolo o minuscolo',
-						'id' => $this->meta_prefix . 'font',
-						'type'    => 'radio',
+						'name' => 'Presenza di elementi staccabili',
+						'desc' => 'Presenza di elementi staccabili',
+						'id' => $this->meta_prefix . 'elementi-staccabili',
+						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => 'Maiuscolo', 'value' => 0, ),
-							array( 'name' => 'Minuscolo', 'value' => 1, ),
-						),
-					),
-					array(
-						'name' => 'Dimesnione del carattere',
-						'desc' => 'Dimesnione del carattere',
-						'id' => $this->meta_prefix . 'dimensione-carattere',
-						'type'    => 'radio',
-						'options' => array(
-							array( 'name' => 'Normale', 'value' => 0, ),
-							array( 'name' => 'Grande', 'value' => 1, ),
-						),
-					),
-					array(
-						'name' => 'Esplorabilit&agrave;',
-						'desc' => 'Grado di Esplorabilit&agrave;',
-						'id' => $this->meta_prefix . 'esploralibita',
-						'type'    => 'select',
-						'options' => array(
-							array( 'name' => '1', 'value' => 1, ),
-							array( 'name' => '2', 'value' => 2, ),
-							array( 'name' => '3', 'value' => 3, ),
-							array( 'name' => '4', 'value' => 4, ),
-							array( 'name' => '5', 'value' => 5, ),
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
 						),
 					),
 					array(
 						'name' => 'Multimedia',
 						'desc' => 'Presenza di assets multimediali',
 						'id' => $this->meta_prefix . 'multimedia',
-						'type'    => 'radio',
+						'type'    => 'radio_inline',
 						'options' => array(
 							array( 'name' => 'Si', 'value' => 1, ),
 							array( 'name' => 'No', 'value' => 0, ),
@@ -409,7 +402,205 @@ class Mediateca_Admin
 					),
 				),
 			);
-
+			
+			$meta_boxes[] = array(
+					'id' => 'descrizione_contenuto_metabox',
+					'title' => 'Descrizione del contenuto',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
+					array(
+						'name' => 'Genere',
+						'desc' => 'Genere',
+						'id' => $this->meta_prefix . 'genere',
+						'taxonomy' => 'genere', //Enter Taxonomy Slug
+						'type' => 'taxonomy_select'
+					),
+					array(
+						'name' => 'Temi trattati',
+						'desc' => 'Temi trattati',
+						'id' => $this->meta_prefix . 'temi-trattati',
+						'taxonomy' => 'temi-trattati', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Ambiente prevalente',
+						'desc' => 'Ambiente prevalente',
+						'id' => $this->meta_prefix . 'ambiente-prevalente',
+						'taxonomy' => 'ambiente-prevalente', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Personaggi',
+						'desc' => 'Personaggi',
+						'id' => $this->meta_prefix . 'personaggi',
+						'taxonomy' => 'personaggi', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Complessit&agrave; della storia',
+						'desc' => 'Complessit&agrave; della storia',
+						'id' => $this->meta_prefix . 'complessita-storia',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Complessit&agrave; della storia descrizione',
+						'desc' => 'Complessit&agrave; della storia descrizione',
+						'id' => $this->meta_prefix . 'complessita-storia-descrizione',
+						'type' => 'textarea_small'
+					),
+				),
+			);
+			
+			$meta_boxes[] = array(
+					'id' => 'descrizione_testo_metabox',
+					'title' => 'Descrizione del testo scritto',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
+					array(
+						'name' => 'Presenza del testo',
+						'desc' => 'Presenza del testo',
+						'id' => $this->meta_prefix . 'presenza-testo',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
+						),
+					),
+					array(
+						'name' => 'Codici utilizzati',
+						'desc' => 'Codici utilizzati',
+						'id' => $this->meta_prefix . 'codici-utilizzati',
+						'taxonomy' => 'codici-utilizzati', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
+					),
+					array(
+						'name' => 'Dimensione del carattere',
+						'desc' => 'Dimensione del carattere',
+						'id' => $this->meta_prefix . 'dimensione-carattere',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Normale', 'value' => 'Normale', 'checked' => 1),
+							array( 'name' => 'Grande', 'value' => 'Grande', ),
+						),
+					),
+					array(
+						'name' => 'Font',
+						'desc' => 'Maiuscolo o minuscolo',
+						'id' => $this->meta_prefix . 'font',
+						'type'    => 'radio',
+						'options' => array(
+							array( 'name' => 'Maiuscolo', 'value' => 'Maiuscolo', ),
+							array( 'name' => 'Minuscolo', 'value' => 'Minuscolo', 'checked' => 1 ),
+						),
+					),
+					array(
+						'name' => 'Complessit&agrave; del testo',
+						'desc' => 'Complessit&agrave; del testo',
+						'id' => $this->meta_prefix . 'complessita-testo',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Complessit&agrave; testo descrizione',
+						'desc' => 'Complessit&agrave; testo descrizione',
+						'id' => $this->meta_prefix . 'complessita-testo-descrizione',
+						'type' => 'textarea_small'
+					),
+				),
+			);
+			
+			$meta_boxes[] = array(
+					'id' => 'descrizione_immagini_metabox',
+					'title' => 'Descrizione delle immagini',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
+					array(
+						'name' => 'Presenza di immagini',
+						'desc' => 'Presenza di immagini',
+						'id' => $this->meta_prefix . 'presenza-immagini',
+						'type'    => 'radio_inline',
+						'options' => array(
+							array( 'name' => 'Si', 'value' => 1, ),
+							array( 'name' => 'No', 'value' => 0, ),
+						),
+					),
+					array(
+						'name' => 'Rapporto spaziale col testo',
+						'desc' => 'Rapporto spaziale col testo',
+						'id' => $this->meta_prefix . 'rapporto-con-testo',
+						'type' => 'multicheck',
+						'options' => array(
+							'Separate dal testo' => 'Separate dal testo',
+							'Integrate nel testo' =>'Integrate nel testo'
+						)
+					),
+					array(
+						'name' => 'Colore',
+						'desc' => 'Colore',
+						'id' => $this->meta_prefix . 'colore-immagini',
+						'type' => 'multicheck',
+						'options' => array(
+							'A colori' => 'A colori',
+							'In bianco e nero' =>'In bianco e nero'
+						)
+					),
+					array(
+						'name' => 'Tecnica',
+						'desc' => 'Tecnica',
+						'id' => $this->meta_prefix . 'tecnica',
+						'type'    => 'multicheck',
+						'options' => array(
+							'Stampa'  => 'Stampa',
+							'Tattile' => 'Tattile',
+							'Grauffage' => 'Grauffage',
+							'Collage di materiali' => 'Collage di materiali',
+							'Contorno in rilievo' => 'Contorno in rilievo'
+						)
+					),
+					array(
+						'name' => 'Complessit&agrave; del immagini',
+						'desc' => 'Complessit&agrave; del immagini',
+						'id' => $this->meta_prefix . 'complessita-immagini',
+						'type'    => 'select',
+						'options' => array(
+							array( 'name' => '1', 'value' => 1, ),
+							array( 'name' => '2', 'value' => 2, ),
+							array( 'name' => '3', 'value' => 3, ),
+							array( 'name' => '4', 'value' => 4, ),
+							array( 'name' => '5', 'value' => 5, ),
+						),
+					),
+					array(
+						'name' => 'Complessit&agrave; immagini descrizione',
+						'desc' => 'Complessit&agrave; immagini descrizione',
+						'id' => $this->meta_prefix . 'complessita-immagini-descrizione',
+						'type' => 'textarea_small'
+					),
+				),
+			);
+			
 			return $meta_boxes;
 	}
 	/**

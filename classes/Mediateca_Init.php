@@ -95,6 +95,13 @@ class Mediateca_Init
 			'query_var' => 'tipo-di-handicap',
 			'rewrite' => array('slug' => 'tipo-di-handicap' )
 			));
+		register_taxonomy( 'accessibilita-secondaria', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Accessibilit&agrave; secondaria',MEDIATECA_TD),
+			'query_var' => 'accessibilita-secondaria',
+			'rewrite' => array('slug' => 'accessibilita-secondaria' )
+			));
 		register_taxonomy( 'genere', $types,
 		array(
 			'hierarchical' => false,
@@ -123,6 +130,13 @@ class Mediateca_Init
 			'query_var' => 'difficolta-compensata',
 			'rewrite' => array('slug' => 'difficolta-compensata' )
 			));
+		register_taxonomy( 'materiale-di-base', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Materiale di base',MEDIATECA_TD),
+			'query_var' => 'materiale-di-base',
+			'rewrite' => array('slug' => 'materiale-di-base' )
+			));
 		register_taxonomy( 'personaggi', $types,
 		array(
 			'hierarchical' => false,
@@ -143,6 +157,13 @@ class Mediateca_Init
 			'label' => __('Codici utilizzati',MEDIATECA_TD),
 			'query_var' => 'codici-utilizzati',
 			'rewrite' => array('slug' => 'codici-utilizzati' )
+			));
+		register_taxonomy( 'ambiente-prevalente', $types,
+		array(
+			'hierarchical' => false,
+			'label' => __('Ambiente prevalente',MEDIATECA_TD),
+			'query_var' => 'ambiente-prevalente',
+			'rewrite' => array('slug' => 'ambiente-prevalente' )
 			));
 	}
 	//push our types in the array of valid query vars
