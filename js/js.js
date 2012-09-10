@@ -106,27 +106,19 @@ function manageCategorySelect()
 		
 		if( value != '')
 		{
+			if( $("#sottocategoria").is('select') )
+			{
+				$("#sottocategoria").fadeOut(300, function(){
+					$(this).parent().remove();
+				});
+			}
 			$.post(Mediateca.ajaxurl, { action: 'manage_category_select', parent: value, 'mediateca-nonce' : $('#mediateca-nonce').val() }, function(data){
 				if( data )
 				{
-					
-					if( $("#sottocategoria").is('select') )
-					{
-						$("#sottocategoria").fadeOut(300, function(){
-							$(this).parent().remove();
-							el.parent().after(data);
-							$("#sottocategoria").parent().fadeIn(300, function(){
-						
-							});
-						});
-					}
-					else
-					{
-						el.parent().after(data);
-						$("#sottocategoria").parent().fadeIn(300, function(){
-						
-						});
-					}
+					el.parent().after(data);
+					$("#sottocategoria").parent().fadeIn(200, function(){
+
+					});
 				}
 			});
 		}
