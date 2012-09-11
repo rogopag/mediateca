@@ -23,9 +23,9 @@
 		<div id="mediateca-form-container" class="mediateca-forms-container">
 			<h4>Ricerca avanzata</h4>
 			<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="libri-form" class="mediateca-form">
-		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce'); ?>
+		<?php wp_nonce_field('mediateca-check-libri-nonce','mediateca-libri-nonce'); ?>
 		<input type="hidden" name="action" value="<?php echo MEDIATECA_LIBRI_SEARCH; ?>" id="<?php echo MEDIATECA_LIBRI_SEARCH; ?>" />
-		<input type="hidden" name="results" value="libri" id="libri" />
+		<input type="hidden" name="results" value="<?php echo LIBRI_SLUG;?>" id="<?php echo LIBRI_SLUG;?>" />
 		<label>Sezione</label>
 		<div class="select-container external-label">
 		<span><input type="radio" name="sezione-libri" value="libri-accessibili" checked="checked"/><label>Libri accessibili</label></span>

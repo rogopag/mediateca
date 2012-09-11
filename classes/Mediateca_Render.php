@@ -27,8 +27,8 @@ class Mediateca_Render {
 		add_filter ( 'page_template', array (&$this, 'hardware_e_softwareTemplate' ) );
 		add_filter ( 'page_template', array (&$this, 'libriTemplate' ) );
 		
-		add_action ( 'wp_ajax_hardware-e-software-search', array (&$this, 'ajaxResult' ) );
-		add_action ( 'wp_ajax_nopriv_hardware-e-software-search', array (&$this, 'ajaxResult' ) );
+		add_action ( 'wp_ajax_'.MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH, array (&$this, 'ajaxResult' ) );
+		add_action ( 'wp_ajax_nopriv_'.MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH, array (&$this, 'ajaxResult' ) );
 		
 		add_action ( 'wp_ajax_manage_category_select', array (&$this, 'populateSubcategories' ) );
 		add_action ( 'wp_ajax_nopriv_manage_category_select', array (&$this, 'populateSubcategories' ) );
@@ -38,11 +38,31 @@ class Mediateca_Render {
 		
 		add_action ( 'wp_ajax_change-sezione-libri', array (&$this, 'manageSezioneLibri' ) );
 		add_action ( 'wp_ajax_nopriv_change-sezione-libri', array (&$this, 'manageSezioneLibri' ) );
+		
+		add_action ( 'wp_ajax_'.MEDIATECA_LIBRI_SEARCH, array (&$this, 'ajaxLibriResult' ) );
+		add_action ( 'wp_ajax_nopriv_'.MEDIATECA_LIBRI_SEARCH, array (&$this, 'ajaxLibriResult' ) );
+		
 	}
 	private function initSession() {
 		if ( !session_id () ) {
 			session_start ();
 		}
+	}
+	public function ajaxLibriResult()
+	{
+		global $wp;
+		
+		//make sure add this plugin shit doesn't bother
+		if (function_exists ( 'addthis_init' )) {
+			remove_filter ( 'the_content', 'addthis_display_social_widget', 15 );
+			remove_filter ( 'get_the_excerpt', 'addthis_display_social_widget_excerpt', 11 );
+		}
+		
+		if( $_POST && wp_verify_nonce ( $_POST ['mediateca-libri-nonce'], 'mediateca-check-libri-nonce' ) )
+		{
+			print_r($_POST);
+		}
+		die('');
 	}
 	public function manageSezioneLibri()
 	{
@@ -112,7 +132,7 @@ class Mediateca_Render {
 		
 		wp_enqueue_style ( 'mediateca-front', MEDIATECA_URL . 'css/style.css', '', '0.1', 'screen' );
 		wp_enqueue_script ( 'mediateca-js', MEDIATECA_URL . 'js/js.js', array ('jquery' ), '0.1', 'screen' );
-		wp_localize_script ( 'mediateca-js', 'Mediateca', array ('plugin_url' => MEDIATECA_URL, ajaxurl => admin_url ( 'admin-ajax.php' ), 'page' => get_permalink ( $post->ID ), 'query' => $wp->query_vars ) );
+		wp_localize_script ( 'mediateca-js', 'Mediateca', array ('plugin_url' => MEDIATECA_URL, ajaxurl => admin_url ( 'admin-ajax.php' ), 'page' => get_permalink ( $post->ID ), 'query' => $wp->query_vars, 'slug' => $post->post_name ) );
 	}
 	public function hardware_e_softwareTemplate($page_template) {
 		global $post, $wp;

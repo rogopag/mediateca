@@ -23,7 +23,7 @@
 			<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form" class="mediateca-form">
 		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce'); ?>
 		<input type="hidden" name="action" value="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" id="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" />
-		<input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
+		<input type="hidden" name="results" value="<?php echo HARDWARE_SOFTWARE_SLUG;?>" id="<?php echo HARDWARE_SOFTWARE_SLUG;?>" />
 		<div class="select-container">
 			<label for="tipologia">Tipologia</label><br />
 			<select id="media_type" name="media_type">

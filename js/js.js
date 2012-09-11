@@ -28,6 +28,7 @@ jq(function($)
 	if( $("#libri-form").is('form') )
 	{
 		libriSelectSezione();
+		hardwareSoftwareForm( $("#libri-form") );
 	}
 });
 
@@ -89,6 +90,8 @@ function ajaxCall( data, element )
 			{
 				if( data )
 				{
+					console.log( data );
+					
 					el.parent().parent().after( data );
 					$("#search-results").fadeIn(200, function(){
 							mediatecaPagination()
