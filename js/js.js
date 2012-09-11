@@ -25,6 +25,10 @@ jq(function($)
 			$(this).val('');
 		});
 	}
+	if( $("#libri-form").is('form') )
+	{
+		libriSelectSezione();
+	}
 });
 
 function mediatecaLinkButtons()
@@ -168,5 +172,21 @@ function mediateca_loading_remove( )
 	$("#loading-gif").fadeOut('fast', function()
 	{
 		$(this).remove();
+	});
+};
+function libriSelectSezione()
+{
+	$('input[type="radio"]').change(function(){
+		var value = $(this).val();
+		$('#libri-form-removables').fadeOut(200, function(){
+			$(this).remove();
+		})
+		$.post(Mediateca.ajaxurl, { action: 'change-sezione-libri', 'sezione' : value, 'mediateca-nonce' : $('#mediateca-nonce').val() }, function(data)
+		{
+			if( data )
+			{
+				$('#libri-removables-container').append(data);
+			}
+		});
 	});
 };

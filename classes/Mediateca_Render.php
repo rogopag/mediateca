@@ -35,11 +35,22 @@ class Mediateca_Render {
 		
 		add_action ( 'wp_ajax_do_text_search', array (&$this, 'doTextSearch' ) );
 		add_action ( 'wp_ajax_nopriv_do_text_search', array (&$this, 'doTextSearch' ) );
+		
+		add_action ( 'wp_ajax_change-sezione-libri', array (&$this, 'manageSezioneLibri' ) );
+		add_action ( 'wp_ajax_nopriv_change-sezione-libri', array (&$this, 'manageSezioneLibri' ) );
 	}
 	private function initSession() {
 		if ( !session_id () ) {
 			session_start ();
 		}
+	}
+	public function manageSezioneLibri()
+	{
+		if( $_POST && $_POST['action'] == 'change-sezione-libri' )
+		{
+			include MEDIATECA_TEMPLATE_PATH . $_POST['sezione'] . '_block.php';
+		}
+		die('');
 	}
 	public function ajaxResult() {
 		global $wp;
@@ -77,7 +88,7 @@ class Mediateca_Render {
 				
 				include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-' . MEDIATECA_RESULTS_PAGE . '-page.php';
 				
-				if ($this->isAjax ())
+				if ( $this->isAjax () )
 					die ( '' );
 			} else {
 				die ( "Problema di validazione del form." );
@@ -89,7 +100,7 @@ class Mediateca_Render {
 			
 			include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-' . MEDIATECA_RESULTS_PAGE . '-page.php';
 			
-			if ($this->isAjax ())
+			if ( $this->isAjax () )
 				die ( '' );
 		}
 	
@@ -301,7 +312,7 @@ class Mediateca_Render {
 			$terms = get_terms ( $taxonomy, $args );
 			
 			if (count ( $terms ) > 0) {
-				echo '<option value="" selected>&#8212; Seleziona ' . ucfirst ( $name ) . ' &#8212;</option>';
+				echo '<option value="" selected>&#8212; Seleziona ' . ucfirst ( $label ) . ' &#8212;</option>';
 				foreach ( $terms as $term ) {
 					if ($parent && $term->parent == 0) {
 						echo '<option value="' . $term->term_id . '">' . $term->name . '</option>';

@@ -25,7 +25,7 @@
 		<input type="hidden" name="action" value="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" id="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" />
 		<input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
 		<div class="select-container">
-			<label for="terzo-livello">Tipologia</label><br />
+			<label for="tipologia">Tipologia</label><br />
 			<select id="media_type" name="media_type">
 				<option value="<?php echo HARDWARE_TYPE; ?>"><?php echo ucfirst(HARDWARE_TYPE); ?></option>
 				<option value="<?php echo SOFTWARE_TYPE; ?>"><?php echo ucfirst(SOFTWARE_TYPE); ?></option>
