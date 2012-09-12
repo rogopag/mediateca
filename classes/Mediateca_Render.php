@@ -58,9 +58,13 @@ class Mediateca_Render {
 			remove_filter ( 'get_the_excerpt', 'addthis_display_social_widget_excerpt', 11 );
 		}
 		
-		if( $_POST && wp_verify_nonce ( $_POST ['mediateca-libri-nonce'], 'mediateca-check-libri-nonce' ) )
+		if( $_POST && wp_verify_nonce( $_POST ['mediateca-libri-nonce'], 'mediateca-check-libri-nonce' ) )
 		{
-			//print_r($_POST);
+			print_r($_POST);
+		}
+		else
+		{
+			die('Problema di validazione del form');
 		}
 		die('');
 	}
@@ -85,11 +89,11 @@ class Mediateca_Render {
 		
 		//check if it is a from submission and we ave something
 		if (($_POST && $_POST ['media_type'])) {
+			
 			//check if the form was submitted from our form 
-			if ( wp_verify_nonce ( $_POST ['mediateca-nonce'], 'mediateca-check-nonce' ) ) {
-				//fill up the vars and render
+			if ( wp_verify_nonce( $_POST['mediateca-nonce'], 'mediateca-check-nonce' ) ) {
 				
-
+				//fill up the vars and render
 				$this->type = $_SESSION['media_type'] = $_POST ['media_type'];
 				
 				$categoria = $_POST ['sottocategoria'] ? $_POST ['sottocategoria'] : $_POST ['categoria'];
@@ -346,10 +350,14 @@ class Mediateca_Render {
 		}
 	}
 	public function populateSubcategories() {
-		if ($_POST && wp_verify_nonce ( $_POST ['mediateca-nonce'], 'mediateca-check-nonce' )) {
+		if ( $_POST && wp_verify_nonce ( $_POST['mediateca-nonce'], 'mediateca-check-nonce' ) ) {
 			$args = array ('hide_empty' => self::HIDE_EMPTY, 'hierarchical' => true, 'child_of' => $_POST ['parent'] );
 			$this->taxonomySelect ( 'sottocategoria', 'categoria', $args, false, 'Sottocategoria', 'hidden' );
 			die ( '' );
+		}
+		else
+		{
+			die('nonce problem');
 		}
 	}
 	public function isAjax() {

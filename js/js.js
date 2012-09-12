@@ -111,20 +111,24 @@ function manageCategorySelect()
 	{
 		var el = $(this), value = el.val();
 		
+		mediateca_loading( el );
+		
 		if( value != '')
 		{
 			if( $("#sottocategoria").is('select') )
 			{
 				$("#sottocategoria").fadeOut(300, function(){
+					
 					$(this).parent().remove();
 				});
 			}
 			$.post(Mediateca.ajaxurl, { action: 'manage_category_select', parent: value, 'mediateca-nonce' : $('#mediateca-nonce').val() }, function(data){
+				
 				if( data )
 				{
 					el.parent().after(data);
 					$("#sottocategoria").parent().fadeIn(200, function(){
-
+						mediateca_loading_remove( );
 					});
 				}
 			});
@@ -167,7 +171,7 @@ function mediatecaPagination()
 function mediateca_loading( a )
 {
 	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading" id="loading-gif" />'), append = a;
-	console.log( src, loading.attr('src') );
+	console.log( 'I should see the loader here', a.attr('class') );
 	loading.insertAfter( append.parent().parent() ).fadeIn('fast');
 };
 function mediateca_loading_remove( )
@@ -182,12 +186,14 @@ function libriSelectSezione()
 	$('input[type="radio"]').change(function(){
 		var value = $(this).val();
 		$('#libri-form-removables').fadeOut(200, function(){
+			mediateca_loading( $(this) );
 			$(this).remove();
 		})
 		$.post(Mediateca.ajaxurl, { action: 'change-sezione-libri', 'sezione' : value, 'mediateca-nonce' : $('#mediateca-nonce').val() }, function(data)
 		{
 			if( data )
 			{
+				mediateca_loading_remove();
 				$('#libri-removables-container').append(data);
 			}
 		});
