@@ -60,7 +60,7 @@ class Mediateca_Render {
 		
 		if( $_POST && wp_verify_nonce ( $_POST ['mediateca-libri-nonce'], 'mediateca-check-libri-nonce' ) )
 		{
-			print_r($_POST);
+			//print_r($_POST);
 		}
 		die('');
 	}
