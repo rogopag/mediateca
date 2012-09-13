@@ -363,17 +363,26 @@ class Mediateca_Render {
 	public function isAjax() {
 		return (isset ( $_SERVER ['HTTP_X_REQUESTED_WITH'] ) && ($_SERVER ['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'));
 	}
-	public function grabPostThumbIfAny( $post_id )
+	public function grabPostThumbIfAny( $post_id, $size =  'thumbnail' )
 	{
 		$id = $post_id;
-		$thumb = get_the_post_thumbnail($id, 'thumbnail');
+		$thumb = get_the_post_thumbnail($id, $size);
 		
 		if( $thumb ) 
 		{
-			return $thumb;
+			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor">'.$thumb.'</a>';
 		}
 		else if( get_post_meta($id, '_mediateca_featured_image', true) )
 		{
+			switch( $size )
+			{
+				case 'thumbnail':
+				$wh = ' width="180px" height="135px"';
+				break;
+				case 'mediateca-thumb':
+				$wh = ' width="100px" height="75px"';
+				break;
+			}
 			$thumb = get_post_meta($id, '_mediateca_featured_image', true);
 			
 			if( strpos( $thumb, 'ImmaginiDB') )
@@ -384,7 +393,7 @@ class Mediateca_Render {
 			
 			$thumb = $upload['baseurl'] . '/ImmaginiDB/' . $thumb;
 			
-			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'" width="180px" height="135px" /></a>';
+			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'"  '.$wh.'/></a>';
 		}
 		return false;
 	}

@@ -8,10 +8,11 @@ get_header(); ?>
 	<div class="main forIE">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange"><?php the_title(); ?></h2>
+			<p class="postmetadata">Pubblicato in <?php echo dito_printObjectTermsInNiceFormat( $post->ID ); ?></p>
 			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small>
-					<?php  
+					<?php 
 				if (is_user_logged_in())
 				{
 					edit_post_link();
