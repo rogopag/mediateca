@@ -282,7 +282,7 @@ class Batch_Mediateca
 				'Disabilita visiva',
 				'Disabilita intellettiva',
 				'Disabilita motoria',
-				'Disabilita espressiva',
+				'Autismo e disturbi della comunicazione',
 				'DSA-Disturbi Specifici dell\'Apprendimento',
 			),
 			'accessibilita-secondaria' => array(
@@ -291,7 +291,7 @@ class Batch_Mediateca
 				'Disabilita visiva',
 				'Disabilita intellettiva',
 				'Disabilita motoria',
-				'Disabilita espressiva',
+				'Autismo e disturbi della comunicazione',
 				'DSA-Disturbi Specifici dell\'Apprendimento',
 			),
 			'difficolta-compensata' => array(

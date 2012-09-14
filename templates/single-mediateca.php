@@ -5,10 +5,10 @@ get_header(); ?>
 <div id="content">
 
 	<?php include_once 'mediateca_sidebar.php';?>
-	<div class="main forIE">
+	<div class="main forIE mediateca-singles-main-content">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-			<h2 class="orange"><?php the_title(); ?></h2>
-			<p class="postmetadata">Pubblicato in <?php echo dito_printObjectTermsInNiceFormat( $post->ID ); ?></p>
+			<?php echo $mediatecaRender->printAuthorsAndIllustratorsIfAny( get_the_ID() ); ?>
+			<h2 class="orange mediateca-singles-titles"><?php the_title(); ?></h2>
 			<div class="entry">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small>

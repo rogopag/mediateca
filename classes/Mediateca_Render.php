@@ -397,5 +397,24 @@ class Mediateca_Render {
 		}
 		return false;
 	}
+	public function printAuthorsAndIllustratorsIfAny( $post_id )
+	{
+		global $mediatecaAdmin;
+		$meta_prefix = $mediatecaAdmin->meta_prefix;
+		$html = '<small class="postmetadata mediateca-metadata">';
+		$data = '';
+		$id = $post_id;
+		$author = get_post_meta( $id, $meta_prefix . 'autori', true );
+		$illustrator = get_post_meta( $id, $meta_prefix . 'illustratori', true );
+		if( $author ) $data .=  $author . '. ';
+		if( $illustrator ) $data .= ' <strong>Illustrazioni di:</strong> ' . $illustrator;
+		
+		if( $data != '' ) 
+		{
+			$html .= rtrim( $data, ', ') . '</small>';
+			return '<small class="postmetadata mediateca-metadata">' . $html . '</small>';
+		}
+		return '';
+	}
 }
 ?>

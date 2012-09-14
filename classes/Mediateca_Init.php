@@ -90,14 +90,14 @@ class Mediateca_Init
 			));
 		register_taxonomy( 'tipo-di-handicap', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Tipo di handicap',MEDIATECA_TD),
 			'query_var' => 'tipo-di-handicap',
 			'rewrite' => array('slug' => 'tipo-di-handicap' )
 			));
 		register_taxonomy( 'accessibilita-secondaria', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Accessibilit&agrave; secondaria',MEDIATECA_TD),
 			'query_var' => 'accessibilita-secondaria',
 			'rewrite' => array('slug' => 'accessibilita-secondaria' )
@@ -118,49 +118,49 @@ class Mediateca_Init
 			));
 		register_taxonomy( 'eta', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Fascia di et&agrave;',MEDIATECA_TD),
 			'query_var' => 'eta',
 			'rewrite' => array('slug' => 'eta' )
 			));
 		register_taxonomy( 'difficolta-compensata', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Tipo di difficolt&agrave; compensata',MEDIATECA_TD),
 			'query_var' => 'difficolta-compensata',
 			'rewrite' => array('slug' => 'difficolta-compensata' )
 			));
 		register_taxonomy( 'materiale-di-base', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Materiale di base',MEDIATECA_TD),
 			'query_var' => 'materiale-di-base',
 			'rewrite' => array('slug' => 'materiale-di-base' )
 			));
 		register_taxonomy( 'personaggi', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Personaggi',MEDIATECA_TD),
 			'query_var' => 'personaggi',
 			'rewrite' => array('slug' => 'personaggi' )
 			));
 		register_taxonomy( 'temi-trattati', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Temi trattati',MEDIATECA_TD),
 			'query_var' => 'temi-trattati',
 			'rewrite' => array('slug' => 'temi-trattati' )
 			));
 		register_taxonomy( 'codici-utilizzati', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Codici utilizzati',MEDIATECA_TD),
 			'query_var' => 'codici-utilizzati',
 			'rewrite' => array('slug' => 'codici-utilizzati' )
 			));
 		register_taxonomy( 'ambiente-prevalente', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Ambiente prevalente',MEDIATECA_TD),
 			'query_var' => 'ambiente-prevalente',
 			'rewrite' => array('slug' => 'ambiente-prevalente' )

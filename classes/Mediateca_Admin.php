@@ -148,6 +148,12 @@ class Mediateca_Admin
 						'type' => 'text'
 					),
 					array(
+						'name' => 'Illustratore/i',
+						'desc' => 'Illustratore/i della pubblicazione',
+						'id' => $this->meta_prefix . 'illustratori',
+						'type' => 'text'
+					),
+					array(
 						'name' => 'Distributore',
 						'desc' => 'Distributore della pubblicazione',
 						'id' => $this->meta_prefix . 'distributore',
@@ -287,13 +293,13 @@ class Mediateca_Admin
 						'taxonomy' => 'tipo-di-handicap',
 						'type' => 'hierarchical_checkboxes'
 					),
-					array(
+				/*	array(
 						'name' => 'Accessibilit&agrave; secondaria',
 						'desc' => 'Tipo di Accessibilit&agrave; secondaria coperta dalla publicazione e non direttamente prevista dagli autori/editori',
 						'id' => $this->meta_prefix . 'accessibilita-secondaria',
 						'taxonomy' => 'accessibilita-secondaria',
 						'type' => 'hierarchical_checkboxes'
-					),
+					),*/
 					array(
 						'name' => 'Tipo di difficolt&agrave; compensata',
 						'desc' => 'Tipo di difficolt&agrave; compensata',
@@ -314,7 +320,7 @@ class Mediateca_Admin
 					'fields' => array(
 					array(
 						'name' => 'Formato',
-						'desc' => 'Formato di impaginazione del volume',
+						'desc' => 'Formato di impaginazione del volume a libro chiuso.',
 						'id' => $this->meta_prefix . 'formato',
 						'type'    => 'radio_inline',
 						'options' => array(
@@ -525,6 +531,12 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'complessita-testo-descrizione',
 						'type' => 'textarea_small'
 					),
+					array(
+						'name' => 'Lunghezza',
+						'desc' => 'Numero di frasi per pagina',
+						'id' => $this->meta_prefix . 'lunghezza-testo',
+						'type' => 'text_small'
+					),
 				),
 			);
 			
@@ -567,12 +579,22 @@ class Mediateca_Admin
 						)
 					),
 					array(
-						'name' => 'Tecnica',
-						'desc' => 'Tecnica',
+						'name' => 'Tipo di immagini',
+						'desc' => 'Tipo di immagini',
+						'id' => $this->meta_prefix . 'tipo-di-immagini',
+						'type'    => 'multicheck',
+						'options' => array(
+							'visuali' => 'visuali',
+							'visuali con dettagli da toccare' => 'visuali con dettagli da toccare',
+							'tattili' => 'tattili',
+						)
+					),
+					array(
+						'name' => 'Tecnica tattile',
+						'desc' => 'Tecnica tattile',
 						'id' => $this->meta_prefix . 'tecnica',
 						'type'    => 'multicheck',
 						'options' => array(
-							'Stampa'  => 'Stampa',
 							'Tattile' => 'Tattile',
 							'Grauffage' => 'Grauffage',
 							'Collage di materiali' => 'Collage di materiali',
@@ -622,7 +644,7 @@ class Mediateca_Admin
 			'checked_ontop' => true
 		);
 		echo '<ul class="hierarchical_checkboxes">';
-		wp_terms_checklist($post->ID, $args);
+			wp_terms_checklist($post->ID, $args);
 		echo '</ul>';
 		if ( !empty( $field['desc'] ) ) echo '<p class="cmb_metabox_description">' . $field['desc'] . '</p>';
 	}
