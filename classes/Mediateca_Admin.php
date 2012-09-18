@@ -293,13 +293,13 @@ class Mediateca_Admin
 						'taxonomy' => 'tipo-di-handicap',
 						'type' => 'hierarchical_checkboxes'
 					),
-				/*	array(
+					array(
 						'name' => 'Accessibilit&agrave; secondaria',
 						'desc' => 'Tipo di Accessibilit&agrave; secondaria coperta dalla publicazione e non direttamente prevista dagli autori/editori',
 						'id' => $this->meta_prefix . 'accessibilita-secondaria',
 						'taxonomy' => 'accessibilita-secondaria',
 						'type' => 'hierarchical_checkboxes'
-					),*/
+					),
 					array(
 						'name' => 'Tipo di difficolt&agrave; compensata',
 						'desc' => 'Tipo di difficolt&agrave; compensata',

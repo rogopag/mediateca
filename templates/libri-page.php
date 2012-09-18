@@ -22,7 +22,7 @@
 		<!--  ADVANCED FORM  -->
 		<div id="mediateca-form-container" class="mediateca-forms-container">
 			<h4>Ricerca avanzata</h4>
-			<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="libri-form" class="mediateca-form">
+		<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="libri-form" class="mediateca-form">
 		<?php wp_nonce_field('mediateca-check-libri-nonce','mediateca-libri-nonce'); ?>
 		<input type="hidden" name="action" value="<?php echo MEDIATECA_LIBRI_SEARCH; ?>" id="<?php echo MEDIATECA_LIBRI_SEARCH; ?>" />
 		<input type="hidden" name="results" value="<?php echo LIBRI_SLUG;?>" id="<?php echo LIBRI_SLUG;?>" />
@@ -44,7 +44,9 @@
 
 <?php endif; ?>
 </div>
-<?php get_sidebar(); ?>
+<?php
+do_action('render_search_results');
+?>
 </div>
 </div>
 <?php get_footer(); ?>

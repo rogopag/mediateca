@@ -145,8 +145,7 @@ function managePagination()
 		
 		if( variable == 'results' )
 		{
-			action = $('#hardware-e-software-search').val();
-			kind = $('#hardware-e-software-search').val();
+			action = kind = $('input[name="action"]').val();
 		}
 		else if( variable == 'search' )
 		{
@@ -156,9 +155,7 @@ function managePagination()
 		
 		send = $.param({action:action, paginated : what, pagenum : page, kind : kind }) + '&' + jQuery.param( Mediateca.query );
 		
-		console.log( send  );
-		
-		ajaxCall( send, $("#hardware-and-software-form") )
+		ajaxCall( send, $("form.mediateca-form") )
 	});
 };
 function mediatecaPagination()
