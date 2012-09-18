@@ -69,7 +69,7 @@ function ajaxCall( data, element )
 			//dataType: 'json',
 			error: function(XMLHttpRequest, textStatus, errorThrown)
 			{  
-				console.error( textStatus, errorThrown );
+				//console.error( textStatus, errorThrown );
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
@@ -90,7 +90,7 @@ function ajaxCall( data, element )
 			{
 				if( data )
 				{
-					console.log( data );
+					//console.log( data );
 					
 					el.parent().parent().after( data );
 					$("#search-results").fadeIn(200, function(){
@@ -141,6 +141,8 @@ function managePagination()
 	{	
 		event.preventDefault();
 		
+		console.log( "Clicked the shit:::::::::::::::::::::::::::::::::::::::", $(event.target).attr('href') );
+		
 		var kind, send, action, a = $(event.target), href = a.attr('href'), query = href.split('?')[1], variable = query.split('=')[0], what = query.split('=')[1], tmp = href.split('page/'), page = tmp[1].split('/?')[0];
 		
 		if( variable == 'results' )
@@ -168,7 +170,7 @@ function mediatecaPagination()
 function mediateca_loading( a )
 {
 	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading" id="loading-gif" />'), append = a;
-	console.log( 'I should see the loader here', a.attr('class') );
+	//console.log( 'I should see the loader here', a.attr('class') );
 	loading.insertAfter( append.parent().parent() ).fadeIn('fast');
 };
 function mediateca_loading_remove( )

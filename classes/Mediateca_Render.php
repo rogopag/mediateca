@@ -6,7 +6,7 @@ class Mediateca_Render {
 	private $type;
 	public $show_comments;
 	public static $PAGES_SLUG = array (MEDIATECA_SLUGS, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
-	const POSTS_PER_PAGE = 10;
+	const POSTS_PER_PAGE = 2;
 	private $taxonomies = array ( );
 	private $metas = array ( );
 	private $number_of_pages = 1;
@@ -314,7 +314,7 @@ class Mediateca_Render {
 			$page = (get_query_var ( 'paged' )) ? get_query_var ( 'paged' ) : 1;
 		}
 		
-		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'post_date', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => 2 /*self::POSTS_PER_PAGE*/ );
+		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'post_date', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
 		
 		if ($is_pagination_query == false) {
 			$_SESSION['previous_query'] = $args;
@@ -352,7 +352,7 @@ class Mediateca_Render {
 				$pagination ['add_args'] [MEDIATECA_TEXT_SEARCH] = (get_query_var ( MEDIATECA_TEXT_SEARCH )) ? get_query_var ( MEDIATECA_TEXT_SEARCH ) : ($_POST [MEDIATECA_TEXT_SEARCH]) ? $_POST [MEDIATECA_TEXT_SEARCH] : $_POST ['paginated'];
 			}
 			
-			if (($_POST ['paginated'] && $_POST ['kind'] == MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH) || ($wp->query_vars ['results'] || $_POST ['results'])) {
+			if (($_POST ['paginated'] && $_POST ['kind'] == MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH || $_POST ['kind'] == MEDIATECA_LIBRI_SEARCH ) || ($wp->query_vars ['results'] || $_POST ['results'])) {
 				$pagination ['base'] = user_trailingslashit ( trailingslashit ( remove_query_arg ( 'results', get_pagenum_link ( 1 ) ) ) . 'page/%#%/', 'paged' );
 				$pagination ['add_args'] ['results'] = ($wp->query_vars ['results']) ? $wp->query_vars ['results'] : ($_POST ['results']) ? $_POST ['results'] : $_POST ['paginated'];
 			
