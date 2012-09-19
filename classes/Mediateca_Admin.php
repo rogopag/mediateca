@@ -12,6 +12,7 @@ class Mediateca_Admin
 	private static $instance;
 	private $types;
 	public $meta_prefix;
+	public static $meta_boxes = array();
 	
 	/**
 	 * Class constructor
@@ -66,6 +67,8 @@ class Mediateca_Admin
 	 **/
 	public function addHardwareAndSoftwareMetaBoxes( $meta_boxes )
 	{
+		static $count = 1;
+		
 		$types = $this->types;
 		
 		array_pop( $types );
@@ -185,7 +188,11 @@ class Mediateca_Admin
 					),
 				),
 			);
-
+			
+			if( $count > 1 )
+			array_push(self::$meta_boxes, $meta_boxes);
+			
+			$count += 1;
 			return $meta_boxes;
 	}
 	public function addLibriMetaBoxes( $meta_boxes )
@@ -389,7 +396,7 @@ class Mediateca_Admin
 					array(
 						'name' => 'Tipo di supporto multimediale',
 						'desc' => 'Tipo di supporto multimediale',
-						'id' => $this->meta_prefix . 'Multimedia type',
+						'id' => $this->meta_prefix . 'multimedia-type',
 						'type'    => 'select',
 						'options' => array(
 							array( 'name' => 'nessuno', 'value' => '', ),
@@ -622,6 +629,8 @@ class Mediateca_Admin
 					),
 				),
 			);
+			
+			 array_push(self::$meta_boxes, $meta_boxes);
 			
 			return $meta_boxes;
 	}

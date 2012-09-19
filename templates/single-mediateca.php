@@ -10,7 +10,9 @@ get_header(); ?>
 			<?php echo $mediatecaRender->printAuthorsAndIllustratorsIfAny( get_the_ID() ); ?>
 			<h2 class="orange mediateca-singles-titles"><?php the_title(); ?></h2>
 			<div class="entry">
+				
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
+				
 				<small>
 					<?php 
 				if (is_user_logged_in())
