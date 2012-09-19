@@ -2,18 +2,22 @@
 error_reporting ( E_ALL );
 ini_set ( "display_errors", 0 );
 class Mediateca_Render {
+		
+	public $show_comments;
+	
+	public static $PAGES_SLUG = array (MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
+	
+	const POSTS_PER_PAGE = 10;
+	const HIDE_EMPTY = 1;
+	
 	private $types;
 	private $type;
-	public $show_comments;
-	public static $PAGES_SLUG = array (MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
-	const POSTS_PER_PAGE = 2;
 	private $taxonomies = array ( );
 	private $metas = array ( );
 	private $number_of_pages = 1;
 	private $mother_page;
 	private $pagename;
-	const HIDE_EMPTY = 1;
-	
+
 	public function __construct() {
 		$this->initSession();
 		
