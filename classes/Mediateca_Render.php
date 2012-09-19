@@ -483,7 +483,7 @@ class Mediateca_Render {
 		foreach( $boxes as $box )
 		{
 			if( in_array($post->post_type, $box['pages'] ) )
-			array_push($tmp, $box);	
+			array_push($tmp, $box);
 		}
 		
 		$output = '';
@@ -522,7 +522,7 @@ class Mediateca_Render {
 		
 		return $a;
 	}
-// Two filter functions to add metadata content to our asset
+	// Two filter functions to add metadata content to our asset
 	public function printMetaBelowTitle( $content )
 	{
 		$a = $this->printMetaBoxesContent(  );
@@ -534,84 +534,11 @@ class Mediateca_Render {
 		$a = $this->printMetaBoxesContent( 1, 6 );
 		return $content.$a;	
 	}
+	// a method to print boolean fields in human language
 	public function manageBooleanMetas($meta, $label, $id, $px = '')
 	{
 		$n = ( get_post_meta($id, $px.$meta, true ) == 1 ) ? 'SI' : 'NO';
 		return sprintf( '<li><strong>%s:</strong> %s </li>', $label, $n);
-	}
-	private function metaBoxesStatic()
-	{
-		/*global $mediatecaAdmin, $post;
-		
-		$px = $mediatecaAdmin->meta_prefix;
-		
-		$id = $post->ID;
-		
-		$output = '';
-		
-		$a = '';
-		
-		$ul = '<ul class="mediateca-meta-below-title">';
-		
-		$output .= ( get_post_meta($id, $px.'editore', true ) ) ? '<li><strong>Editore:</strong> ' . get_post_meta($id, $px.'editore', true ) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'collana', true ) ) ? '<li><strong>Collana:</strong> ' . get_post_meta($id, $px.'collana', true ) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'distributore', true ) ) ? '<li><strong>Distributore:</strong> ' . get_post_meta($id, $px.'distributore', true ) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'ISBN', true ) ) ? '<li><strong>ISBN:</strong> ' . get_post_meta($id, $px.'ISBN', true ) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'anno', true ) ) ? '<li><strong>Anno:</strong> ' . substr( get_post_meta($id, $px.'anno', true ), -4) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'numero-di-pagine', true ) ) ? '<li><strong>Numero di pagine:</strong> ' . substr( get_post_meta($id, $px.'numero-di-pagine', true ), -4) . '</li>': '';
-		$output .= ( get_post_meta($id, $px.'prezzo', true ) ) ? '<li><strong>Prezzo:</strong> ' . substr( get_post_meta($id, $px.'prezzo', true ), -4) . '&euro;</li>': '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('tipo-di-libro') ) ) ? '<li><strong>Tipo di libro:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('tipo-di-libro') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('eta') ) ) ? '<li><strong>Fascie di et&agrave;:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('eta') ) . '</li>' : '';
-		
-		$ulClose .= '</ul>';
-		
-		if( $output ) $a =  $ul.$output.$ulClose;
-		
-		$ul = '<ul class="mediateca-meta-below-title">';
-			
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('tipo-di-handicap') ) ) ? '<li><strong>Accessibilit&agrave; primaria:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('tipo-di-handicap') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('accessibilita-secondaria') ) ) ? '<li><strong>Accessibilit&agrave; secondaria:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('accessibilita-secondaria') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('difficolta-compensata') ) ) ? '<li><strong>Tipo di difficolt&agrave; compensata:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('difficolta-compensata') ) . '</li>' : '';
-		$output .= ( get_post_meta($id, $px.'formato', true ) ) ? '<li><strong>Formato volume a libro chiuso:</strong> ' . get_post_meta($id, $px.'formato', true ) . '</li>': '';	
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('materiale-di-base') ) ) ? '<li><strong>Materiale di base:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('materiale-di-base') ) . '</li>' : '';
-		$output .= ( get_post_meta($id, $px.'forma-delle-pagine', true ) ) ? '<li><strong>Forma delle pagine:</strong> ' . get_post_meta($id, $px.'forma-delle-pagine', true ) . '</li>': '';	
-		if( $post->post_type == LIBRI_TYPE )
-		{
-			$output .= $this->manageBooleanMetas('dispositivi-di-aiuto', 'Presenza di dispositivi per aiutare a sfogliare le pagine', $id, $px);
-			$output .= $this->manageBooleanMetas('elementi-mobili', 'Presenza di elementi mobili', $id, $px);
-			$output .= $this->manageBooleanMetas('elementi-staccabili', 'Presenza di elementi staccabili', $id, $px);
-			$output .= $this->manageBooleanMetas('multimedia', 'Presenza di assets multimediali', $id, $px);
-			$output .= ( get_post_meta($id, $px.'multimedia-type', true ) ) ? '<li><strong>Tipo di supporto multimediale:</strong> ' . get_post_meta($id, $px.'multimedia-type', true ) . '</li>': '';	
-			$output .= ( get_post_meta($id, $px.'multimedia-link', true ) ) ? '<li><strong>Multimedia link:</strong> ' . get_post_meta($id, $px.'multimedia-link', true ) . '</li>': '';	
-		}
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('genere') ) ) ? '<li><strong>Genere:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('genere') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('temi-trattati') ) ) ? '<li><strong>Temi trattati:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('temi-trattati') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('ambiente-prevalente') ) ) ? '<li><strong>Ambiente prevalente:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('ambiente-prevalente') ) . '</li>' : '';
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('personaggi') ) ) ? '<li><strong>Personaggi:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('personaggi') ) . '</li>' : '';
-		$output .= ( get_post_meta($id, $px.'complessita-storia', true ) ) ? '<li><strong>Complessit&agrave; della storia:</strong> ' . get_post_meta($id, $px.'complessita-storia', true ) . '</li>': '';	
-		$output .= $this->manageBooleanMetas('presenza-testo', 'Presenza di testo', $id, $px);
-		$output .= ( dito_printObjectTermsInNiceFormat( $id, array('codici-utilizzati') ) ) ? '<li><strong>Codici utilizzati:</strong> ' . dito_printObjectTermsInNiceFormat( $id, array('codici-utilizzati') ) . '</li>' : '';
-		$output .= ( get_post_meta($id, $px.'dimensione-carattere', true ) ) ? '<li><strong>Dimensione del carattere:</strong> ' . get_post_meta($id, $px.'dimensione-carattere', true ) . '</li>': '';	
-		$output .= ( get_post_meta($id, $px.'font', true ) ) ? '<li><strong>Font:</strong> ' . get_post_meta($id, $px.'font', true ) . '</li>': '';	
-		$output .= ( get_post_meta($id, $px.'complessita-testo', true ) ) ? '<li><strong>Complessit&agrave; del testo:</strong> ' . get_post_meta($id, $px.'complessita-testo', true ) . '</li>': '';			
-		$output .= ( get_post_meta($id, $px.'complessita-testo-descrizione', true ) ) ? '<li><strong>Complessit&agrave; del testo descrizione:</strong> ' . get_post_meta($id, $px.'complessita-testo-descrizione', true ) . '</li>': '';			
-		$output .= ( get_post_meta($id, $px.'lunghezza-testo', true ) ) ? '<li><strong>Numero di frasi per pagina:</strong> ' . get_post_meta($id, $px.'lunghezza-testo', true ) . '</li>': '';			
-		$output .= $this->manageBooleanMetas('presenza-immagini', 'Presenza di immagini', $id, $px);
-		if( get_post_meta($id, $px.'presenza-immagini', true ) )
-		{
-				$output .= ( get_post_meta($id, $px.'rapporto-con-testo', true ) ) ? '<li><strong>Rapporto spaziale col testo:</strong> ' . get_post_meta($id, $px.'rapporto-con-testo', true ) . '</li>': '';			
-				$output .= ( get_post_meta($id, $px.'colore-immagini', true ) ) ? '<li><strong>Colore immagini:</strong> ' . get_post_meta($id, $px.'colore-immagini', true ) . '</li>': '';			
-				$output .= ( get_post_meta($id, $px.'tipo-di-immagini', true ) ) ? '<li><strong>Tipo di immagini:</strong> ' . get_post_meta($id, $px.'tipo-di-immagini', true ) . '</li>': '';					
-				$output .= ( get_post_meta($id, $px.'tecnica', true ) ) ? '<li><strong>Tecnica tattile:</strong> ' . get_post_meta($id, $px.'tecnica', true ) . '</li>': '';							
-				$output .= ( get_post_meta($id, $px.'complessita-immagini', true ) ) ? '<li><strong>Complessit&agrave; del immagini:</strong> ' . get_post_meta($id, $px.'complessita-immagini', true ) . '</li>': '';							
-				$output .= ( get_post_meta($id, $px.'complessita-immagini-descrizione', true ) ) ? '<li><strong>Complessit&agrave; del immagini descrizione:</strong> ' . get_post_meta($id, $px.'complessita-immagini-descrizione', true ) . '</li>': '';											
-				
-		}
-		
-		$ulClose = '</ul>';
-			
-		if( $output ) $a = $ul.$output.$ulClose;*/
-		
 	}
 }
 ?>

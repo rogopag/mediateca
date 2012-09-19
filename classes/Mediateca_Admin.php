@@ -74,7 +74,7 @@ class Mediateca_Admin
 		array_pop( $types );
 		
 		$meta_boxes[] = array(
-				'id' => 'test_metabox',
+				'id' => 'dati_metabox',
 				'title' => 'Dati pubblicazione',
 				'pages' => $types, // post type
 				'context' => 'normal',
@@ -89,62 +89,6 @@ class Mediateca_Admin
 						'type' => 'taxonomy_radio'
 					),
 					array(
-						'name' => 'Categoria',
-						'desc' => 'Categoria e sottocategoria (figlia) di appartenenza della pubblicazione',
-						'id' => $this->meta_prefix . 'categoria',
-						'taxonomy' => 'categoria', //Enter Taxonomy Slug
-						'type' => 'hierarchical_checkboxes'
-					),
-					array(
-						'name' => 'Terzo livello',
-						'desc' => 'Terzo livello di filtro per hardware e software',
-						'id' => $this->meta_prefix . 'terzo-livello',
-						'taxonomy' => 'terzo-livello', //Enter Taxonomy Slug
-						'type' => 'taxonomy_select'
-					),
-					array(
-						'name' => 'Riferimenti',
-						'desc' => 'Link alla pagina della pubblicazione',
-						'id' => $this->meta_prefix . 'riferimenti',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'collocazione',
-						'desc' => 'Collocazione della pubblicazione',
-						'id' => $this->meta_prefix . 'collocazione',
-						'type' => 'text_small'
-					),
-					array(
-						'name' => 'handicap',
-						'desc' => 'Handicap preso in considerazione',
-						'id' => $this->meta_prefix . 'handicap',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Scuola',
-						'desc' => 'Scuola a cui &egrave; a cui &egrave; rivolta la pubblicazione',
-						'id' => $this->meta_prefix . 'scuola',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Lingua',
-						'desc' => 'Lingua della pubblicazione',
-						'id' => $this->meta_prefix . 'lingua',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Anno',
-						'desc' => 'Anno di pubblicazione',
-						'id' => $this->meta_prefix . 'anno',
-						'type' => 'text_date'
-					),
-					array(
-						'name' => 'Collana',
-						'desc' => 'Collana di pubblicazione',
-						'id' => $this->meta_prefix . 'collana',
-						'type' => 'text_medium'
-					),
-					array(
 						'name' => 'Autore/i',
 						'desc' => 'Autore/i della pubblicazione',
 						'id' => $this->meta_prefix . 'autori',
@@ -157,15 +101,39 @@ class Mediateca_Admin
 						'type' => 'text'
 					),
 					array(
+						'name' => 'Editore',
+						'desc' => 'Editore della pubblicazione',
+						'id' => $this->meta_prefix . 'editore',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Collana',
+						'desc' => 'Collana di pubblicazione',
+						'id' => $this->meta_prefix . 'collana',
+						'type' => 'text_medium'
+					),
+					array(
 						'name' => 'Distributore',
 						'desc' => 'Distributore della pubblicazione',
 						'id' => $this->meta_prefix . 'distributore',
 						'type' => 'text_medium'
 					),
 					array(
-						'name' => 'Editore',
-						'desc' => 'Editore della pubblicazione',
-						'id' => $this->meta_prefix . 'editore',
+						'name' => 'Anno',
+						'desc' => 'Anno di pubblicazione',
+						'id' => $this->meta_prefix . 'anno',
+						'type' => 'text_date'
+					),
+					array(
+						'name' => 'Et&agrave; consigliata',
+						'desc' => 'Et&agrave; consigliata',
+						'id' => $this->meta_prefix . 'scuola',
+						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Lingua',
+						'desc' => 'Lingua della pubblicazione',
+						'id' => $this->meta_prefix . 'lingua',
 						'type' => 'text_medium'
 					),
 					array(
@@ -188,6 +156,48 @@ class Mediateca_Admin
 					),
 				),
 			);
+			$meta_boxes[] = array(
+					'id' => 'info_metabox',
+					'title' => 'Informazioni aggiuntive',
+					'pages' => $types, // post type
+					'context' => 'normal',
+					'priority' => 'high',
+					'show_names' => true, // Show field names on the left
+					'fields' => array(
+						array(
+							'name' => 'Categoria',
+							'desc' => 'Categoria e sottocategoria (figlia) di appartenenza della pubblicazione',
+							'id' => $this->meta_prefix . 'categoria',
+							'taxonomy' => 'categoria', //Enter Taxonomy Slug
+							'type' => 'hierarchical_checkboxes'
+						),
+						array(
+							'name' => 'Terzo livello',
+							'desc' => 'Terzo livello di filtro per hardware e software',
+							'id' => $this->meta_prefix . 'terzo-livello',
+							'taxonomy' => 'terzo-livello', //Enter Taxonomy Slug
+							'type' => 'taxonomy_select'
+						),
+						array(
+							'name' => 'Riferimenti',
+							'desc' => 'Link alla pagina della pubblicazione',
+							'id' => $this->meta_prefix . 'riferimenti',
+							'type' => 'text_medium'
+						),
+						array(
+							'name' => 'Collocazione',
+							'desc' => 'Collocazione della pubblicazione',
+							'id' => $this->meta_prefix . 'collocazione',
+							'type' => 'text_small'
+						),
+						array(
+							'name' => 'Tipo di disabilit&agrave;',
+							'desc' => 'Handicap preso in considerazione',
+							'id' => $this->meta_prefix . 'handicap',
+							'type' => 'text_medium'
+						),
+				),
+			);	
 			
 			if( $count > 1 )
 			array_push(self::$meta_boxes, $meta_boxes);
@@ -276,8 +286,8 @@ class Mediateca_Admin
 						'type' => 'taxonomy_select'
 					),
 					array(
-						'name' => 'Fascia di et&agrave;',
-						'desc' => 'Fascia di et&agrave;',
+						'name' => 'Et&agrave; consigliata',
+						'desc' => 'Et&agrave; consigliata',
 						'id' => $this->meta_prefix . 'eta',
 						'taxonomy' => 'eta', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
