@@ -141,7 +141,7 @@ function managePagination()
 	{	
 		event.preventDefault();
 		
-		console.log( "Clicked the shit:::::::::::::::::::::::::::::::::::::::", $(event.target).attr('href') );
+		//console.log( "Clicked the shit:::::::::::::::::::::::::::::::::::::::", $(event.target).attr('href') );
 		
 		var kind, send, action, a = $(event.target), href = a.attr('href'), query = href.split('?')[1], variable = query.split('=')[0], what = query.split('=')[1], tmp = href.split('page/'), page = tmp[1].split('/?')[0];
 		
@@ -169,6 +169,8 @@ function mediatecaPagination()
 };
 function mediateca_loading( a )
 {
+	$('input[name="submit-search"]').attr('disabled', 'disabled');
+	
 	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading" id="loading-gif" />'), append = a;
 	//console.log( 'I should see the loader here', a.attr('class') );
 	loading.insertAfter( append.parent().parent() ).fadeIn('fast');
@@ -178,6 +180,7 @@ function mediateca_loading_remove( )
 	$("#loading-gif").fadeOut('fast', function()
 	{
 		$(this).remove();
+		$('input[name="submit-search"]').removeAttr('disabled');
 	});
 };
 function libriSelectSezione()
