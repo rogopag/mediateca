@@ -81,13 +81,13 @@ class Mediateca_Admin
 				'priority' => 'high',
 				'show_names' => true, // Show field names on the left
 				'fields' => array(
-					array(
+					/*array(
 						'name' => 'Sezione',
 						'desc' => 'Sezione di appartenenza della pubblicazione',
 						'id' => $this->meta_prefix . 'sezione',
 						'taxonomy' => 'sezione', //Enter Taxonomy Slug
 						'type' => 'taxonomy_radio'
-					),
+					),*/
 					array(
 						'name' => 'Autore/i',
 						'desc' => 'Autore/i della pubblicazione',

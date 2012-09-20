@@ -70,13 +70,13 @@ class Mediateca_Init
 			'query_var' => 'terzo-livello',
 			'rewrite' => array('slug' => 'terzo-livello' )
 			));
-		register_taxonomy( 'sezione', $types,
+		/*register_taxonomy( 'sezione', $types,
 		array(
 			'hierarchical' => true,
 			'label' => __('Sezione',MEDIATECA_TD),
 			'query_var' => 'sezione',
 			'rewrite' => array('slug' => 'sezione' )
-			));
+			));*/
 	}
 	public function createLibriTaxonomies()
 	{
