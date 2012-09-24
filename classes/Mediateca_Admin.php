@@ -56,7 +56,12 @@ class Mediateca_Admin
 			remove_meta_box ( 'commentstatusdiv', $type, 'normal' );
 			remove_meta_box ( 'categoriadiv', $type, 'side' );
 			remove_meta_box ( 'tagsdiv-sezione', $type, 'side' );
-			remove_meta_box ( 'terzo-livellodiv', $type, 'side' );
+			remove_meta_box ( 'tagsdiv-terzo-livello', $type, 'side' );
+			remove_meta_box ( 'tagsdiv-sezione-libri', $type, 'side' );
+			remove_meta_box ( 'sistema-operativodiv', $type, 'side' );
+			remove_meta_box ( 'etadiv', $type, 'side' );
+			remove_meta_box ( 'tipo-di-handicapdiv', $type, 'side' );
+			
 		}
 	}
 	/**
@@ -81,13 +86,6 @@ class Mediateca_Admin
 				'priority' => 'high',
 				'show_names' => true, // Show field names on the left
 				'fields' => array(
-					/*array(
-						'name' => 'Sezione',
-						'desc' => 'Sezione di appartenenza della pubblicazione',
-						'id' => $this->meta_prefix . 'sezione',
-						'taxonomy' => 'sezione', //Enter Taxonomy Slug
-						'type' => 'taxonomy_radio'
-					),*/
 					array(
 						'name' => 'Autore/i',
 						'desc' => 'Autore/i della pubblicazione',
@@ -125,10 +123,17 @@ class Mediateca_Admin
 						'type' => 'text_date'
 					),
 					array(
-						'name' => 'Et&agrave; consigliata',
-						'desc' => 'Et&agrave; consigliata',
+						'name' => 'Scuola',
+						'desc' => 'Utilizzare questo valore per aggiornare fascia di et&agrave;',
 						'id' => $this->meta_prefix . 'scuola',
 						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Et&agrave; consigliata',
+						'desc' => 'Et&agrave; consigliata',
+						'id' => $this->meta_prefix . 'eta',
+						'taxonomy' => 'eta', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Lingua',
@@ -138,9 +143,16 @@ class Mediateca_Admin
 					),
 					array(
 						'name' => 'Sistema',
-						'desc' => 'Sistema operativo che supporta la pubblicazione (hardware e software)',
+						'desc' => 'Sistema operativo a cui riferirsi per dare la nuova tassonomia',
 						'id' => $this->meta_prefix . 'sistema',
 						'type' => 'text_medium'
+					),
+					array(
+						'name' => 'Sistema operativo',
+						'desc' => 'Sistema operativo che supporta la pubblicazione (hardware e software)',
+						'id' => $this->meta_prefix . 'sistema-operitivo',
+						'taxonomy' => 'sistema-operativo', //Enter Taxonomy Slug
+						'type' => 'hierarchical_checkboxes'
 					),
 					array(
 						'name' => 'Hardware necessario',
@@ -185,9 +197,19 @@ class Mediateca_Admin
 							'type' => 'text_medium'
 						),
 						array(
-							'name' => 'Collocazione',
-							'desc' => 'Collocazione della pubblicazione',
-							'id' => $this->meta_prefix . 'collocazione',
+						'name' => 'Disponibile in Area',
+						'desc' => 'Presenza della pubblicazione in Area',
+						'id' => $this->meta_prefix . 'disponibile-in-area',
+						'type'    => 'radio_inline',
+						'options' => array(
+								array( 'name' => 'Si', 'value' => 1, ),
+								array( 'name' => 'No', 'value' => 0, ),
+							  ),
+						),
+						array(
+							'name' => 'ID Collocazione',
+							'desc' => 'ID Collocazione della pubblicazione',
+							'id' => $this->meta_prefix . 'id-collocazione',
 							'type' => 'text_small'
 						),
 						array(

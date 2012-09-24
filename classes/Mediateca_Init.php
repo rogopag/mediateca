@@ -70,17 +70,18 @@ class Mediateca_Init
 			'query_var' => 'terzo-livello',
 			'rewrite' => array('slug' => 'terzo-livello' )
 			));
-		/*register_taxonomy( 'sezione', $types,
+		register_taxonomy( 'sistema-operativo', $types,
 		array(
 			'hierarchical' => true,
-			'label' => __('Sezione',MEDIATECA_TD),
-			'query_var' => 'sezione',
-			'rewrite' => array('slug' => 'sezione' )
-			));*/
+			'label' => __('Sistema operativo',MEDIATECA_TD),
+			'query_var' => 'sistema-operativo',
+			'rewrite' => array('slug' => 'sistema-operativo' )
+			));
 	}
 	public function createLibriTaxonomies()
 	{
 		$types = LIBRI_TYPE;
+		
 		register_taxonomy( 'sezione-libri', $types,
 		array(
 			'hierarchical' => false,
@@ -116,7 +117,7 @@ class Mediateca_Init
 			'query_var' => 'tipo-di-libro',
 			'rewrite' => array('slug' => 'tipo-di-libro' )
 			));
-		register_taxonomy( 'eta', $types,
+		register_taxonomy( 'eta', self::$types,
 		array(
 			'hierarchical' => true,
 			'label' => __('Fascia di et&agrave;',MEDIATECA_TD),
