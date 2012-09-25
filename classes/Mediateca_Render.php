@@ -1,6 +1,6 @@
 <?php
 error_reporting ( E_ALL );
-ini_set ( "display_errors", 1 );
+ini_set ( "display_errors", 0 );
 class Mediateca_Render {
 		
 	public $show_comments;
@@ -348,11 +348,15 @@ class Mediateca_Render {
 	}
 	public function sidebarLeftBox() {
 		if (is_front_page () && file_exists ( MEDIATECA_TEMPLATE_PATH . 'sidebar_boxes.php' )) {
+			$posts = $this->getPosts ( array( LIBRI_TYPE ) );
+			$h2 = $this->niceNameFromSlug( LIBRI_SLUG );
+			include MEDIATECA_TEMPLATE_PATH . 'sidebar_boxes.php';
+			rewind_posts();
+			$h2 = $this->niceNameFromSlug( HARDWARE_SOFTWARE_SLUG );
 			$posts = $this->getPosts ( array (HARDWARE_TYPE, SOFTWARE_TYPE ) );
-			
-			include_once MEDIATECA_TEMPLATE_PATH . 'sidebar_boxes.php';
+			include MEDIATECA_TEMPLATE_PATH . 'sidebar_boxes.php';
+			rewind_posts();
 		}
-		return $posts;
 	}
 	public function getPosts($types, $number = 2, $taxonomies = array(), $metas = array()) {
 		$args = array ('posts_per_page' => $number, 'offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'post_date', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish' );
