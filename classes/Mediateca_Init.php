@@ -5,6 +5,7 @@ class Mediateca_Init
 {
 	private static $instance;
 	public static $types = array(HARDWARE_TYPE, SOFTWARE_TYPE, LIBRI_TYPE);
+	//that is for temporarily use do not fear
 	public static $pages;
 	
 	private function __construct()

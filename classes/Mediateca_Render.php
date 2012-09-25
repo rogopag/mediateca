@@ -1,11 +1,11 @@
 <?php
 error_reporting ( E_ALL );
-ini_set ( "display_errors", 0 );
+ini_set ( "display_errors", 1 );
 class Mediateca_Render {
 		
 	public $show_comments;
 	
-	public static $PAGES_SLUG = array (MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG );
+	public static $PAGES_SLUG = array (MEDIATECA_SLUG, HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG, APP_PER_TABLET_SLUG );
 	
 	const POSTS_PER_PAGE = 10;
 	const HIDE_EMPTY = 1;
@@ -27,9 +27,8 @@ class Mediateca_Render {
 		
 		add_action ( 'sidebar_left_home_first_box', array (&$this, 'sidebarLeftBox' ), 10 );
 		add_filter ( 'single_template', array (&$this, 'get_custom_post_type_single_template' ), 11 );
-		add_filter ( 'page_template', array (&$this, 'mediatecaTemplate' ) );
-		add_filter ( 'page_template', array (&$this, 'hardware_e_softwareTemplate' ) );
-		add_filter ( 'page_template', array (&$this, 'libriTemplate' ) );
+		
+		$this->giveTemplatePages();
 		
 		add_action ( 'wp_ajax_'.MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH, array (&$this, 'ajaxResult' ) );
 		add_action ( 'wp_ajax_nopriv_'.MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH, array (&$this, 'ajaxResult' ) );
@@ -46,6 +45,38 @@ class Mediateca_Render {
 		add_action ( 'wp_ajax_'.MEDIATECA_LIBRI_SEARCH, array (&$this, 'ajaxLibriResult' ) );
 		add_action ( 'wp_ajax_nopriv_'.MEDIATECA_LIBRI_SEARCH, array (&$this, 'ajaxLibriResult' ) );
 		
+		add_action('print_mediateca_menu_links', array(&$this, 'printMediatecaMenuLinks'), 10 );
+		
+	}
+	private function giveTemplatePages()
+	{
+		foreach( self::$PAGES_SLUG as $func )
+		{
+			$method = str_replace('-', '_', $func).'Template';
+				
+			if( method_exists(&$this, $method) )
+			add_filter ( 'page_template', array (&$this, $method ) );
+		}
+	}
+	public function printMediatecaMenuLinks()
+	{
+		$html = '';
+		$pages = array(HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG, APP_PER_TABLET_SLUG);
+		$count = 1;
+		$len = count($pages);
+		$class = 'com';
+		
+		foreach( $pages as $page )
+		{
+			if( $count == $len ) $class = 'comLast';
+			$html .= '<div class="'.$class.'"><a href="'.get_bloginfo('url') .'/'. MEDIATECA_SLUG . '/' . $page . '">'.$this->niceNameFromSlug($page).'</a></div>';
+			$count++;
+		}
+		echo $html;
+	}
+	private function niceNameFromSlug( $name )
+	{
+		return ucfirst( str_replace('-', ' ', $name) );
 	}
 	private function initSession() {
 		if ( !session_id () ) {
@@ -267,6 +298,18 @@ class Mediateca_Render {
 			}
 			
 			$page_template = MEDIATECA_TEMPLATE_PATH . LIBRI_SLUG . '-page.php';
+		}
+		return $page_template;
+	}
+	public function app_per_tabletTemplate($page_template) 
+	{
+		global $post;
+		
+		if ($post->post_name == APP_PER_TABLET_SLUG && file_exists ( MEDIATECA_TEMPLATE_PATH . APP_PER_TABLET_SLUG . '-page.php' ))
+		{
+			$this->styleAndScripts ();
+			
+			$page_template = MEDIATECA_TEMPLATE_PATH . APP_PER_TABLET_SLUG . '-page.php';
 		}
 		return $page_template;
 	}
