@@ -202,8 +202,8 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'disponibile-in-area',
 						'type'    => 'radio_inline',
 						'options' => array(
-								array( 'name' => 'Si', 'value' => 1, ),
-								array( 'name' => 'No', 'value' => 0, ),
+								array( 'name' => 'Si', 'value' => 'SI', ),
+								array( 'name' => 'No', 'value' => 'NO', ),
 							  ),
 						),
 						array(
