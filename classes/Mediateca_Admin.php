@@ -295,6 +295,12 @@ class Mediateca_Admin
 						'type'    => 'text_small',
 					),
 					array(
+						'name' => 'Durata',
+						'desc' => 'Durata (Multimedia)',
+						'id' => $this->meta_prefix . 'durata',
+						'type'    => 'text_small',
+					),
+					array(
 						'name' => 'Prezzo',
 						'desc' => 'Prezzo della pubblicazione',
 						'id' => $this->meta_prefix . 'prezzo',
@@ -363,7 +369,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'formato',
 						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => 'Piu piccolo di un A4', 'value' => 'Piu piccolo di un A4', 'checked' => 1),
+							array( 'name' => 'Piu piccolo di un A4', 'value' => 'Piu piccolo di un A4', 'checked' => 0 ),
 							array( 'name' => 'A4', 'value' => 'A4', ),
 							array( 'name' => 'Piu grande di un A4', 'value' => 'Piu grande di un A4', ),
 						),
@@ -381,7 +387,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'forma-delle-pagine',
 						'type'    => 'radio_inline',
 						'options' => array(
-							array( 'name' => 'Regolare', 'value' => 'Regolare', 'checked' => 1),
+							array( 'name' => 'Regolare', 'value' => 'Regolare', 'checked' => 0),
 							array( 'name' => 'Irregolare', 'value' => 'Irregolare', ),
 						),
 					),
@@ -490,6 +496,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'complessita-storia',
 						'type'    => 'select',
 						'options' => array(
+							array( 'name' => '__NESSUNA__', 'value' => 0, ),
 							array( 'name' => '1', 'value' => 1, ),
 							array( 'name' => '2', 'value' => 2, ),
 							array( 'name' => '3', 'value' => 3, ),
@@ -537,7 +544,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'dimensione-carattere',
 						'type'    => 'radio',
 						'options' => array(
-							array( 'name' => 'Normale', 'value' => 'Normale', 'checked' => 1),
+							array( 'name' => 'Normale', 'value' => 'Normale', 'checked' => 0),
 							array( 'name' => 'Grande', 'value' => 'Grande', ),
 						),
 					),
@@ -548,7 +555,7 @@ class Mediateca_Admin
 						'type'    => 'radio',
 						'options' => array(
 							array( 'name' => 'Maiuscolo', 'value' => 'Maiuscolo', ),
-							array( 'name' => 'Minuscolo', 'value' => 'Minuscolo', 'checked' => 1 ),
+							array( 'name' => 'Minuscolo', 'value' => 'Minuscolo', 'checked' => 0 ),
 						),
 					),
 					array(
@@ -557,6 +564,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'complessita-testo',
 						'type'    => 'select',
 						'options' => array(
+							array( 'name' => '__NESSUNA__', 'value' => 0, ),
 							array( 'name' => '1', 'value' => 1, ),
 							array( 'name' => '2', 'value' => 2, ),
 							array( 'name' => '3', 'value' => 3, ),
@@ -634,7 +642,6 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'tecnica',
 						'type'    => 'multicheck',
 						'options' => array(
-							'Tattile' => 'Tattile',
 							'Grauffage' => 'Grauffage',
 							'Collage di materiali' => 'Collage di materiali',
 							'Contorno in rilievo' => 'Contorno in rilievo'
@@ -646,6 +653,7 @@ class Mediateca_Admin
 						'id' => $this->meta_prefix . 'complessita-immagini',
 						'type'    => 'select',
 						'options' => array(
+							array( 'name' => '__NESSUNA__', 'value' => 0, ),
 							array( 'name' => '1', 'value' => 1, ),
 							array( 'name' => '2', 'value' => 2, ),
 							array( 'name' => '3', 'value' => 3, ),

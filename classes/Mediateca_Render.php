@@ -61,7 +61,7 @@ class Mediateca_Render {
 	public function printMediatecaMenuLinks()
 	{
 		$html = '';
-		$pages = array(HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG, APP_PER_TABLET_SLUG);
+		$pages = array(LIBRI_SLUG, HARDWARE_SOFTWARE_SLUG, APP_PER_TABLET_SLUG);
 		$count = 1;
 		$len = count($pages);
 		$class = 'com';
@@ -540,12 +540,23 @@ class Mediateca_Render {
 		{
 			if( isset($tmp[$i]) )
 			{
+				$control_terms = $this->postHasTerm( $post->ID, 'sezione-libri',  'libri-sulla-disabilita' );
+				
+				if( 'Accessibilit&agrave; del volume' == $tmp[$i]['title'] && $control_terms ) $tmp[$i]['title'] = 'Tipo di disabilit&agrave;';
 				$output .= '<li class="title-boxes position_'.$start.'">' . $tmp[$i]['title'].'</li>';
 				
 				foreach( $tmp[$i]['fields'] as $field )
 				{
 					if( array_key_exists('taxonomy', $field ) )
 					{
+						if( $control_terms && $field['name'] == 'Accessibilit&agrave; primaria' )
+						{
+							$field['name'] = 'Si parla di';
+						}
+						if( $control_terms  && $field['name'] == 'Accessibilit&agrave; secondaria' )
+						{
+							$field['name'] = 'Si parla anche';
+						}
 						$term = dito_printObjectTermsInNiceFormat( $id, array($field['taxonomy']) );
 						$output .= ( $term ) ? '<li><strong>'.$field['name'].':</strong> ' . $term . '</li>' : '';
 					}
@@ -584,8 +595,27 @@ class Mediateca_Render {
 	// a method to print boolean fields in human language
 	public function manageBooleanMetas($meta, $label, $id, $px = '')
 	{
-		$n = ( get_post_meta($id, $px.$meta, true ) == 1 ) ? 'SI' : 'NO';
-		return sprintf( '<li><strong>%s:</strong> %s </li>', $label, $n);
+		$val = get_post_meta($id, $px.$meta, true );
+		
+		if( is_numeric( $val ) )
+		{
+			$n = ( ( $val ) == 1 ) ? 'SI' : 'NO';
+		}
+		else 
+		{
+			$n = $val;
+		}
+		return ( $n ) ? sprintf( '<li><strong>%s:</strong> %s </li>', $label, $n) : '';
+	}
+	private function postHasTerm( $id, $tax, $term )
+	{
+		$terms = wp_get_object_terms( $id, $tax, array( 'fields' => 'slugs' ) );
+		
+		if( in_array($term, $terms) )
+		{
+			return true;
+		}
+		return false;
 	}
 }
 ?>
