@@ -582,7 +582,13 @@ class Mediateca_Admin
 						'name' => 'Lunghezza',
 						'desc' => 'Numero di frasi per pagina',
 						'id' => $this->meta_prefix . 'lunghezza-testo',
-						'type' => 'text_small'
+						'type' => 'select',
+					'options' => array(
+							array( 'name' => '__NESSUNA__', 'value' => 0, ),
+							array( 'name' => '1', 'value' => '1', ),
+							array( 'name' => 'da 2 a 5', 'value' => 'da 2 a 5', ),
+							array( 'name' => 'pi&ugrave; di 5', 'value' => 'pi&ugrave; di 5', ),
+						),
 					),
 				),
 			);
