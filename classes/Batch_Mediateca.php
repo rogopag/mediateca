@@ -36,7 +36,7 @@ class Batch_Mediateca
 	private function doBatches()
 	{
 		if( $_POST['batch_terms'] )
-		{
+		{	
 			$this->createTerms();
 		}
 		if( $_POST['batch_posts'])
@@ -147,11 +147,13 @@ class Batch_Mediateca
 		$catId = $this->getTermId($sottoCategoria);
 		
 		$terzoLivello = $this->doSlugFromTermName( mb_strtolower( $this->batch_db->get_var("SELECT TerzoLivello FROM TerzoLivello WHERE ID = '$card->TerzoLivello'") ) );
-		//$sezione = $this->doSlugFromTermName( mb_strtolower($card->Sezione) );
+		$sezione = $this->doSlugFromTermName( mb_strtolower($card->Sezione) );
 		
 		$c = wp_set_post_terms( $post_id, array($parentCatId, $catId), 'categoria', false );
 		
 		$t = wp_set_object_terms( $post_id, array($terzoLivello), 'terzo-livello', false );
+		
+		//$s = wp_set_object_terms( $post_id, array($sezione), 'sezione', false );
 		
 		$this->giveMetaToPost( $card, $post_id );
 		
@@ -210,12 +212,9 @@ class Batch_Mediateca
 		
 		foreach( $termsData as $term )
 		{
-			if( $term != 'APPRENDIMENTO' )
-			{
-				$normal = mb_strtolower($term);
-				$this->insertTerm( ucfirst( $normal ), 'categoria', array('slug' => $this->doSlugFromTermName($normal) ) );
-				print ucfirst( $normal ) . " " . mb_strtolower( $this->doSlugFromTermName($normal) ) . "<br />";
-			}
+			$normal = mb_strtolower($term);
+			$this->insertTerm( ucfirst( $normal ), 'categoria', array('slug' => $this->doSlugFromTermName($normal) ) );
+			print ucfirst( $normal ) . " " . mb_strtolower( $this->doSlugFromTermName($normal) ) . "<br />";
 		}
 		
 		print "<p>_____________________________________________________________________________________________</p>";
@@ -226,16 +225,7 @@ class Batch_Mediateca
 		{
 			$normal = mb_strtolower($term->SottoCategoria);
 			$parent =  ucfirst( mb_strtolower( $this->batch_db->get_var("SELECT Categoria FROM Categorie WHERE ID = '$term->IDCategoria'") ) );
-			if( $parent == 'Apprendimento' )
-			{
-				$parent_term_id = 0;
-				$parent = "NO PARENT";
-			}
-			else 
-			{
-				$parent_term_id = $this->getTermId( $parent );
-			}
-			
+			$parent_term_id = $this->getTermId( $parent );
 			print "<strong>SottoCategoria:: </strong>".ucfirst( $normal ) . " <strong>slug::</strong> " . $this->doSlugFromTermName($normal) . " <strong>parent::</strong> " . ucfirst($parent) . " <strong>parent slug::</strong> " . $this->doSlugFromTermName($parent) ."<br />";
 			$this->insertTerm( ucfirst( $normal ), 'categoria', array('slug' => $this->doSlugFromTermName($normal), 'parent' =>  $parent_term_id ) );
 		}
@@ -249,7 +239,7 @@ class Batch_Mediateca
 	}
 	private function doSlugFromTermName( $name )
 	{
-		$str = str_replace(array(" ", "'", "/"), "-", $name);
+		$str = str_replace(array(" ", "'"), "-", $name);
 		return $this->unaccent($str);
 	}
 	private function insertTerm ($term, $taxonomy, $args = array()) 
