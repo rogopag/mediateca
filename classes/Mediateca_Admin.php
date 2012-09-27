@@ -61,7 +61,15 @@ class Mediateca_Admin
 			remove_meta_box ( 'sistema-operativodiv', $type, 'side' );
 			remove_meta_box ( 'etadiv', $type, 'side' );
 			remove_meta_box ( 'tipo-di-handicapdiv', $type, 'side' );
-			
+			remove_meta_box ( 'accessibilita-secondariadiv', $type, 'side' );
+			remove_meta_box ( 'tagsdiv-genere', $type, 'side' );
+			remove_meta_box ( 'tagsdiv-tipo-di-libro', $type, 'side' );
+			remove_meta_box ( 'difficolta-compensatadiv', $type, 'side' );
+			remove_meta_box ( 'materiale-di-basediv', $type, 'side' );
+			remove_meta_box ( 'personaggidiv', $type, 'side' );
+			remove_meta_box ( 'temi-trattatidiv', $type, 'side' );
+			remove_meta_box ( 'codici-utilizzatidiv', $type, 'side' );
+			remove_meta_box ( 'ambiente-prevalentediv', $type, 'side' );
 		}
 	}
 	/**

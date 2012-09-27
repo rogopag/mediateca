@@ -47,7 +47,7 @@ class Mediateca_Init
 				'rewrite' => true,
 				'query_var' => $type,
 				'supports' => array('title', 'author', 'editor', 'excerpt', 'revisions', 'thumbnail', 'custom-fields', 'post-formats', 'comments'),
-				'taxonomies' => array('categoria', 'terzo-livello', 'sezione')
+				'taxonomies' => array('post_tag')
 			));
 		}
 	}
