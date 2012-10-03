@@ -30,12 +30,15 @@ jq(function($)
 		libriSelectSezione();
 		hardwareSoftwareForm( $("#libri-form") );
 	}
+	fixCheckBoxes();
+});
+function fixCheckBoxes()
+{
 	if( $('.hierarchical_checkboxes').is('ul') )
 	{
 		$('input[type="checkbox"]').removeAttr('disabled');
 	}
-});
-
+};
 function mediatecaLinkButtons()
 {
 	$('.mediatecaButtons').click(function()
@@ -201,6 +204,7 @@ function libriSelectSezione()
 			{
 				mediateca_loading_remove();
 				$('#libri-removables-container').append(data);
+				fixCheckBoxes();
 			}
 		});
 	});
