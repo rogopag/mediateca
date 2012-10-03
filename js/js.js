@@ -30,6 +30,10 @@ jq(function($)
 		libriSelectSezione();
 		hardwareSoftwareForm( $("#libri-form") );
 	}
+	if( $('.hierarchical_checkboxes').is('ul') )
+	{
+		$('input[type="checkbox"]').removeAttr('disabled');
+	}
 });
 
 function mediatecaLinkButtons()
