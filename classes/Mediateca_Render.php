@@ -1,6 +1,6 @@
 <?php
 error_reporting ( E_ALL );
-ini_set ( "display_errors", 0 );
+ini_set ( "display_errors", 1 );
 class Mediateca_Render {
 		
 	public $show_comments;
@@ -467,12 +467,15 @@ class Mediateca_Render {
 	}
 	public function grabPostThumbIfAny( $post_id, $size =  'thumbnail' )
 	{
+		global $mediatecaAdmin;
 		$id = $post_id;
 		$thumb = get_the_post_thumbnail($id, $size);
+
+		$link = ( get_post_meta($id, $mediatecaAdmin->meta_prefix."riferimenti", true ) ) ? get_post_meta($id, $mediatecaAdmin->meta_prefix."riferimenti", true ) : get_permalink( $id );
 		
 		if( $thumb ) 
 		{
-			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor">'.$thumb.'</a>';
+			return '<a href="'.$link.'" class="mediateca-image-anchor" target="_blank">'.$thumb.'</a>';
 		}
 		else if( get_post_meta($id, '_mediateca_featured_image', true) )
 		{
@@ -495,7 +498,7 @@ class Mediateca_Render {
 			
 			$thumb = $upload['baseurl'] . '/ImmaginiDB/' . $thumb;
 			
-			return '<a href="'.get_permalink( $id ).'" class="mediateca-image-anchor"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'"  '.$wh.'/></a>';
+			return '<a href="'.$link.'" class="mediateca-image-anchor" target="_blank"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'"  '.$wh.'/></a>';
 		}
 		return false;
 	}
@@ -548,6 +551,10 @@ class Mediateca_Render {
 				
 				foreach( $tmp[$i]['fields'] as $field )
 				{
+					if( $field['name'] === 'Featured Image' )
+					{
+						continue;
+					}
 					if( $field['name'] === 'Link editore/produttore' )
 					{
 						$link = get_post_meta($id, $field['id'], true );
