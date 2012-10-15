@@ -107,8 +107,14 @@ class Mediateca_Admin
 						'type' => 'text'
 					),
 					array(
-						'name' => 'Editore',
-						'desc' => 'Editore della pubblicazione',
+							'name' => 'Link editore/produttore',
+							'desc' => 'Link alla pagina dell\'editore / produttore',
+							'id' => $this->meta_prefix . 'riferimenti',
+							'type' => 'text_medium'
+						),
+					array(
+						'name' => 'Editore/distributore',
+						'desc' => 'Editore/distributore della pubblicazione',
 						'id' => $this->meta_prefix . 'editore',
 						'type' => 'text_medium'
 					),
@@ -116,12 +122,6 @@ class Mediateca_Admin
 						'name' => 'Collana',
 						'desc' => 'Collana di pubblicazione',
 						'id' => $this->meta_prefix . 'collana',
-						'type' => 'text_medium'
-					),
-					array(
-						'name' => 'Distributore',
-						'desc' => 'Distributore della pubblicazione',
-						'id' => $this->meta_prefix . 'distributore',
 						'type' => 'text_medium'
 					),
 					array(
@@ -199,12 +199,6 @@ class Mediateca_Admin
 							'type' => 'taxonomy_select'
 						),
 						array(
-							'name' => 'Riferimenti',
-							'desc' => 'Link alla pagina della pubblicazione',
-							'id' => $this->meta_prefix . 'riferimenti',
-							'type' => 'text_medium'
-						),
-						array(
 						'name' => 'Disponibile in Area',
 						'desc' => 'Presenza della pubblicazione in Area',
 						'id' => $this->meta_prefix . 'disponibile-in-area',
@@ -226,7 +220,7 @@ class Mediateca_Admin
 							'id' => $this->meta_prefix . 'handicap',
 							'type' => 'text_medium'
 						),
-				),
+					),
 			);	
 			
 			if( $count > 1 )

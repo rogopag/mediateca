@@ -524,7 +524,7 @@ class Mediateca_Render {
 		
 		$id = $post->ID;
 		$tmp = array();
-
+	
 		$boxes = Mediateca_Admin::$meta_boxes[0];
 		
 		foreach( $boxes as $box )
@@ -535,6 +535,7 @@ class Mediateca_Render {
 		
 		$output = '';
 		$a = '';
+		$link = '';
 		
 		for($i=$start; $i<$depth; $i++)
 		{
@@ -547,6 +548,11 @@ class Mediateca_Render {
 				
 				foreach( $tmp[$i]['fields'] as $field )
 				{
+					if( $field['name'] === 'Link editore/produttore' )
+					{
+						$link = get_post_meta($id, $field['id'], true );
+						continue;
+					}
 					if( array_key_exists('taxonomy', $field ) )
 					{
 						if( $control_terms && $field['name'] == 'Accessibilit&agrave; primaria' )
@@ -558,8 +564,15 @@ class Mediateca_Render {
 							$field['name'] = 'Si parla anche';
 						}
 						$term = dito_printObjectTermsInNiceFormat( $id, array($field['taxonomy']) );
+						
 						$output .= ( $term ) ? '<li><strong>'.$field['name'].':</strong> ' . $term . '</li>' : '';
 					}
+					elseif( $field['name'] === 'Editore/distributore' )
+					{
+						$field['name'] = ( $post->post_type == HARDWARE_TYPE ) ? 'Produttore' : $field['name'];
+						$meta = get_post_meta($id, $field['id'], true );
+						$output .= ( $meta ) ? '<li><strong>'.$field['name'].':</strong> <a href="'.$link.'">' . $meta . '</a></li>': '';
+					}				
 					else if( strpos( $field['type'], 'dio' ) && count( $field['options'] ) == 2 )
 					{
 						$output .= $this->manageBooleanMetas( $field['id'], $field['name'], $id, '' );
