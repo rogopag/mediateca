@@ -20,12 +20,12 @@
 		<!--  ADVANCED FORM  -->
 		<div id="mediateca-form-container" class="mediateca-forms-container">
 			<h4>Ricerca avanzata</h4>
-			<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form" class="mediateca-form">
+		<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form" class="mediateca-form">
 		<?php wp_nonce_field('mediateca-check-nonce','mediateca-nonce'); ?>
 		<input type="hidden" name="action" value="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" id="<?php echo MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH; ?>" />
-		<input type="hidden" name="results" value="hardware-e-software" id="hardware-e-software" />
+		<input type="hidden" name="results" value="<?php echo HARDWARE_SOFTWARE_SLUG;?>" id="<?php echo HARDWARE_SOFTWARE_SLUG;?>" />
 		<div class="select-container">
-			<label for="terzo-livello">Tipologia</label><br />
+			<label for="tipologia">Tipologia</label><br />
 			<select id="media_type" name="media_type">
 				<option value="<?php echo HARDWARE_TYPE; ?>"><?php echo ucfirst(HARDWARE_TYPE); ?></option>
 				<option value="<?php echo SOFTWARE_TYPE; ?>"><?php echo ucfirst(SOFTWARE_TYPE); ?></option>
@@ -45,7 +45,7 @@
 			'selected' => 0  
 			));
 		?>
-		<span class="span-submit"><input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif"></span>
+		<span class="span-submit"><input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /> <span id="cerca">Cerca</span></span>
 	</div>
 	
 </form>

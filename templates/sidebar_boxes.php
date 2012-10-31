@@ -1,6 +1,6 @@
 <?php if( class_exists("Mediateca_Render") && is_array( $posts ) ): ?>
 <div class="forums">
-<h2 class="green">Mediateca</h2>
+<h2 class="green"><?php echo  $h2;?></h2>
 <?php
 foreach( $posts as $p ):
 ?>
