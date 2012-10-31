@@ -28,6 +28,8 @@ define('MEDIATECA_TD', 'mediateca');
 define('MEDIATECA_RESULTS_PAGE', 'results');
 define('MEDIATECA_TEXT_SEARCH', 'search');
 define('MEDIATECA_HARDWARE_AND_SOFTWARE_SEARCH', 'hardware-e-software-search');
+define('MEDIATECA_LIBRI_SEARCH', 'libri-search');
+define('APP_PER_TABLET_SLUG', 'app-per-tablet');
 
 require_once 'conf/class_loader.php';
 
@@ -54,7 +56,7 @@ function createPluginPages()
 		
 		$user = $current_user;
 		
-		$pages = array(HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG);
+		$pages = array(HARDWARE_SOFTWARE_SLUG, LIBRI_SLUG, APP_PER_TABLET_SLUG);
 		
 		if( !get_page_by_title( ucfirst(MEDIATECA_SLUG) ) )
 		{
@@ -81,7 +83,8 @@ function createPluginPages()
 		}
 		else
 		{
-			$parent = get_page_by_title( ucfirst(MEDIATECA_SLUG) );
+			$p = get_page_by_title( ucfirst(MEDIATECA_SLUG) );
+			$parent = $p->ID;
 		}
 		
 			

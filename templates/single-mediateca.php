@@ -5,13 +5,16 @@ get_header(); ?>
 <div id="content">
 
 	<?php include_once 'mediateca_sidebar.php';?>
-	<div class="main forIE">
+	<div class="main forIE mediateca-singles-main-content main-large">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
-			<h2 class="orange"><?php the_title(); ?></h2>
-			<div class="entry">
+			<?php echo $mediatecaRender->printAuthorsAndIllustratorsIfAny( get_the_ID() ); ?>
+			<h2 class="orange mediateca-singles-titles main-large"><?php the_title(); ?></h2>
+			<div class="entry main-large">
+				
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
+				
 				<small>
-					<?php  
+					<?php 
 				if (is_user_logged_in())
 				{
 					edit_post_link();

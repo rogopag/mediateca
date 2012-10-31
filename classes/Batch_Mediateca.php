@@ -36,8 +36,7 @@ class Batch_Mediateca
 	private function doBatches()
 	{
 		if( $_POST['batch_terms'] )
-		{
-			
+		{	
 			$this->createTerms();
 		}
 		if( $_POST['batch_posts'])
@@ -154,7 +153,7 @@ class Batch_Mediateca
 		
 		$t = wp_set_object_terms( $post_id, array($terzoLivello), 'terzo-livello', false );
 		
-		$s = wp_set_object_terms( $post_id, array($sezione), 'sezione', false );
+		//$s = wp_set_object_terms( $post_id, array($sezione), 'sezione', false );
 		
 		$this->giveMetaToPost( $card, $post_id );
 		
@@ -166,7 +165,11 @@ class Batch_Mediateca
 		global $mediatecaAdmin;
 		
 		if($card->Riferimenti) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'riferimenti', $card->Riferimenti, true );
-		if($card->Collocazione) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'collocazione', $card->Collocazione, true );
+		if( $card->Collocazione )
+		{
+			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'id-collocazione', $card->Collocazione, true );
+			add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'disponibile-in-area', 1, true );
+		}
 		if($card->Handicap) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'handicap', $card->Handicap, true );
 		if($card->Scuola) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'scuola', $card->Scuola, true );
 		if($card->Lingua) add_post_meta( $post_id, $mediatecaAdmin->meta_prefix . 'lingua', $card->Lingua, true );
@@ -282,7 +285,16 @@ class Batch_Mediateca
 				'Disabilita visiva',
 				'Disabilita intellettiva',
 				'Disabilita motoria',
-				'Disabilita espressiva',
+				'Autismo e disturbi della comunicazione',
+				'DSA-Disturbi Specifici dell\'Apprendimento',
+			),
+			'accessibilita-secondaria' => array(
+				'Nessuna disabilita',
+				'Disabilita uditiva',
+				'Disabilita visiva',
+				'Disabilita intellettiva',
+				'Disabilita motoria',
+				'Autismo e disturbi della comunicazione',
 				'DSA-Disturbi Specifici dell\'Apprendimento',
 			),
 			'difficolta-compensata' => array(
@@ -297,6 +309,7 @@ class Batch_Mediateca
 				'Comprensione delle immagini',
 				'Attenzione',
 				'Pronuncia ad alta voce del testo-difficolta fonologiche',
+				'Memoria',
 				'Altro',
 			),
 			'genere' => array(
@@ -360,6 +373,27 @@ class Batch_Mediateca
 				'simboli pcs',
 				'altri tipi di simboli',
 				'altro'
+			),
+			'materiale-di-base' => array(
+				'Carta',
+				'Cartoncino rigido',
+				'Carta plastificata',
+				'Plastica',
+				'Stoffa',
+				'Legno',
+				'Altro'
+			),
+			'sistema-operativo' => array(
+				'MS-DOS',
+				'Windows 95',
+				'Windows 98',
+				'Windows 2000',
+				'Windows NT',
+				'Windows XP',
+				'Windows Vista',
+				'Windows 7',
+				'Mac OS X',
+				'Linux'
 			)
 		);
 		return $populate;

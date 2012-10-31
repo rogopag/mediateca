@@ -5,6 +5,7 @@ class Mediateca_Init
 {
 	private static $instance;
 	public static $types = array(HARDWARE_TYPE, SOFTWARE_TYPE, LIBRI_TYPE);
+	//that is for temporarily use do not fear
 	public static $pages;
 	
 	private function __construct()
@@ -46,7 +47,7 @@ class Mediateca_Init
 				'rewrite' => true,
 				'query_var' => $type,
 				'supports' => array('title', 'author', 'editor', 'excerpt', 'revisions', 'thumbnail', 'custom-fields', 'post-formats', 'comments'),
-				'taxonomies' => array('categoria', 'terzo-livello', 'sezione')
+				'taxonomies' => array('post_tag')
 			));
 		}
 	}
@@ -70,17 +71,18 @@ class Mediateca_Init
 			'query_var' => 'terzo-livello',
 			'rewrite' => array('slug' => 'terzo-livello' )
 			));
-		register_taxonomy( 'sezione', $types,
+		register_taxonomy( 'sistema-operativo', $types,
 		array(
 			'hierarchical' => true,
-			'label' => __('Sezione',MEDIATECA_TD),
-			'query_var' => 'sezione',
-			'rewrite' => array('slug' => 'sezione' )
+			'label' => __('Sistema operativo',MEDIATECA_TD),
+			'query_var' => 'sistema-operativo',
+			'rewrite' => array('slug' => 'sistema-operativo' )
 			));
 	}
 	public function createLibriTaxonomies()
 	{
 		$types = LIBRI_TYPE;
+		
 		register_taxonomy( 'sezione-libri', $types,
 		array(
 			'hierarchical' => false,
@@ -90,10 +92,17 @@ class Mediateca_Init
 			));
 		register_taxonomy( 'tipo-di-handicap', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Tipo di handicap',MEDIATECA_TD),
 			'query_var' => 'tipo-di-handicap',
 			'rewrite' => array('slug' => 'tipo-di-handicap' )
+			));
+		register_taxonomy( 'accessibilita-secondaria', $types,
+		array(
+			'hierarchical' => true,
+			'label' => __('Accessibilit&agrave; secondaria',MEDIATECA_TD),
+			'query_var' => 'accessibilita-secondaria',
+			'rewrite' => array('slug' => 'accessibilita-secondaria' )
 			));
 		register_taxonomy( 'genere', $types,
 		array(
@@ -109,40 +118,54 @@ class Mediateca_Init
 			'query_var' => 'tipo-di-libro',
 			'rewrite' => array('slug' => 'tipo-di-libro' )
 			));
-		register_taxonomy( 'eta', $types,
+		register_taxonomy( 'eta', self::$types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Fascia di et&agrave;',MEDIATECA_TD),
 			'query_var' => 'eta',
 			'rewrite' => array('slug' => 'eta' )
 			));
 		register_taxonomy( 'difficolta-compensata', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Tipo di difficolt&agrave; compensata',MEDIATECA_TD),
 			'query_var' => 'difficolta-compensata',
 			'rewrite' => array('slug' => 'difficolta-compensata' )
 			));
+		register_taxonomy( 'materiale-di-base', $types,
+		array(
+			'hierarchical' => true,
+			'label' => __('Materiale di base',MEDIATECA_TD),
+			'query_var' => 'materiale-di-base',
+			'rewrite' => array('slug' => 'materiale-di-base' )
+			));
 		register_taxonomy( 'personaggi', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Personaggi',MEDIATECA_TD),
 			'query_var' => 'personaggi',
 			'rewrite' => array('slug' => 'personaggi' )
 			));
 		register_taxonomy( 'temi-trattati', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Temi trattati',MEDIATECA_TD),
 			'query_var' => 'temi-trattati',
 			'rewrite' => array('slug' => 'temi-trattati' )
 			));
 		register_taxonomy( 'codici-utilizzati', $types,
 		array(
-			'hierarchical' => false,
+			'hierarchical' => true,
 			'label' => __('Codici utilizzati',MEDIATECA_TD),
 			'query_var' => 'codici-utilizzati',
 			'rewrite' => array('slug' => 'codici-utilizzati' )
+			));
+		register_taxonomy( 'ambiente-prevalente', $types,
+		array(
+			'hierarchical' => true,
+			'label' => __('Ambiente prevalente',MEDIATECA_TD),
+			'query_var' => 'ambiente-prevalente',
+			'rewrite' => array('slug' => 'ambiente-prevalente' )
 			));
 	}
 	//push our types in the array of valid query vars
