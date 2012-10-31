@@ -469,9 +469,11 @@ class Mediateca_Render {
 	{
 		global $mediatecaAdmin;
 		$id = $post_id;
+		$placeholder_link = MEDIATECA_URL . 'img/giochi.jpg'; 
 		$thumb = get_the_post_thumbnail($id, $size);
 
 		$link = ( get_post_meta($id, $mediatecaAdmin->meta_prefix."riferimenti", true ) ) ? get_post_meta($id, $mediatecaAdmin->meta_prefix."riferimenti", true ) : get_permalink( $id );
+		
 		
 		if( $thumb ) 
 		{
@@ -500,7 +502,18 @@ class Mediateca_Render {
 			
 			return '<a href="'.$link.'" class="mediateca-image-anchor" target="_blank"><img src="'.$thumb.'" class="mediateca-thumbs" id="mediateca-thumbs_'.$id.'"  '.$wh.'/></a>';
 		}
-		return false;
+		else {
+			switch( $size )
+				{
+					case 'thumbnail':
+					$wh = ' width="180px" height="70px"';
+					break;
+					case 'mediateca-thumb':
+					$wh = ' width="100px" height="41px"';
+					break;
+				}
+			return '<a href="'.$link.'" class="mediateca-image-anchor" target="_blank"><img src='.$placeholder_link.' alt="giochi" '.$wh.'/></a>';
+		}
 	}
 	public function printAuthorsAndIllustratorsIfAny( $post_id )
 	{
