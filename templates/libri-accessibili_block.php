@@ -8,6 +8,6 @@
 	<div class="select-container select-container-libri submit-container">
 		<label>Accessibile in caso di:</label>
 		<?php Mediateca_Admin::render_hierarchical_checkboxes( array('taxonomy'=>'tipo-di-handicap') );?>
-		<span class="span-submit libri-submit"><input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif"></span>
+		<span class="span-submit libri-submit"><input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 	</div>
 </div>

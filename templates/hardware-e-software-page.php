@@ -45,7 +45,7 @@
 			'selected' => 0  
 			));
 		?>
-		<span class="span-submit"><input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif"></span>
+		<span class="span-submit">Cerca<input name="submit-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 	</div>
 	
 </form>
