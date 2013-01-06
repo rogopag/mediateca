@@ -40,7 +40,8 @@ span.span-submit span#cerca{position:absolute;top:-19px;left:7px;font-size:11px;
 .mediateca-meta-below-title{margin:0;padding:0 0 12px 0;}
 .mediateca-meta-below-title li{font-size:12px;list-style-type:none;margin:0;padding:0;indent:none;color:rgb(100,100,100);word-wrap:break-word;padding-bottom:2px;}
 .mediateca-meta-below-title li strong{color:rgb(40,40,40);}
-.mediateca-meta-below-title li a{/*color:#43a2e8;*/}
+.mediateca-meta-below-title li a{}
 li.title-boxes{color:#43a2e8;padding:9px 0 4px 0;font-weight:bold;}
-li.position_0{padding-top:0;display:none;};
-li.position_1{padding-top:0;};
+li.position_0{padding-top:0;display:none;}
+li.position_1{padding-top:0;}
+div.libri{padding-left:194px;}
