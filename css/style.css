@@ -47,5 +47,6 @@ li.position_0{padding-top:0;display:none;}
 li.position_1{padding-top:0;}
 div.libri{padding-left:194px;}
 /* ///////////////// OVERRIDES /////////////////*/
+#mediateca-how-to{padding-bottom:12px;}
 #hideShow{float:right;color:rgb(65,80,180);font-weight:bold;cursor:pointer;font-family: Trebuchet MS;position:relative;font-size:11px;text-align:right;padding:12px 0 0 0px}
 .intro p{margin-bottom:0;}
