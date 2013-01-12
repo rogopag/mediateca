@@ -6,7 +6,7 @@
 	<div class="main forIE main-large">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange main-large"><?php the_title(); ?></h2>
-			<div class="entry main-large">
+			<div class="entry main-large" id="mediateca-how-to">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small class="float-right">
 					<?php  

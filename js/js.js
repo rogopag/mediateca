@@ -30,6 +30,10 @@ jq(function($)
 		libriSelectSezione();
 		hardwareSoftwareForm( $("#libri-form") );
 	}
+	if( $('#mediateca-how-to').is('div') )
+	{
+		dito_manageHowTos();
+	}
 	fixCheckBoxes();
 });
 function fixCheckBoxes()
@@ -209,3 +213,34 @@ function libriSelectSezione()
 		});
 	});
 };
+function dito_manageHowTos()
+{
+	var div = $('#mediateca-how-to'), button = $('<span id="hideShow"></div>'), close = false;
+	
+	button.text('Nascondi aiuto');
+	
+	$('h2.orange').append(button);
+	
+	button.bind('click', function(event){
+		var me = $(this);
+		
+		me.fadeOut(100);
+		
+		if( !close )
+		{
+			div.slideUp(400, function(){
+				close = true;
+				me.text('Visualizza aiuto');
+				me.fadeIn(150);
+			});
+		}
+		else if( close )
+		{
+			div.slideDown(400, function(){
+				close = false;
+				me.text('Nascondi aiuto');
+				me.fadeIn(150);
+			});
+		}
+	});
+}

@@ -5,7 +5,7 @@ div.buttonsContainer{text-align:center;margin-bottom:20px;}
 .mediateca-forms-container{float:left;padding:0 12px 0 12px;width:308px;margin:0;}
 #mediateca-form-container{border-right:1px solid #F8E498;padding-right:24px;}
 #mediateca-text-search{padding-right:0px;}
-.mediateca-forms-container h4{padding:10px 0 10px 0;color:rgb(30,30,30)}
+.mediateca-forms-container h4{padding:0px 0 10px 0;color:rgb(30,30,30)}
 .mediateca-form{font-size:12px;}
 .mediateca-form input[type="text"]{border: 1px solid #646464;height: 13px;padding: 1px;position: relative;width: 200px;}
 .mediateca-form label{color:rgb(60,60,60);padding-left:2px;font-weight:bold;}
@@ -47,4 +47,5 @@ li.position_0{padding-top:0;display:none;}
 li.position_1{padding-top:0;}
 div.libri{padding-left:194px;}
 /* ///////////////// OVERRIDES /////////////////*/
+#hideShow{float:right;color:rgb(65,80,180);font-weight:bold;cursor:pointer;font-family: Trebuchet MS;position:relative;font-size:11px;text-align:right;padding:12px 0 0 0px}
 .intro p{margin-bottom:0;}
