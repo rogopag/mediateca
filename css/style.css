@@ -45,3 +45,5 @@ li.title-boxes{color:#43a2e8;padding:9px 0 4px 0;font-weight:bold;}
 li.position_0{padding-top:0;display:none;}
 li.position_1{padding-top:0;}
 div.libri{padding-left:194px;}
+/* ///////////////// OVERRIDES /////////////////*/
+.intro p{margin-bottom:0;}

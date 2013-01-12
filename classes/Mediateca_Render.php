@@ -106,15 +106,24 @@ class Mediateca_Render {
 			
 			$book_type = $_POST['tipo-di-libro'];
 			
-			$accessibilities = $_POST['tax_input']['tipo-di-handicap'];
+			
+			$secondary = $_POST['tax_input']['accessibilita-secondaria'];
+			
 			
 			$this->taxQuery ( 'sezione-libri', $section, 'slug' );
 			$this->taxQuery ( 'eta', $age );
 			$this->taxQuery ( 'tipo-di-libro', $book_type );
 			
+			$accessibilities = $_POST['tax_input']['tipo-di-handicap'];
 			foreach( $accessibilities as $accessibility )
 			{
 				$this->taxQuery ( 'tipo-di-handicap', $accessibility );
+			}
+			
+			$secondaries = $_POST['tax_input']['accessibilita-secondaria'];
+			foreach( $secondaries as $secondary )
+			{
+				$this->taxQuery ( 'accessibilita-secondaria', $secondary );
 			}
 			 
 			$_SESSION['previous_query'] = null;
