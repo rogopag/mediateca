@@ -25,7 +25,8 @@ div.mediateca-sidebar-thumb{width:100%;text-align:right;display:block;overflow:v
 div#libri-removables-container{padding-top:12px;}
 div.select-container-libri{padding-bottom:12px;}
 div.libri-container-list{padding-bottom:0;}
-ul.hierarchical_checkboxes{padding:0;vertical-align:top;overflow:auto;display:block;}
+ul.hierarchical_checkboxes{padding:0;vertical-align:top;overflow:auto;display:block;margin-top:6px;}
+.select-container-libri input[type="checkbox"]{margin-left:0px;}
 ul.hierarchical_checkboxes li{float:left;vertical-align:top;list-style-type:none;padding:0 5px 5px 0;margin:0;}
 div.external-label{padding-top:3px;}
 span.libri-submit{float:right;display:block;vertical-align:middle;position:relative;}

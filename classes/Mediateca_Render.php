@@ -588,9 +588,17 @@ class Mediateca_Render {
 						{
 							$field['name'] = 'Si parla di';
 						}
+						elseif( $field['name'] == 'Accessibilit&agrave; primaria' )
+						{
+							$field['name'] = 'Si parla per';
+						}
 						if( $control_terms  && $field['name'] == 'Accessibilit&agrave; secondaria' )
 						{
-							$field['name'] = 'Si parla anche';
+							$field['name'] = 'Utile anche in caso di';
+						}
+						elseif( $field['name'] == 'Accessibilit&agrave; secondaria' )
+						{
+							$field['name'] = 'Utile anche in caso di';
 						}
 						$term = dito_printObjectTermsInNiceFormat( $id, array($field['taxonomy']) );
 						
@@ -609,6 +617,8 @@ class Mediateca_Render {
 					else
 					{
 						$meta = get_post_meta($id, $field['id'], true );
+						$meta = ( $field['name'] == 'Prezzo' ) ? $meta.'&euro;' : $meta;
+						$meta = ( $field['type'] == 'select' && is_numeric($meta) && count( $field['options'] ) > 2 ) ? $meta.' su ' . ( count( $field['options'] ) - 1 ) : $meta;
 						$output .= ( $meta ) ? '<li><strong>'.$field['name'].':</strong> ' . $meta . '</li>': '';	
 					}
 				}
