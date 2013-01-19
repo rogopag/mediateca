@@ -84,6 +84,7 @@ function ajaxCall( data, element )
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
+				console.log( send );
 				if( $("#search-results").is('div') )
 					{
 						$("#search-results").fadeOut('fast', function()
@@ -101,7 +102,7 @@ function ajaxCall( data, element )
 			{
 				if( data )
 				{
-					//console.log( data );
+					console.log( 'success ', data );
 					
 					el.parent().parent().after( data );
 					$("#search-results").fadeIn(200, function(){
@@ -112,6 +113,7 @@ function ajaxCall( data, element )
 			},
 			complete: function( data, textStatus )
 			{
+				console.log( 'complete ', data );
 				mediateca_loading_remove();
 			}  
 		});

@@ -50,24 +50,54 @@ class Mediateca_Render {
 	}
 	public function tax_posts_join( $a, $b )
 	{
+		print_r( $a );
+		echo "<br />______________________________________<br />";
+	//	print_r( $b );
+		echo "<br />______________________________________<br />";
 		return $a;
 	}
 	public function tax_posts_where( $a, $b )
 	{
-		$t = $b->get('tax_query');
+		$t = $b->get('tax_query'); $prev = 0;
 		
 		foreach( $t as $q )
 		{
 			if( $q['taxonomy'] == 'tipo-di-handicap' || $q['taxonomy'] == 'accessibilita-secondaria' )
 			{
-				$term = $this->getTermTaxonomyID( $q['terms'], $q['taxonomy'] );
-				$a = str_replace( 'IN ('.$term.') AND', 'IN ('.$term.') OR', $a );
+				echo "<br />OPERATOR SHOULD BE OR" . $q['terms'] ." prev " .$prev . "<br>";
+				
+				if( $prev % 2 == 0 )
+				{
+					$term = $this->getTermTaxonomyID( $q['terms'], $q['taxonomy'] );
+					$a = str_replace( 'IN ('.$term.') AND', 'IN ('.$term.') OR', $a );
+				}
+				
+				echo '<br /><br />---------------  '.$a.'  -------------------------------';
+				$prev++;
 			}
 		}
+	//	$prev = 0;
+		foreach( $t as $q )
+		{
+			if( $q['taxonomy'] == 'tipo-di-handicap' || $q['taxonomy'] == 'accessibilita-secondaria' )
+			{
+				$a = str_replace( 'AND tt', 'AND (tt', $a);
+				$term = $this->getTermTaxonomyID( $q['terms'], $q['taxonomy'] );
+				$a = str_replace( 'IN ('.$term.') )', 'IN ('.$term.') ) )', $a );
+				$a = str_replace( 'IN ('.$term.') AND', 'IN ('.$term.') ) AND', $a );
+			}
+		}
+		print_r( $t );
+		echo "<br />This is mine______________________________________<br />";
+		print_r( $t );
+		print_r( $a );
+		echo "<br />______________________________________<br />";
 		return $a;
 	}
 	public function tax_posts_request( $a )
 	{
+		print_r( $a );
+		echo "<br />______________________________________<br />";
 		return $a;
 	}
 	private function giveTemplatePages()
