@@ -48,6 +48,28 @@ class Mediateca_Render {
 		add_action('print_mediateca_menu_links', array(&$this, 'printMediatecaMenuLinks'), 10 );
 		
 	}
+	public function tax_posts_join( $a, $b )
+	{
+		return $a;
+	}
+	public function tax_posts_where( $a, $b )
+	{
+		$t = $b->get('tax_query');
+		
+		foreach( $t as $q )
+		{
+			if( $q['taxonomy'] == 'tipo-di-handicap' || $q['taxonomy'] == 'accessibilita-secondaria' )
+			{
+				$term = $this->getTermTaxonomyID( $q['terms'], $q['taxonomy'] );
+				$a = str_replace( 'IN ('.$term.') AND', 'IN ('.$term.') OR', $a );
+			}
+		}
+		return $a;
+	}
+	public function tax_posts_request( $a )
+	{
+		return $a;
+	}
 	private function giveTemplatePages()
 	{
 		foreach( self::$PAGES_SLUG as $func )
@@ -86,7 +108,7 @@ class Mediateca_Render {
 	public function ajaxLibriResult()
 	{
 		global $wp;
-		
+		$this->taxonomies = array();
 		
 		//make sure add this plugin shit doesn't bother
 		if ( function_exists ( 'addthis_init' ) ) {
@@ -117,19 +139,17 @@ class Mediateca_Render {
 			$accessibilities = $_POST['tax_input']['tipo-di-handicap'];
 			foreach( $accessibilities as $accessibility )
 			{
-				$this->taxQuery ( 'tipo-di-handicap', $accessibility );
-			}
-			
-			$secondaries = $_POST['tax_input']['accessibilita-secondaria'];
-			foreach( $secondaries as $secondary )
-			{
-				$this->taxQuery ( 'accessibilita-secondaria', $secondary );
+				$this->taxQuery ( 'tipo-di-handicap', $accessibility, 'id', 'IN' );
+				$this->taxQuery ( 'accessibilita-secondaria',  $accessibility );
 			}
 			 
 			$_SESSION['previous_query'] = null;
 			
 			if ($this->isAjax ())
 				$visible = 'hidden';
+				
+		//	echo '<br />___________________________________________________________';
+		//	print_r( $this->taxonomies );
 			
 			$search = $this->getQueryObject ( $this->type, $this->taxonomies );
 			
@@ -164,6 +184,8 @@ class Mediateca_Render {
 	}
 	public function ajaxResult() {
 		global $wp;
+		
+		$this->taxonomies = array();
 		
 		//make sure add this plugin shit doesn't bother
 		if (function_exists ( 'addthis_init' )) {
@@ -375,6 +397,11 @@ class Mediateca_Render {
 		return $ps;
 	}
 	private function getQueryObject($types, $taxonomies = array(), $metas = array(), $is_pagination_query = false) {
+		
+		add_filter( 'posts_join', array(&$this, 'tax_posts_join'), 10, 2 );
+		add_filter( 'posts_where', array(&$this, 'tax_posts_where'), 10, 2 );
+		add_filter( 'posts_request', array(&$this, 'tax_posts_request'), 10, 1 );
+		
 		if ($_POST && $_POST ['pagenum']) {
 			$page = $_POST ['pagenum'];
 		} else {
@@ -390,18 +417,19 @@ class Mediateca_Render {
 			$query = $_SESSION['previous_query'];
 			$query ['paged'] = $page;
 		}
+		
 		$q = new WP_Query ( $query );
 		
 		$this->number_of_pages = $q->max_num_pages;
 		
 		return $q;
 	}
-	private function taxQuery($tax, $term, $field = 'id' ) {
+	private function taxQuery($tax, $term, $field = 'id', $operator = 'IN' ) {
 		
 		if (! $term || $term == - 1)
 			return array ( );
 			
-		$query = array ('taxonomy' => $tax, 'field' => $field, 'terms' => $term );
+		$query = array ('taxonomy' => $tax, 'field' => $field, 'terms' => $term, 'custom_operator' => $operator, 'operator' => $operator  );
 		
 		return array_push ( $this->taxonomies, $query );
 	}
@@ -590,7 +618,7 @@ class Mediateca_Render {
 						}
 						elseif( $field['name'] == 'Accessibilit&agrave; primaria' )
 						{
-							$field['name'] = 'Si parla per';
+							$field['name'] = 'Pensato per';
 						}
 						if( $control_terms  && $field['name'] == 'Accessibilit&agrave; secondaria' )
 						{
@@ -668,6 +696,16 @@ class Mediateca_Render {
 			return true;
 		}
 		return false;
+	}
+	private function getTermTaxonomyID( $value, $taxonomy )
+	{
+		$term = get_term_by( 'id', $value, $taxonomy );
+		return $term->term_taxonomy_id;
+	}
+	private function getTermId( $value, $taxonomy)
+	{
+		$term = get_term_by( 'slug', $value, $taxonomy );
+		return $term->term_id;
 	}
 }
 ?>
