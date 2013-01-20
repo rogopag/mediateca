@@ -3,7 +3,7 @@ div.buttonsContainer{text-align:center;margin-bottom:20px;}
 .mediatecaButtons:hover{position:relative;top:3px;color: #fqq;box-shadow:none;-moz-box-shadow:none;-webkit-box-shadow:none;}
 .mediatecaButtons a{color:black;}
 .mediateca-forms-container{float:left;padding:0 12px 0 12px;width:308px;margin:0;}
-#mediateca-form-container{border-right:1px solid #F8E498;padding-right:24px;}
+#mediateca-form-container{border-right:1px solid #F8E498;padding-left:24px;padding-bottom:3px;}
 #mediateca-text-search{padding-right:0px;}
 .mediateca-forms-container h4{padding:0px 0 10px 0;color:rgb(30,30,30)}
 .mediateca-form{font-size:12px;}
@@ -20,7 +20,8 @@ a.page-numbers{}
 .search-entry{padding-bottom:8px;}
 .mediateca-image-anchor{float:left;margin:0;padding:0 10px 10px 0;}
 .mediateca-image-anchor img {margin:0 0 10px 0;padding:0;background:none;border:1px solid #F8E498;}
-#loading-gif{display:none;position:relative;display:none;left:50%;top:20px;}
+#loading-gif{position:relative;display:none;clear:both;text-align:center;padding:24px 0 6px 0px;}
+#loading-gif img{position:absolute;left:52%;}
 div.mediateca-sidebar-thumb{width:100%;text-align:right;display:block;overflow:visible;padding:24px 0 0 12px;}
 div#libri-removables-container{padding-top:12px;}
 div.select-container-libri{padding-bottom:12px;}
@@ -45,8 +46,8 @@ span.span-submit span#cerca{position:absolute;top:-19px;left:7px;font-size:11px;
 li.title-boxes{color:#43a2e8;padding:9px 0 4px 0;font-weight:bold;}
 li.position_0{padding-top:0;display:none;}
 li.position_1{padding-top:0;}
-div.libri{padding-left:194px;}
+.padding-194, div.libri{padding-left:194px;}
 /* ///////////////// OVERRIDES /////////////////*/
-#mediateca-how-to{padding-bottom:12px;}
+#mediateca-how-to{padding-bottom:12px;float:left;display:block;overflow:visible;}
 #hideShow{float:right;color:rgb(65,80,180);font-weight:bold;cursor:pointer;font-family: Trebuchet MS;position:relative;font-size:11px;text-align:right;padding:12px 0 0 0px}
 .intro p{margin-bottom:0;}

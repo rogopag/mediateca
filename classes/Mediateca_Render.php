@@ -265,20 +265,11 @@ class Mediateca_Render {
 	}
 	public function meta_posts_join($a,$b)
 	{
-		print_r( $a );
-		echo '<br>________________________<br>';
-		echo '<br>________________________<br>';
-		print_r( $b );
-		echo '<br>________________________<br>';
 		return $a;
 	}
 	public function meta_posts_where($a,$b)
 	{
-		print_r( $a );
-		echo '<br>________________________<br>';
-		echo '<br>________________________<br>';
-		print_r( $b );
-		echo '<br>________________________<br>';
+		
 		$a = str_replace('AND ( (wp_postmeta', 'OR ( (wp_postmeta', $a);
 		return $a;
 	}
@@ -287,6 +278,7 @@ class Mediateca_Render {
 		
 		add_filter( 'posts_join', array(&$this, 'meta_posts_join'), 10, 2 );
 		add_filter( 'posts_where', array(&$this, 'meta_posts_where'), 10, 2 );
+		add_filter( 'posts_request', array(&$this, 'tax_posts_request'), 10, 1 );
 		
 		if (($_POST && wp_verify_nonce ( $_POST ['mediateca-nonce-text'], 'mediateca-check-text-nonce' ) || $_POST && $_POST ['paginated']) || $wp->query_vars ['search']) {
 			
@@ -309,17 +301,24 @@ class Mediateca_Render {
 							'post_type' => $types, //'showposts' => 50
 							'meta_query' => array(
 							'relation' => 'OR',
-							array(
-								'key' => $mediatecaAdmin->meta_prefix . 'autori',
+								array(
+									'key' => $mediatecaAdmin->meta_prefix . 'autori',
+									'value' => $wp->query_vars [MEDIATECA_TEXT_SEARCH],
+									'type' => 'string',
+									'compare' => 'LIKE'
+								),
+								array(
+									'key' => $mediatecaAdmin->meta_prefix . 'illustratori',
+									'value' => $wp->query_vars [MEDIATECA_TEXT_SEARCH],
+									'type' => 'string',
+									'compare' => 'LIKE'
+								),
+							/*	array(
+								'key' => $mediatecaAdmin->meta_prefix . 'editore',
 								'value' => $wp->query_vars [MEDIATECA_TEXT_SEARCH],
+								'type' => 'string',
 								'compare' => 'LIKE'
-							),
-							array(
-								'key' => $mediatecaAdmin->meta_prefix . 'illustratori',
-								'value' => $wp->query_vars [MEDIATECA_TEXT_SEARCH],
-								'type' => 'numeric',
-								'compare' => 'LIKE'
-								)
+								)*/
 							),
 							'paged' => $this->getCurrent (), 
 							'posts_per_page' => self::POSTS_PER_PAGE, 
