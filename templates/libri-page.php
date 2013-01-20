@@ -19,6 +19,7 @@
 				?>
 			</small></div>
 <!--  ADVANCED FORM  -->
+<div id="forms-wrapper">
 <div id="mediateca-form-container" class="mediateca-forms-container">
 <h4>Ricerca avanzata</h4>
 <form action="<?php echo the_permalink(); ?>" method="post"
@@ -53,6 +54,7 @@ sulla disabilit&agrave;</label></span></div>
 	name="submit-text-search" type="image" value="submit"
 	src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 </form>
+</div>
 </div>	
 <?php endwhile; else: ?>
 

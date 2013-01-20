@@ -4,8 +4,11 @@ if( !console )
 {
 	var console = {
 		log:function(message){
-			alert(message);
-			}
+				alert(message);
+			},
+		error:function(message){
+					alert(message);
+				}
 		};
 }
 
@@ -93,7 +96,7 @@ function ajaxCall( data, element )
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
-				console.log( XMLHttpRequest, send )
+				//console.log( XMLHttpRequest, send )
 				if( $("#search-results").is('div') )
 					{
 						$("#search-results").fadeOut('fast', function()
@@ -115,7 +118,11 @@ function ajaxCall( data, element )
 					//console.log( 'success ', data );
 					
 					el.parent().parent().after( data );
+					$('#forms-wrapper').slideUp('fast', function(){
+						
+					})
 					$("#search-results").fadeIn(200, function(){
+							dito_manageFormVisibility();
 							mediatecaPagination()
 					});
 						
@@ -253,6 +260,37 @@ function dito_manageHowTos()
 			div.slideDown(400, function(){
 				close = false;
 				me.text('Nascondi aiuto');
+				me.fadeIn(150);
+			});
+		}
+	});
+};
+function dito_manageFormVisibility()
+{
+	var div = $('#forms-wrapper'), button = $('<span id="hideShowForm"></div>'), close = true;
+	
+	button.text('Ricerca ancora');
+	
+	$('h2.mediateca-results-title').append(button);
+	
+	button.bind('click', function(event){
+		var me = $(this);
+		
+		me.fadeOut(100);
+		
+		if( !close )
+		{
+			div.slideUp(400, function(){
+				close = true;
+				me.text('Ricerca ancora');
+				me.fadeIn(150);
+			});
+		}
+		else if( close )
+		{
+			div.slideDown(400, function(){
+				close = false;
+				me.text('Nascondi form di ricerca');
 				me.fadeIn(150);
 			});
 		}
