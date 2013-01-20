@@ -45,7 +45,7 @@ span.span-submit span#cerca{position:absolute;top:-19px;left:7px;font-size:11px;
 .mediateca-meta-below-title li a{}
 li.title-boxes{color:#43a2e8;padding:9px 0 4px 0;font-weight:bold;}
 li.position_0{padding-top:0;display:none;}
-li.position_1{padding-top:0;}
+li.position_1{padding-top:6px;}
 .padding-194, div.libri{padding:0 0 0 4px;margin:0;}
 /* ///////////////// OVERRIDES /////////////////*/
 #mediateca-how-to{padding-bottom:12px;float:left;display:block;overflow:visible;}

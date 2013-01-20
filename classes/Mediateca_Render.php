@@ -587,9 +587,9 @@ class Mediateca_Render {
 		$author = get_post_meta ( $id, $meta_prefix . 'autori', true );
 		$illustrator = get_post_meta ( $id, $meta_prefix . 'illustratori', true );
 		if ($author)
-			$data .= $author . '. ';
+			$data .= $author . ' ';
 		if ($illustrator)
-			$data .= ' <strong>Illustrazioni di:</strong> ' . $illustrator;
+			$data .= ' <strong>illustrazioni di</strong> ' . $illustrator;
 		
 		if ($data != '') {
 			$html .= rtrim ( $data, ', ' ) . '</small>';
