@@ -50,7 +50,7 @@ li.position_1{padding-top:0;}
 /* ///////////////// OVERRIDES /////////////////*/
 #mediateca-how-to{padding-bottom:12px;float:left;display:block;overflow:visible;}
 #hideShow, #hideShowForm{float:right;color:rgb(65,80,180);font-weight:bold;cursor:pointer;font-family: Trebuchet MS;position:relative;font-size:11px;text-align:right;padding:12px 0 0 0px}
-#hideShowForm{padding-top:8px;}
+#hideShowForm{padding:8px 4px 0 0;}
 .intro p{margin-bottom:0;}
 .mediateca-results-title{margin:0;padding:0;margin-left: 13px;width: 392px;font-family: georgia;font-size: 1.35em;padding-bottom: 24px;padding-top:0px;width:100%;position:relative;}
 #forms-wrapper{display:block;float:left;padding:0;margin:0;padding-bottom:24px;}
