@@ -6,6 +6,7 @@
 	<?php if ($search->have_posts()) : while ($search->have_posts()) : $search->the_post(); ?>
 		<div class="entry search-entry main-large">
 			<?php echo $this->grabPostThumbIfAny( get_the_ID(), 'mediateca-thumb' ); ?>
+			<div class="results-text-box">
 			<h4 class="search-result-entry-title"><a href="<?php the_permalink(); ?>"><?php the_title(); ?></a></h4>
 			<p class="postmetadata">Pubblicato in <?php echo dito_printObjectTermsInNiceFormat( get_the_ID(), array(), array('eta') ); ?></p>
 			<?php 
@@ -14,7 +15,8 @@
 				else:
 					the_content();
 				endif;
-			?>		
+			?>
+			</div>		
 		</div>
 <?php 
 endwhile; 
