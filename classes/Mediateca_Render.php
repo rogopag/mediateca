@@ -133,7 +133,7 @@ class Mediateca_Render {
 			
 			$book_type = $_POST ['tipo-di-libro'];
 			
-			$secondary = $_POST ['tax_input'] ['accessibilita-secondaria'];
+			//$secondary = $_POST ['tax_input'] ['accessibilita-secondaria'];
 			
 			$this->taxQuery ( 'sezione-libri', $section, 'slug' );
 			$this->taxQuery ( 'eta', $age );
@@ -142,7 +142,7 @@ class Mediateca_Render {
 			$accessibilities = $_POST ['tax_input'] ['tipo-di-handicap'];
 			foreach ( $accessibilities as $accessibility ) {
 				$this->taxQuery ( 'tipo-di-handicap', $accessibility, 'id', 'IN' );
-				$this->taxQuery ( 'accessibilita-secondaria', $accessibility );
+				//$this->taxQuery ( 'accessibilita-secondaria', $accessibility );
 			}
 			
 			$_SESSION ['previous_query'] = null;
@@ -435,9 +435,9 @@ class Mediateca_Render {
 	}
 	private function getQueryObject($types, $taxonomies = array(), $metas = array(), $is_pagination_query = false) {
 		
-		add_filter ( 'posts_join', array (&$this, 'tax_posts_join' ), 10, 2 );
-		add_filter ( 'posts_where', array (&$this, 'tax_posts_where' ), 10, 2 );
-		add_filter ( 'posts_request', array (&$this, 'tax_posts_request' ), 10, 1 );
+		//add_filter ( 'posts_join', array (&$this, 'tax_posts_join' ), 10, 2 );
+		//add_filter ( 'posts_where', array (&$this, 'tax_posts_where' ), 10, 2 );
+		//add_filter ( 'posts_request', array (&$this, 'tax_posts_request' ), 10, 1 );
 		
 		if ($_POST && $_POST ['pagenum']) {
 			$page = $_POST ['pagenum'];
