@@ -1,7 +1,7 @@
 <?php get_header(); ?>
 
 <div id="content">
-	<?php get_template_part('sidebar_left');?>
+	<?php require_once( MEDIATECA_TEMPLATE_PATH . 'libri-sidebar.php' );?>
 	<div class="wrap-center-content">
 <div class="main forIE main-large">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>

@@ -17,6 +17,7 @@ class Mediateca_Render {
 	private $number_of_pages = 1;
 	private $mother_page;
 	private $pagename;
+//	private $accessibilities = array();
 	
 	public function __construct() {
 		$this->initSession ();
@@ -55,6 +56,7 @@ class Mediateca_Render {
 	public function tax_posts_where($a, $b) {
 		$t = $b->get ( 'tax_query' );
 		$prev = 0;
+		$count = 0;
 		
 		foreach ( $t as $q ) {
 			if ($q ['taxonomy'] == 'tipo-di-handicap' || $q ['taxonomy'] == 'accessibilita-secondaria') {
@@ -67,13 +69,14 @@ class Mediateca_Render {
 				$prev ++;
 			}
 		}
-		foreach ( $t as $q ) {
+		foreach ( $t as $q ) {	
 			if ($q ['taxonomy'] == 'tipo-di-handicap' || $q ['taxonomy'] == 'accessibilita-secondaria') {
-				$a = str_replace ( 'AND tt', 'AND (tt', $a );
+				$a = str_replace ( 'AND tt'.$count, 'AND (tt'.$count, $a );
 				$term = $this->getTermTaxonomyID ( $q ['terms'], $q ['taxonomy'] );
 				$a = str_replace ( 'IN (' . $term . ') )', 'IN (' . $term . ') ) )', $a );
 				$a = str_replace ( 'IN (' . $term . ') AND', 'IN (' . $term . ') ) AND', $a );
 			}
+			$count++;
 		}
 		
 		return $a;
@@ -108,7 +111,7 @@ class Mediateca_Render {
 		return ucfirst ( str_replace ( '-', ' ', $name ) );
 	}
 	private function initSession() {
-		if (! session_id ()) {
+		if ( !session_id () ) {
 			session_start ();
 		}
 	}
@@ -133,43 +136,45 @@ class Mediateca_Render {
 			
 			$book_type = $_POST ['tipo-di-libro'];
 			
-			//$secondary = $_POST ['tax_input'] ['accessibilita-secondaria'];
-			
 			$this->taxQuery ( 'sezione-libri', $section, 'slug' );
 			$this->taxQuery ( 'eta', $age );
 			$this->taxQuery ( 'tipo-di-libro', $book_type );
 			
 			$accessibilities = $_POST ['tax_input'] ['tipo-di-handicap'];
+			
+			//$this->accessibilities = $accessibilities;
+			
+			$_SESSION ['accessibilities'] = $accessibilities;
+			
 			foreach ( $accessibilities as $accessibility ) {
 				$this->taxQuery ( 'tipo-di-handicap', $accessibility, 'id', 'IN' );
-				//$this->taxQuery ( 'accessibilita-secondaria', $accessibility );
+				$this->taxQuery ( 'accessibilita-secondaria', $accessibility );
 			}
 			
 			$_SESSION ['previous_query'] = null;
 			
 			if ($this->isAjax ())
 				$visible = 'hidden';
-				
-			//	echo '<br />___________________________________________________________';
-			//	print_r( $this->taxonomies );
 			
 
 			$search = $this->getQueryObject ( $this->type, $this->taxonomies );
-			
-			include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-' . MEDIATECA_RESULTS_PAGE . '-page.php';
+				
 		
 		} else if (($_GET && $_GET ['results'] == $this->mother_page) || ($_POST && $_POST ['paginated'])) {
 			$this->type = $_SESSION ['media_type'];
 			
-			$search = $this->getQueryObject ( null, null, null, true );
+			$search = $this->getQueryObject ( null, null, null, true );	
 			
-			include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-' . MEDIATECA_RESULTS_PAGE . '-page.php';
-			
-			if ($this->isAjax ())
-				die ( '' );
 		} else {
 			die ( 'Problema di validazione del form' );
 		}
+		
+		ob_start();
+		include_once MEDIATECA_TEMPLATE_PATH . HARDWARE_SOFTWARE_SLUG . '-' . MEDIATECA_RESULTS_PAGE . '-page.php';
+		$out = ob_get_contents();
+		ob_end_clean();
+		
+		echo $out;
 		
 		if ($this->isAjax ())
 			die ( '' );
@@ -183,6 +188,7 @@ class Mediateca_Render {
 	public function ajaxResult() {
 		global $wp;
 		
+		$_SESSION ['accessibilities'] = array();
 		$this->taxonomies = array ( );
 		
 		//make sure add this plugin shit doesn't bother
@@ -328,8 +334,7 @@ class Mediateca_Render {
 			
 			$search = new WP_Query ( $args );
 			
-			$this->number_of_pages = $search->
-			max_num_pages;
+			$this->number_of_pages = $search->max_num_pages;
 			
 			//make sure add this plugin shit doesn't bother
 			
@@ -435,17 +440,17 @@ class Mediateca_Render {
 	}
 	private function getQueryObject($types, $taxonomies = array(), $metas = array(), $is_pagination_query = false) {
 		
-		//add_filter ( 'posts_join', array (&$this, 'tax_posts_join' ), 10, 2 );
-		//add_filter ( 'posts_where', array (&$this, 'tax_posts_where' ), 10, 2 );
-		//add_filter ( 'posts_request', array (&$this, 'tax_posts_request' ), 10, 1 );
+		add_filter ( 'posts_join', array (&$this, 'tax_posts_join' ), 10, 2 );
+		add_filter ( 'posts_where', array (&$this, 'tax_posts_where' ), 10, 2 );
+		add_filter ( 'posts_request', array (&$this, 'tax_posts_request' ), 10, 1 );
 		
 		if ($_POST && $_POST ['pagenum']) {
 			$page = $_POST ['pagenum'];
 		} else {
-			$page = (get_query_var ( 'paged' )) ? get_query_var ( 'paged' ) : 1;
+			$page = ( get_query_var ( 'paged' ) ) ? get_query_var ( 'paged' ) : 1;
 		}
 		
-		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'post_date', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
+		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'title', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
 		
 		if ($is_pagination_query == false) {
 			$_SESSION ['previous_query'] = $args;
@@ -690,9 +695,26 @@ class Mediateca_Render {
 	private function postHasTerm($id, $tax, $term) {
 		$terms = wp_get_object_terms ( $id, $tax, array ('fields' => 'slugs' ) );
 		
+		//print_r( $terms );
+		
 		if (in_array ( $term, $terms )) {
 			return true;
 		}
+		return false;
+	}
+	public function post_in_second( $id, $tax, $tax2 )
+	{
+		$terms = $_SESSION ['accessibilities'];
+		
+		if( $terms )
+		{
+			foreach( $terms as $term )
+			{
+				$t = get_term_by( 'id', $term, $tax );
+				if( $this->postHasTerm( $id, $tax2, $t->slug ) ) return true;
+			}
+		}
+		
 		return false;
 	}
 	private function getTermTaxonomyID($value, $taxonomy) {
