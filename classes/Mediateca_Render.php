@@ -704,18 +704,26 @@ class Mediateca_Render {
 	}
 	public function post_in_second( $id, $tax, $tax2 )
 	{
-		$terms = $_SESSION ['accessibilities'];
+		$terms = $_SESSION ['accessibilities']; 
+		$return = false;
 		
 		if( $terms )
 		{
 			foreach( $terms as $term )
 			{
 				$t = get_term_by( 'id', $term, $tax );
-				if( $this->postHasTerm( $id, $tax2, $t->slug ) ) return true;
+				if( !$this->postHasTerm( $id, $tax, $t->slug ) && $this->postHasTerm( $id, $tax2, $t->slug ) ) {
+					$return = true;
+				}
+				else
+				{
+					$return = false;
+				}
+							
 			}
 		}
 		
-		return false;
+		return $return;
 	}
 	private function getTermTaxonomyID($value, $taxonomy) {
 		$term = get_term_by ( 'id', $value, $taxonomy );
