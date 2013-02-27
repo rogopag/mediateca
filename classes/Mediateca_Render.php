@@ -406,7 +406,7 @@ class Mediateca_Render {
 	public function get_custom_post_type_single_template($single_template) {
 		global $post;
 		
-		if (in_array ( $post->post_type, $this->types ) && file_exists ( MEDIATECA_TEMPLATE_PATH . 'single-' . MEDIATECA_SLUG . '.php' )) {
+		if (in_array ( $post->post_type, $this->types ) && file_exists ( MEDIATECA_TEMPLATE_PATH . 'single-' . MEDIATECA_SLUG . '.php' )) 		{
 			$this->styleAndScripts ();
 			$single_template = MEDIATECA_TEMPLATE_PATH . '/single-' . MEDIATECA_SLUG . '.php';
 			
@@ -450,7 +450,7 @@ class Mediateca_Render {
 			$page = ( get_query_var ( 'paged' ) ) ? get_query_var ( 'paged' ) : 1;
 		}
 		
-		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'title', 'order' => 'DESC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
+		$args = array ('offset' => 0, 'tax_query' => $taxonomies, 'orderby' => 'title', 'order' => 'ASC', 'include' => '', 'exclude' => '', 'meta_query' => $metas, 'post_type' => $types, 'post_mime_type' => '', 'post_parent' => '', 'post_status' => 'publish', 'paged' => $page, 'posts_per_page' => self::POSTS_PER_PAGE );
 		
 		if ($is_pagination_query == false) {
 			$_SESSION ['previous_query'] = $args;
@@ -729,9 +729,11 @@ class Mediateca_Render {
 		$term = get_term_by ( 'id', $value, $taxonomy );
 		return $term->term_taxonomy_id;
 	}
-	private function getTermId($value, $taxonomy) {
+	public function getTermId($value, $taxonomy) {
 		$term = get_term_by ( 'slug', $value, $taxonomy );
+		if( $term )
 		return $term->term_id;
+		return 0;
 	}
 }
 ?>
