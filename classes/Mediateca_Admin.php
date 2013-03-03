@@ -366,7 +366,7 @@ class Mediateca_Admin
 					'show_names' => true, // Show field names on the left
 					'fields' => array(
 					array(
-						'name' => 'Formato',
+						'name' => 'Formato (libro chiuso)',
 						'desc' => 'Formato di impaginazione del volume a libro chiuso.',
 						'id' => $this->meta_prefix . 'formato',
 						'type'    => 'radio_inline',
@@ -383,7 +383,7 @@ class Mediateca_Admin
 						'taxonomy' => 'materiale-di-base', //Enter Taxonomy Slug
 						'type' => 'hierarchical_checkboxes'
 					),
-					array(
+				/*	array(
 						'name' => 'Forma delle pagine',
 						'desc' => 'Forma delle pagine',
 						'id' => $this->meta_prefix . 'forma-delle-pagine',
@@ -392,17 +392,20 @@ class Mediateca_Admin
 							array( 'name' => 'Regolare', 'value' => 'Regolare', 'checked' => 0),
 							array( 'name' => 'Irregolare', 'value' => 'Irregolare', ),
 						),
-					),
+					),*/
 					array(
-						'name' => 'Presenza di dispositivi per aiutare a sfogliare le pagine',
-						'desc' => 'Presenza di dispositivi per aiutare a sfogliare le pagine',
+						'name' => 'Dispositivi per aiutare a sfogliare le pagine',
+						'desc' => 'Dispositivi per aiutare a sfogliare le pagine',
 						'id' => $this->meta_prefix . 'dispositivi-di-aiuto',
-						'type'    => 'radio_inline',
+						'type'    => 'multicheck',
 						'options' => array(
-							array( 'name' => 'Si', 'value' => 1, ),
-							array( 'name' => 'No', 'value' => 0, ),
+							'spesse' => 'Pagine spesse',
+							'irregolare' => 'Pagine dalla forma irregolare',
+							'spirale' => 'Rilegatura a spirale',
+							'linguette' => 'Linguette'
 						),
 					),
+					
 					array(
 						'name' => 'Presenza di elementi mobili',
 						'desc' => 'Presenza di elementi mobili',
@@ -507,7 +510,7 @@ class Mediateca_Admin
 						),
 					),
 					array(
-						'name' => 'Complessit&agrave; della storia descrizione',
+						'name' => 'Complessit&agrave; della storia (descrizione)',
 						'desc' => 'Complessit&agrave; della storia descrizione',
 						'id' => $this->meta_prefix . 'complessita-storia-descrizione',
 						'type' => 'textarea_small'
@@ -524,7 +527,7 @@ class Mediateca_Admin
 					'show_names' => true, // Show field names on the left
 					'fields' => array(
 					array(
-						'name' => 'Presenza del testo',
+						'name' => 'Presenza del testo scritto',
 						'desc' => 'Presenza del testo',
 						'id' => $this->meta_prefix . 'presenza-testo',
 						'type'    => 'radio',
@@ -575,18 +578,18 @@ class Mediateca_Admin
 						),
 					),
 					array(
-						'name' => 'Complessit&agrave; testo descrizione',
+						'name' => 'Complessit&agrave; testo (descrizione)',
 						'desc' => 'Complessit&agrave; testo descrizione',
 						'id' => $this->meta_prefix . 'complessita-testo-descrizione',
 						'type' => 'textarea_small'
 					),
 					array(
-						'name' => 'Lunghezza',
+						'name' => 'Numero di frasi per pagina',
 						'desc' => 'Numero di frasi per pagina',
 						'id' => $this->meta_prefix . 'lunghezza-testo',
 						'type' => 'select',
 					'options' => array(
-							array( 'name' => '__NESSUNA__', 'value' => 0, ),
+							array( 'name' => '__NESSUNA__', 'value' => 'nessuna', ),
 							array( 'name' => '1', 'value' => '1', ),
 							array( 'name' => 'da 2 a 5', 'value' => 'da 2 a 5', ),
 							array( 'name' => 'pi&ugrave; di 5', 'value' => 'pi&ugrave; di 5', ),
@@ -656,8 +659,8 @@ class Mediateca_Admin
 						)
 					),
 					array(
-						'name' => 'Complessit&agrave; del immagini',
-						'desc' => 'Complessit&agrave; del immagini',
+						'name' => 'Complessit&agrave; delle immagini',
+						'desc' => 'Complessit&agrave; delle immagini',
 						'id' => $this->meta_prefix . 'complessita-immagini',
 						'type'    => 'select',
 						'options' => array(
@@ -670,7 +673,7 @@ class Mediateca_Admin
 						),
 					),
 					array(
-						'name' => 'Complessit&agrave; immagini descrizione',
+						'name' => 'Complessit&agrave; delle immagini (descrizione)',
 						'desc' => 'Complessit&agrave; immagini descrizione',
 						'id' => $this->meta_prefix . 'complessita-immagini-descrizione',
 						'type' => 'textarea_small'
@@ -700,6 +703,7 @@ class Mediateca_Admin
 			'taxonomy' => $field['taxonomy'],
 			'checked_ontop' => true
 		);
+		
 		echo '<ul class="hierarchical_checkboxes">';
 			wp_terms_checklist($post->ID, $args);
 		echo '</ul>';

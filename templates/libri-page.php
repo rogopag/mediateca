@@ -1,14 +1,14 @@
 <?php get_header(); ?>
 
 <div id="content">
-	<?php get_template_part('sidebar_left');?>
+	<?php require_once( MEDIATECA_TEMPLATE_PATH . 'libri-sidebar.php' );?>
 	<div class="wrap-center-content">
 <div class="main forIE main-large">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange main-large"><?php the_title(); ?></h2>
 
 
-<div class="entry intro main-large">
+<div class="entry intro main-large" id="mediateca-how-to">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small class="float-right">
 					<?php  
@@ -19,6 +19,7 @@
 				?>
 			</small></div>
 <!--  ADVANCED FORM  -->
+<div id="forms-wrapper">
 <div id="mediateca-form-container" class="mediateca-forms-container">
 <h4>Ricerca avanzata</h4>
 <form action="<?php echo the_permalink(); ?>" method="post"
@@ -53,6 +54,7 @@ sulla disabilit&agrave;</label></span></div>
 	name="submit-text-search" type="image" value="submit"
 	src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 </form>
+</div>
 </div>	
 <?php endwhile; else: ?>
 

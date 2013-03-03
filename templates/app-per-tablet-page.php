@@ -8,7 +8,7 @@
 			<h2 class="orange main-large"><?php /*the_title();*/ echo "Pagina in costruzione";?></h2>
 
 
-<div class="entry intro main-large">
+<div class="entry intro main-large" id="mediateca-how-to">
 				<?php //the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small class="float-right">
 					<?php  

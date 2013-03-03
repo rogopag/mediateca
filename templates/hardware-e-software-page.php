@@ -6,7 +6,7 @@
 	<div class="main forIE main-large">
 		<?php if (have_posts()) : while (have_posts()) : the_post(); ?>
 			<h2 class="orange main-large"><?php the_title(); ?></h2>
-			<div class="entry main-large">
+			<div class="entry main-large" id="mediateca-how-to">
 				<?php the_content('<p class="serif">Read the rest of this page &raquo;</p>'); ?>
 				<small class="float-right">
 					<?php  
@@ -18,6 +18,7 @@
 			</small>		
 		</div>
 		<!--  ADVANCED FORM  -->
+		<div id="forms-wrapper">
 		<div id="mediateca-form-container" class="mediateca-forms-container">
 			<h4>Ricerca avanzata</h4>
 		<form action="<?php echo the_permalink(); ?>" method="post" accept-charset="utf-8" id="hardware-and-software-form" class="mediateca-form">
@@ -60,7 +61,7 @@
 		<span class="span-submit"><input name="submit-text-search" type="image" value="submit" src="<?php bloginfo('url'); ?>/wp-content/themes/area/imgs/search.gif" /></span>
 	</form>
 </div>
-
+</div>
 <?php endwhile; else: ?>
 	<p>Siamo spiacenti, la pagina che stavi cercando non &egrave; stata trovata.</p>
 <?php endif; ?>
