@@ -55,8 +55,8 @@ class Mediateca_Init
 	{
 		$types = self::$types;
 		
-		array_pop( $types );	
-	
+		array_pop( $types );
+		
 		register_taxonomy( 'categoria', $types,
 		array(
 			'hierarchical' => true,

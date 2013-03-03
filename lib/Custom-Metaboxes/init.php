@@ -244,6 +244,7 @@ class cmb_Meta_Box {
 					if( empty( $meta ) && !empty( $field['std'] ) ) $meta = $field['std'];
 					echo '<select name="', $field['id'], '" id="', $field['id'], '">';
 					foreach ($field['options'] as $option) {
+						
 						echo '<option value="', $option['value'], '"', $meta == $option['value'] ? ' selected="selected"' : '', '>', $option['name'], '</option>';
 					}
 					echo '</select>';

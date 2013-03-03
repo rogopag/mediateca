@@ -1,5 +1,17 @@
 var jq = jQuery, Mediateca;
 
+if( !console )
+{
+	var console = {
+		log:function(message){
+				alert(message);
+			},
+		error:function(message){
+					alert(message);
+				}
+		};
+}
+
 jq(function($)
 {
 	if( Mediateca.query.pagename == 'mediateca' )
@@ -29,6 +41,10 @@ jq(function($)
 	{
 		libriSelectSezione();
 		hardwareSoftwareForm( $("#libri-form") );
+	}
+	if( $('#mediateca-how-to').is('div') )
+	{
+		dito_manageHowTos();
 	}
 	fixCheckBoxes();
 });
@@ -76,14 +92,16 @@ function ajaxCall( data, element )
 			//dataType: 'json',
 			error: function(XMLHttpRequest, textStatus, errorThrown)
 			{  
-				//console.error( textStatus, errorThrown );
+				console.error( textStatus, errorThrown );
 			},
 			beforeSend: function(XMLHttpRequest) 
 			{ 
+				//console.log( XMLHttpRequest, send )
 				if( $("#search-results").is('div') )
 					{
 						$("#search-results").fadeOut('fast', function()
 						{
+							$( this ).remove();
 							mediateca_loading( el );
 						});
 					}
@@ -97,10 +115,14 @@ function ajaxCall( data, element )
 			{
 				if( data )
 				{
-					//console.log( data );
+					//console.log( 'success ', data );
 					
 					el.parent().parent().after( data );
+					$('#forms-wrapper').slideUp('fast', function(){
+						
+					})
 					$("#search-results").fadeIn(200, function(){
+							dito_manageFormVisibility();
 							mediatecaPagination()
 					});
 						
@@ -108,6 +130,7 @@ function ajaxCall( data, element )
 			},
 			complete: function( data, textStatus )
 			{
+				//console.log( 'complete ', data );
 				mediateca_loading_remove();
 			}  
 		});
@@ -148,7 +171,7 @@ function managePagination()
 	{	
 		event.preventDefault();
 		
-		//console.log( "Clicked the shit:::::::::::::::::::::::::::::::::::::::", $(event.target).attr('href') );
+		////console.log( "Clicked the shit:::::::::::::::::::::::::::::::::::::::", $(event.target).attr('href') );
 		
 		var kind, send, action, a = $(event.target), href = a.attr('href'), query = href.split('?')[1], variable = query.split('=')[0], what = query.split('=')[1], tmp = href.split('page/'), page = tmp[1].split('/?')[0];
 		
@@ -178,9 +201,10 @@ function mediateca_loading( a )
 {
 	$('input[name="submit-search"]').attr('disabled', 'disabled');
 	
-	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading" id="loading-gif" />'), append = a;
-	//console.log( 'I should see the loader here', a.attr('class') );
-	loading.insertAfter( append.parent().parent() ).fadeIn('fast');
+	var src = Mediateca.plugin_url + 'img/spin.gif', loading = $('<img class="loading-gif" src="'+src+'" alt="loading"  />'), append = a, loadingContainer = $('<div class="loading-container" id="loading-gif" />');
+	loadingContainer.append( loading );
+	////console.log( 'I should see the loader here', a.attr('class') );
+	loadingContainer.insertAfter( append.parent().parent() ).fadeIn('fast');
 };
 function mediateca_loading_remove( )
 {
@@ -209,3 +233,66 @@ function libriSelectSezione()
 		});
 	});
 };
+function dito_manageHowTos()
+{
+	var div = $('#mediateca-how-to'), button = $('<span id="hideShow"></div>'), close = true;
+	
+	div.hide();
+	button.text('Visualizza aiuto');
+	
+	$('h2.orange').append(button);
+	
+	button.bind('click', function(event){
+		var me = $(this);
+		
+		me.fadeOut(100);
+		
+		if( !close )
+		{
+			div.slideUp(400, function(){
+				close = true;
+				me.text('Visualizza aiuto');
+				me.fadeIn(150);
+			});
+		}
+		else if( close )
+		{
+			div.slideDown(400, function(){
+				close = false;
+				me.text('Nascondi aiuto');
+				me.fadeIn(150);
+			});
+		}
+	});
+};
+function dito_manageFormVisibility()
+{
+	var div = $('#forms-wrapper'), button = $('<span id="hideShowForm"></div>'), close = true;
+	
+	button.text('Ricerca ancora');
+	
+	$('h2.mediateca-results-title').append(button);
+	
+	button.bind('click', function(event){
+		var me = $(this);
+		
+		me.fadeOut(100);
+		
+		if( !close )
+		{
+			div.slideUp(400, function(){
+				close = true;
+				me.text('Ricerca ancora');
+				me.fadeIn(150);
+			});
+		}
+		else if( close )
+		{
+			div.slideDown(400, function(){
+				close = false;
+				me.text('Nascondi form di ricerca');
+				me.fadeIn(150);
+			});
+		}
+	});
+}
