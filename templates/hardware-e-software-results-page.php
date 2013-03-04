@@ -33,6 +33,7 @@ $title = ( $wp->query_vars[MEDIATECA_TEXT_SEARCH] ) ? ucfirst($wp->query_vars[ME
 <?php
 endif;
 endwhile;
+$this->paginationLinks();
 if( $suggestions ):
 $suggestions = array_reverse($suggestions);
 ?>
