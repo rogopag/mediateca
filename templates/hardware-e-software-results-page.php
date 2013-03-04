@@ -33,8 +33,9 @@ $title = ( $wp->query_vars[MEDIATECA_TEXT_SEARCH] ) ? ucfirst($wp->query_vars[ME
 <?php
 endif;
 endwhile;
-$this->paginationLinks();
+
 if( $suggestions ):
+$this->paginationLinks();
 $suggestions = array_reverse($suggestions);
 ?>
 <h2 class="mediateca-results-title-below">Suggeriamo anche</h2>
